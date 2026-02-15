@@ -1,0 +1,100 @@
+import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
+import { parseViewSection } from "@/lib/parseNaver";
+import { saveKeywordHistory } from "@/lib/saveHistory";
+
+const DELAY_MS = 800;
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export async function POST() {
+  try {
+    const { data: clients, error: clientsError } = await supabase
+      .from("clients")
+      .select("id, name, blog_url");
+
+    if (clientsError) throw clientsError;
+    if (!clients || clients.length === 0) {
+      return NextResponse.json({
+        message: "등록된 병원이 없습니다.",
+        updated: 0,
+      });
+    }
+
+    let totalUpdated = 0;
+    const errors: string[] = [];
+
+    for (const client of clients) {
+      const { data: keywords, error: kwError } = await supabase
+        .from("keywords")
+        .select("id, keyword, current_rank")
+        .eq("client_id", client.id);
+
+      if (kwError || !keywords) continue;
+
+      for (const kw of keywords) {
+        try {
+          await sleep(DELAY_MS);
+
+          const encodedKeyword = encodeURIComponent(kw.keyword);
+          const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
+
+          const response = await fetch(url, {
+            headers: {
+              "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+              "Accept-Language": "ko-KR,ko;q=0.9",
+            },
+          });
+
+          if (!response.ok) {
+            errors.push(`[${client.name}] "${kw.keyword}" 검색 실패`);
+            continue;
+          }
+
+          const html = await response.text();
+          const results = parseViewSection(html);
+
+          const matched = results.find((r) =>
+            r.link.includes(client.blog_url.trim())
+          );
+          const newRank = matched ? matched.rank : null;
+
+          const { error: updateError } = await supabase
+            .from("keywords")
+            .update({
+              previous_rank: kw.current_rank,
+              current_rank: newRank,
+              matched_title: matched?.title ?? null,
+              matched_url: matched?.link ?? null,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", kw.id);
+
+          if (updateError) {
+            errors.push(`[${client.name}] "${kw.keyword}" DB 업데이트 실패`);
+          } else {
+            await saveKeywordHistory(kw.id, newRank);
+            totalUpdated++;
+          }
+        } catch {
+          errors.push(`[${client.name}] "${kw.keyword}" 처리 중 오류`);
+        }
+      }
+    }
+
+    return NextResponse.json({
+      message: `${totalUpdated}개 키워드 순위 업데이트 완료`,
+      updated: totalUpdated,
+      errors,
+    });
+  } catch (error) {
+    console.error("Batch track error:", error);
+    return NextResponse.json(
+      { error: "배치 처리 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
+  }
+}
