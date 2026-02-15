@@ -79,7 +79,7 @@ export default function RankHistory({
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl shadow-xl p-4 md:p-6 w-full max-w-3xl max-h-[90vh] overflow-y-auto"
       >
         <div className="flex items-center justify-between mb-5">
           <div>
@@ -103,7 +103,7 @@ export default function RankHistory({
         {loading ? (
           <div className="text-center py-12 text-slate-400">불러오는 중...</div>
         ) : (
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-5 md:grid-cols-7 gap-1.5 md:gap-2">
             {days.map((day, index) => {
               const rank = rankMap.get(day.date);
               const hasData = rankMap.has(day.date);
@@ -114,12 +114,12 @@ export default function RankHistory({
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.015 }}
-                  className={`rounded-xl p-3 text-center transition-all ${getRankColor(hasData ? rank ?? null : null)}`}
+                  className={`rounded-xl p-2 md:p-3 text-center transition-all ${getRankColor(hasData ? rank ?? null : null)}`}
                 >
                   <div className="text-[10px] text-slate-400 mb-1">
                     {day.label}({day.dayName})
                   </div>
-                  <div className="text-lg leading-tight">
+                  <div className="text-base md:text-lg leading-tight">
                     {hasData ? (
                       rank !== null ? (
                         <span>{rank}위</span>
