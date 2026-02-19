@@ -124,6 +124,11 @@ export default function MainPanel({ client, onClientUpdated }: MainPanelProps) {
     }
   };
 
+  const isDroppedFromTop7 = (kw: Keyword) =>
+    kw.previous_rank !== null &&
+    kw.previous_rank <= 7 &&
+    (kw.current_rank === null || kw.current_rank > 7);
+
   if (!client) {
     return (
       <main className="flex-1 flex items-center justify-center p-4">
@@ -266,7 +271,7 @@ export default function MainPanel({ client, onClientUpdated }: MainPanelProps) {
                   <td className="px-5 py-4 font-medium text-slate-800">
                     <button
                       onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-                      className="hover:text-emerald-600 transition-colors cursor-pointer text-left"
+                      className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : "hover:text-emerald-600"}`}
                       title="순위 변화 보기"
                     >
                       {kw.keyword}
@@ -373,7 +378,7 @@ export default function MainPanel({ client, onClientUpdated }: MainPanelProps) {
                   <div className="flex items-center justify-between mb-2">
                     <button
                       onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-                      className="font-medium text-slate-800 hover:text-emerald-600 transition-colors text-left"
+                      className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : "text-slate-800 hover:text-emerald-600"}`}
                     >
                       {kw.keyword}
                     </button>
