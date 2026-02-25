@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseViewSection } from "@/lib/parseNaver";
-import type { ViewResult } from "@/lib/parseNaver";
+import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
+import type { ViewResult, SmartBlockResult } from "@/lib/parseNaver";
 
 interface SearchApiResponse {
   results: ViewResult[];
   found: ViewResult | null;
   foundRank: number | null;
+  smartBlockResults: SmartBlockResult[];
+  foundInSmartBlock: SmartBlockResult | null;
 }
 
 export async function GET(request: NextRequest) {
@@ -42,16 +44,24 @@ export async function GET(request: NextRequest) {
 
     const html = await response.text();
     const results = parseViewSection(html);
+    const smartBlockResults = parseSmartBlocks(html);
 
     let found: ViewResult | null = null;
+    let foundInSmartBlock: SmartBlockResult | null = null;
+
     if (blogUrl) {
-      found = results.find((r) => r.link.includes(blogUrl.trim())) ?? null;
+      const normalizedUrl = blogUrl.trim();
+      found = results.find((r) => r.link.includes(normalizedUrl)) ?? null;
+      foundInSmartBlock =
+        smartBlockResults.find((r) => r.link.includes(normalizedUrl)) ?? null;
     }
 
     const responseData: SearchApiResponse = {
       results,
       found,
       foundRank: found ? found.rank : null,
+      smartBlockResults,
+      foundInSmartBlock,
     };
 
     return NextResponse.json(responseData);

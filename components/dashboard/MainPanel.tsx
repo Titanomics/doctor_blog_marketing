@@ -82,8 +82,10 @@ export default function MainPanel({ client, onClientUpdated }: MainPanelProps) {
           id: kw.id,
           previous_rank: kw.current_rank,
           current_rank: data.foundRank,
-          matched_title: data.found?.title ?? null,
-          matched_url: data.found?.link ?? null,
+          matched_title: data.found?.title ?? data.foundInSmartBlock?.title ?? null,
+          matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,
+          smart_block_name: data.foundInSmartBlock?.blockName ?? null,
+          smart_block_rank: data.foundInSmartBlock?.rank ?? null,
           updated_at: new Date().toISOString(),
         }),
       });
@@ -278,7 +280,11 @@ export default function MainPanel({ client, onClientUpdated }: MainPanelProps) {
                     </button>
                   </td>
                   <td className="px-5 py-4 text-center">
-                    <RankBadge rank={kw.current_rank} />
+                    <RankBadge
+                      rank={kw.current_rank}
+                      smartBlockName={kw.smart_block_name}
+                      smartBlockRank={kw.smart_block_rank}
+                    />
                   </td>
                   <td className="px-5 py-4 text-center">
                     <RankChange
@@ -408,7 +414,11 @@ export default function MainPanel({ client, onClientUpdated }: MainPanelProps) {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 mb-2">
-                    <RankBadge rank={kw.current_rank} />
+                    <RankBadge
+                      rank={kw.current_rank}
+                      smartBlockName={kw.smart_block_name}
+                      smartBlockRank={kw.smart_block_rank}
+                    />
                     <RankChange current={kw.current_rank} previous={kw.previous_rank} />
                   </div>
                   {kw.matched_url && (

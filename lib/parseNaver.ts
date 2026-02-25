@@ -4,18 +4,33 @@ export interface ViewResult {
   link: string;
 }
 
+export interface SmartBlockResult {
+  rank: number;   // 블록 내 순위
+  title: string;
+  link: string;
+  blockName: string;  // 예: "'대구심장내과' 인기글", "대구수성구심장내과"
+}
+
+// HTML 엔티티 디코딩
+function decodeHtmlEntities(str: string): string {
+  return str
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, "/")
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#\d+;/g, "");
+}
+
 export function parseViewSection(html: string): ViewResult[] {
   const results: ViewResult[] = [];
 
-  // VIEW 섹션 추출 (여러 전략으로 fallback)
-  const viewHtml =
-    extractViewSection(html) ??
-    html;
+  const viewHtml = extractViewSection(html) ?? html;
 
-  // VIEW 섹션 내 모든 항목의 headline 링크 추출 (블로그+카페+기타 모두 포함)
-  // 각 항목의 제목은 headline1 클래스 span 안에 있고, data-heatmap-target=".link" 속성의 <a> 태그
+  // .link 과 .imgtitlelink 모두 포함 (피처드 카드 포함)
   const headlinePattern =
-    /href="(https?:\/\/[^"]+)"[^>]*data-heatmap-target="\.link"[^>]*><span[^>]*headline1[^>]*>([\s\S]*?)<\/span><\/a>/g;
+    /href="(https?:\/\/[^"]+)"[^>]*data-heatmap-target="\.(?:link|imgtitlelink)"[^>]*><span[^>]*headline1[^>]*>([\s\S]*?)<\/span><\/a>/g;
 
   let match;
   const seen = new Set<string>();
@@ -25,8 +40,6 @@ export function parseViewSection(html: string): ViewResult[] {
     const rawText = match[2].replace(/<[^>]*>/g, "").trim();
 
     if (!rawText || rawText.length < 3) continue;
-
-    // 중복 제거
     if (seen.has(link)) continue;
     seen.add(link);
 
@@ -40,18 +53,89 @@ export function parseViewSection(html: string): ViewResult[] {
   return results;
 }
 
+export function parseSmartBlocks(html: string): SmartBlockResult[] {
+  const results: SmartBlockResult[] = [];
+
+  // ugc 스마트블록 위치 탐색 (data-block-id="ugc/...")
+  const blockPattern = /data-block-id="(ugc\/[^"]+)"/g;
+  const blocks: Array<{ pos: number; blockId: string; blockName: string }> = [];
+
+  let bm;
+  while ((bm = blockPattern.exec(html)) !== null) {
+    const blockId = bm[1];
+    // 블록 제목은 data-block-id 이후 3000자 내에서 첫 h2 태그
+    const lookAhead = html.substring(bm.index, bm.index + 3000);
+    const titleMatch = /<h2[^>]*>([\s\S]*?)<\/h2>/i.exec(lookAhead);
+    const blockName = titleMatch
+      ? decodeHtmlEntities(titleMatch[1].replace(/<[^>]*>/g, "").trim())
+      : blockId;
+    blocks.push({ pos: bm.index, blockId, blockName });
+  }
+
+  if (blocks.length === 0) return [];
+
+  // .link 과 .imgtitlelink 둘 다 headline1 span이 있는 링크 찾기
+  const articlePattern =
+    /href="(https?:\/\/(?:blog|cafe)\.naver\.com\/[^"]+)"[^>]*data-heatmap-target="\.(?:link|imgtitlelink)"[^>]*><span[^>]*headline1[^>]*>([\s\S]*?)<\/span><\/a>/g;
+
+  // 블록별 articles 그룹화
+  const byBlock = new Map<
+    string,
+    { blockName: string; articles: Array<{ link: string; title: string }> }
+  >();
+
+  let am;
+  while ((am = articlePattern.exec(html)) !== null) {
+    const link = am[1];
+    const title = am[2].replace(/<[^>]*>/g, "").trim();
+    if (!title || title.length < 3) continue;
+
+    const articlePos = am.index;
+
+    // 이 기사가 속한 블록 찾기 (position 기준으로 가장 가까운 이전 블록)
+    let blockName = "";
+    for (let i = blocks.length - 1; i >= 0; i--) {
+      if (blocks[i].pos <= articlePos) {
+        blockName = blocks[i].blockName;
+        break;
+      }
+    }
+    if (!blockName) continue;
+
+    if (!byBlock.has(blockName)) {
+      byBlock.set(blockName, { blockName, articles: [] });
+    }
+    const blockData = byBlock.get(blockName)!;
+    // 중복 URL 제거
+    if (!blockData.articles.some((a) => a.link === link)) {
+      blockData.articles.push({ link, title });
+    }
+  }
+
+  // 블록별로 순위 부여
+  for (const { blockName, articles } of byBlock.values()) {
+    articles.forEach((article, idx) => {
+      results.push({
+        rank: idx + 1,
+        title: article.title,
+        link: article.link,
+        blockName,
+      });
+    });
+  }
+
+  return results;
+}
+
 function extractViewSection(html: string): string | null {
-  // 전략 1: _fe_view_root 클래스 (네이버 통합검색 VIEW 섹션)
   const viewRootPattern = /class="[^"]*_fe_view_root[^"]*"/i;
   const m1 = viewRootPattern.exec(html);
   if (m1) return html.slice(m1.index, m1.index + 200000);
 
-  // 전략 2: data-section="view" 속성
   const dataPattern = /(<(?:section|div)[^>]+data-section="view"[^>]*>)/i;
   const m2 = dataPattern.exec(html);
   if (m2) return html.slice(m2.index, m2.index + 200000);
 
-  // 전략 3: sp_nviews 등 레거시 클래스
   const legacyPatterns = [
     /class="[^"]*sp_nviews[^"]*"/i,
     /class="[^"]*section_view[^"]*"/i,

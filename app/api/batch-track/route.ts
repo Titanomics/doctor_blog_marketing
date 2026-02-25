@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { parseViewSection } from "@/lib/parseNaver";
+import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
 import { saveKeywordHistory } from "@/lib/saveHistory";
 
 const DELAY_MS = 800;
@@ -56,10 +56,15 @@ export async function POST() {
 
           const html = await response.text();
           const results = parseViewSection(html);
+          const smartBlockResults = parseSmartBlocks(html);
 
           const matched = results.find((r) =>
             r.link.includes(client.blog_url.trim())
           );
+          const matchedInSmartBlock = smartBlockResults.find((r) =>
+            r.link.includes(client.blog_url.trim())
+          );
+
           const newRank = matched ? matched.rank : null;
 
           const { error: updateError } = await supabase
@@ -67,8 +72,11 @@ export async function POST() {
             .update({
               previous_rank: kw.current_rank,
               current_rank: newRank,
-              matched_title: matched?.title ?? null,
-              matched_url: matched?.link ?? null,
+              matched_title:
+                matched?.title ?? matchedInSmartBlock?.title ?? null,
+              matched_url: matched?.link ?? matchedInSmartBlock?.link ?? null,
+              smart_block_name: matchedInSmartBlock?.blockName ?? null,
+              smart_block_rank: matchedInSmartBlock?.rank ?? null,
               updated_at: new Date().toISOString(),
             })
             .eq("id", kw.id);
