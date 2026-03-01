@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
+import { parseViewSection, parseSmartBlocks, matchesBlogUrl } from "@/lib/parseNaver";
 import type { ViewResult, SmartBlockResult } from "@/lib/parseNaver";
 
 interface SearchApiResponse {
@@ -50,10 +50,9 @@ export async function GET(request: NextRequest) {
     let foundInSmartBlock: SmartBlockResult | null = null;
 
     if (blogUrl) {
-      const normalizedUrl = blogUrl.trim();
-      found = results.find((r) => r.link.includes(normalizedUrl)) ?? null;
+      found = results.find((r) => matchesBlogUrl(r.link, blogUrl)) ?? null;
       foundInSmartBlock =
-        smartBlockResults.find((r) => r.link.includes(normalizedUrl)) ?? null;
+        smartBlockResults.find((r) => matchesBlogUrl(r.link, blogUrl)) ?? null;
     }
 
     const responseData: SearchApiResponse = {

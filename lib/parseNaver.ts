@@ -11,6 +11,32 @@ export interface SmartBlockResult {
   blockName: string;  // 예: "'대구심장내과' 인기글", "대구수성구심장내과"
 }
 
+/**
+ * 블로그 URL 매칭 - 여러 URL 형식을 유연하게 지원
+ * - 직접: blog.naver.com/oenough/224181717584
+ * - logNo 파라미터: blog.naver.com/oenough?logNo=224181717584
+ * - 모바일: m.blog.naver.com/oenough/224181717584
+ */
+export function matchesBlogUrl(resultLink: string, blogUrl: string): boolean {
+  const normalized = blogUrl.replace(/^https?:\/\//, "").trim();
+
+  // 1차: 직접 포함
+  if (resultLink.includes(normalized)) return true;
+
+  // 2차: blogId/postId 파싱 후 대안 형식 매칭
+  const path = normalized.replace(/^(?:www\.|m\.)?blog\.naver\.com\//, "").split("/");
+  const blogId = path[0];
+  const postId = path[1];
+
+  if (blogId && postId && /^\d+$/.test(postId)) {
+    if (resultLink.includes(`/${blogId}/`) && resultLink.includes(postId)) return true;
+    if (resultLink.includes(`blogId=${blogId}`) && resultLink.includes(`logNo=${postId}`)) return true;
+    if (resultLink.includes(`/${blogId}?`) && resultLink.includes(postId)) return true;
+  }
+
+  return false;
+}
+
 // HTML 엔티티 디코딩
 function decodeHtmlEntities(str: string): string {
   return str

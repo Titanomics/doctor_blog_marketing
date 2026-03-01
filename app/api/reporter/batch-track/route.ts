@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
+import { parseViewSection, parseSmartBlocks, matchesBlogUrl } from "@/lib/parseNaver";
 import { saveReporterHistory } from "@/lib/saveReporterHistory";
 
 const DELAY_MS = 800;
@@ -37,36 +37,37 @@ async function handler() {
           .select("id, blog_url, current_rank")
           .eq("keyword_id", kw.id);
 
-        if (entryError || !entries) continue;
+        if (entryError || !entries || entries.length === 0) continue;
 
-        for (const entry of entries) {
-          try {
-            await sleep(DELAY_MS);
+        try {
+          // 키워드당 1번만 네이버 검색
+          await sleep(DELAY_MS);
 
-            const encodedKeyword = encodeURIComponent(kw.keyword);
-            const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
+          const encodedKeyword = encodeURIComponent(kw.keyword);
+          const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
 
-            const response = await fetch(url, {
-              headers: {
-                "User-Agent":
-                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-                "Accept-Language": "ko-KR,ko;q=0.9",
-              },
-            });
+          const response = await fetch(url, {
+            headers: {
+              "User-Agent":
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+              "Accept-Language": "ko-KR,ko;q=0.9",
+            },
+          });
 
-            if (!response.ok) {
-              errors.push(`[${client.name}] "${kw.keyword}" ${entry.blog_url} 검색 실패`);
-              continue;
-            }
+          if (!response.ok) {
+            errors.push(`[${client.name}] "${kw.keyword}" 검색 실패`);
+            continue;
+          }
 
-            const html = await response.text();
-            const results = parseViewSection(html);
-            const smartBlockResults = parseSmartBlocks(html);
+          const html = await response.text();
+          const results = parseViewSection(html);
+          const smartBlockResults = parseSmartBlocks(html);
 
-            const normalizedUrl = entry.blog_url.trim();
-            const matched = results.find((r) => r.link.includes(normalizedUrl));
+          // 같은 키워드의 모든 URL 매칭 (네이버 1회 조회로 처리)
+          for (const entry of entries) {
+            const matched = results.find((r) => matchesBlogUrl(r.link, entry.blog_url));
             const matchedInSmartBlock = smartBlockResults.find((r) =>
-              r.link.includes(normalizedUrl)
+              matchesBlogUrl(r.link, entry.blog_url)
             );
 
             const newRank = matched ? matched.rank : null;
@@ -90,9 +91,9 @@ async function handler() {
               await saveReporterHistory(entry.id, newRank);
               totalUpdated++;
             }
-          } catch {
-            errors.push(`[${client.name}] "${kw.keyword}" ${entry.blog_url} 처리 중 오류`);
           }
+        } catch {
+          errors.push(`[${client.name}] "${kw.keyword}" 처리 중 오류`);
         }
       }
     }
