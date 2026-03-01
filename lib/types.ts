@@ -48,3 +48,33 @@ export interface SearchApiResponse {
   smartBlockResults: SmartBlockResult[];
   foundInSmartBlock: SmartBlockResult | null;
 }
+
+export interface CafeClient {
+  id: string;
+  name: string;        // 브랜드명
+  assignee: string;
+  cafe_url: string;    // 예: https://cafe.naver.com/카페아이디
+  created_at: string;
+}
+
+export interface CafeKeyword {
+  id: string;
+  client_id: string;
+  keyword: string;
+  current_rank: number | null;
+  previous_rank: number | null;
+  matched_title: string | null;
+  matched_url: string | null;
+  smart_block_name: string | null;
+  smart_block_rank: number | null;
+  updated_at: string;
+  created_at: string;
+}
+
+export interface CafeKeywordHistory {
+  id: string;
+  keyword_id: string;
+  rank: number | null;
+  tracked_date: string;
+  created_at: string;
+}

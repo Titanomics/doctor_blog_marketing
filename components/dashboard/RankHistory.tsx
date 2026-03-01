@@ -8,6 +8,7 @@ interface RankHistoryProps {
   keywordId: string;
   keywordName: string;
   onClose: () => void;
+  historyApiPath?: string;
 }
 
 const DAY_NAMES = ["일", "월", "화", "수", "목", "금", "토"];
@@ -16,6 +17,7 @@ export default function RankHistory({
   keywordId,
   keywordName,
   onClose,
+  historyApiPath = "/api/keywords/history",
 }: RankHistoryProps) {
   const [history, setHistory] = useState<KeywordHistory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,7 +27,7 @@ export default function RankHistory({
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/keywords/history?keywordId=${keywordId}`
+          `${historyApiPath}?keywordId=${keywordId}`
         );
         if (res.ok) {
           const data = await res.json();

@@ -76,7 +76,7 @@ export function parseSmartBlocks(html: string): SmartBlockResult[] {
 
   // .link 과 .imgtitlelink 둘 다 headline1 span이 있는 링크 찾기
   const articlePattern =
-    /href="(https?:\/\/(?:blog|cafe)\.naver\.com\/[^"]+)"[^>]*data-heatmap-target="\.(?:link|imgtitlelink)"[^>]*><span[^>]*headline1[^>]*>([\s\S]*?)<\/span><\/a>/g;
+    /href="(https?:\/\/(?:blog|(?:m\.)?cafe)\.naver\.com\/[^"]+)"[^>]*data-heatmap-target="\.(?:link|imgtitlelink)"[^>]*><span[^>]*headline1[^>]*>([\s\S]*?)<\/span><\/a>/g;
 
   // 블록별 articles 그룹화
   const byBlock = new Map<

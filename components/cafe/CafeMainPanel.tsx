@@ -2,27 +2,18 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Client, CafeClient, Keyword } from "@/lib/types";
+import { CafeClient, CafeKeyword } from "@/lib/types";
 import RankBadge from "@/components/dashboard/RankBadge";
 import RankChange from "@/components/dashboard/RankChange";
 import RankHistory from "@/components/dashboard/RankHistory";
 
-type AnyClient = Client | CafeClient;
-
-interface MainPanelProps {
-  mode: "blog" | "cafe";
-  client: AnyClient | null;
+interface CafeMainPanelProps {
+  client: CafeClient | null;
   onClientUpdated: () => void;
 }
 
-function getClientUrl(mode: "blog" | "cafe", client: AnyClient): string {
-  return mode === "blog"
-    ? (client as Client).blog_url
-    : (client as CafeClient).cafe_url;
-}
-
-export default function MainPanel({ mode, client, onClientUpdated }: MainPanelProps) {
-  const [keywords, setKeywords] = useState<Keyword[]>([]);
+export default function CafeMainPanel({ client, onClientUpdated }: CafeMainPanelProps) {
+  const [keywords, setKeywords] = useState<CafeKeyword[]>([]);
   const [loading, setLoading] = useState(false);
   const [newKeyword, setNewKeyword] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
@@ -32,31 +23,11 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [deletingClient, setDeletingClient] = useState(false);
   const [historyKeyword, setHistoryKeyword] = useState<{ id: string; name: string } | null>(null);
 
-  const isBlog = mode === "blog";
-  const apiBase = isBlog ? "" : "/cafe";
-  const keywordsApi = `/api${apiBase}/keywords`;
-  const searchApi = `/api${apiBase}/search`;
-  const urlParam = isBlog ? "blogUrl" : "cafeUrl";
-  const batchApi = `/api${apiBase}/batch-track`;
-  const clientsApi = `/api${apiBase}/clients`;
-  const historyApi = `/api${apiBase}/keywords/history`;
-  const entityLabel = isBlog ? "병원" : "브랜드";
-  const accentText = isBlog ? "text-emerald-600" : "text-violet-600";
-  const accentHover = isBlog ? "hover:text-emerald-600" : "hover:text-violet-600";
-  const accentBg = isBlog ? "bg-emerald-50 text-emerald-700" : "bg-violet-50 text-violet-700";
-  const accentBtn = isBlog
-    ? "bg-emerald-500 hover:bg-emerald-600"
-    : "bg-violet-500 hover:bg-violet-600";
-  const accentFocus = isBlog
-    ? "focus:border-emerald-500 focus:ring-emerald-500/20"
-    : "focus:border-violet-500 focus:ring-violet-500/20";
-  const accentRefresh = isBlog ? "hover:text-emerald-500" : "hover:text-violet-500";
-
   const fetchKeywords = useCallback(async () => {
     if (!client) return;
     setLoading(true);
     try {
-      const res = await fetch(`${keywordsApi}?clientId=${client.id}`);
+      const res = await fetch(`/api/cafe/keywords?clientId=${client.id}`);
       if (res.ok) {
         const data = await res.json();
         setKeywords(data);
@@ -64,7 +35,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     } finally {
       setLoading(false);
     }
-  }, [client, keywordsApi]);
+  }, [client]);
 
   useEffect(() => {
     setKeywords([]);
@@ -77,10 +48,13 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     if (!client || !newKeyword.trim()) return;
     setAddingKeyword(true);
     try {
-      const res = await fetch(keywordsApi, {
+      const res = await fetch("/api/cafe/keywords", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ client_id: client.id, keyword: newKeyword.trim() }),
+        body: JSON.stringify({
+          client_id: client.id,
+          keyword: newKeyword.trim(),
+        }),
       });
       if (res.ok) {
         setNewKeyword("");
@@ -91,18 +65,17 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     }
   };
 
-  const handleRefreshKeyword = async (kw: Keyword) => {
+  const handleRefreshKeyword = async (kw: CafeKeyword) => {
     if (!client) return;
     setRefreshingId(kw.id);
     try {
-      const clientUrl = getClientUrl(mode, client);
       const res = await fetch(
-        `${searchApi}?keyword=${encodeURIComponent(kw.keyword)}&${urlParam}=${encodeURIComponent(clientUrl)}`
+        `/api/cafe/search?keyword=${encodeURIComponent(kw.keyword)}&cafeUrl=${encodeURIComponent(client.cafe_url)}`
       );
       if (!res.ok) return;
       const data = await res.json();
 
-      await fetch(keywordsApi, {
+      await fetch("/api/cafe/keywords", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -124,7 +97,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   };
 
   const handleDeleteKeyword = async (id: string) => {
-    await fetch(`${keywordsApi}?id=${id}`, { method: "DELETE" });
+    await fetch(`/api/cafe/keywords?id=${id}`, { method: "DELETE" });
     fetchKeywords();
   };
 
@@ -132,7 +105,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     setBatchLoading(true);
     setBatchMessage("");
     try {
-      const res = await fetch(batchApi, { method: "POST" });
+      const res = await fetch("/api/cafe/batch-track", { method: "POST" });
       const data = await res.json();
       setBatchMessage(data.message ?? "완료");
       fetchKeywords();
@@ -143,17 +116,17 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
 
   const handleDeleteClient = async () => {
     if (!client) return;
-    if (!confirm(`"${client.name}" ${entityLabel}을 삭제하시겠습니까?\n관련 키워드도 모두 삭제됩니다.`)) return;
+    if (!confirm(`"${client.name}" 브랜드를 삭제하시겠습니까?\n관련 키워드도 모두 삭제됩니다.`)) return;
     setDeletingClient(true);
     try {
-      await fetch(`${clientsApi}?id=${client.id}`, { method: "DELETE" });
+      await fetch(`/api/cafe/clients?id=${client.id}`, { method: "DELETE" });
       onClientUpdated();
     } finally {
       setDeletingClient(false);
     }
   };
 
-  const isDroppedFromTop7 = (kw: Keyword) =>
+  const isDroppedFromTop7 = (kw: CafeKeyword) =>
     kw.previous_rank !== null &&
     kw.previous_rank <= 7 &&
     (kw.current_rank === null || kw.current_rank > 7);
@@ -163,43 +136,43 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       <main className="flex-1 flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-slate-400 text-base md:text-lg">
-            <span className="hidden md:inline">좌측에서 {entityLabel}을 선택하세요</span>
-            <span className="md:hidden">메뉴에서 {entityLabel}을 선택하세요</span>
+            <span className="hidden md:inline">좌측에서 브랜드를 선택하세요</span>
+            <span className="md:hidden">메뉴에서 브랜드를 선택하세요</span>
           </p>
           <p className="text-slate-300 text-sm mt-2">
-            선택한 {entityLabel}의 키워드 순위가 표시됩니다
+            선택한 브랜드의 키워드 순위가 표시됩니다
           </p>
         </div>
       </main>
     );
   }
 
-  const clientUrl = getClientUrl(mode, client);
-
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-8 pt-16 md:pt-8">
-      {/* 헤더 */}
+      {/* 브랜드 헤더 */}
       <div className="flex flex-col md:flex-row md:items-start justify-between mb-6 gap-3">
         <div>
           <h2 className="text-xl md:text-2xl font-bold text-slate-800">{client.name}</h2>
           <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-1">
             {client.assignee && (
-              <span className="text-sm text-slate-500">담당: {client.assignee}</span>
+              <span className="text-sm text-slate-500">
+                담당: {client.assignee}
+              </span>
             )}
             <a
-              href={`https://${clientUrl}`}
+              href={`https://${client.cafe_url}`}
               target="_blank"
               rel="noopener noreferrer"
-              className={`text-sm ${accentText} hover:underline break-all`}
+              className="text-sm text-violet-600 hover:underline break-all"
             >
-              {clientUrl}
+              {client.cafe_url}
             </a>
             <button
               onClick={handleDeleteClient}
               disabled={deletingClient}
               className="text-xs text-red-400 hover:text-red-600 transition-colors"
             >
-              {entityLabel} 삭제
+              브랜드 삭제
             </button>
           </div>
         </div>
@@ -231,7 +204,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className={`text-sm px-4 py-3 rounded-xl mb-4 ${accentBg}`}
+            className="bg-violet-50 text-violet-700 text-sm px-4 py-3 rounded-xl mb-4"
           >
             {batchMessage}
           </motion.div>
@@ -240,26 +213,40 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
 
       {/* PC: 테이블 / 모바일: 카드 */}
       <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        {/* PC 테이블 */}
+        {/* PC 테이블 (md 이상) */}
         <table className="w-full hidden md:table">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
-              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48">키워드</th>
-              <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">현재 순위</th>
-              <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
-              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">매칭 포스트</th>
-              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
+              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48">
+                키워드
+              </th>
+              <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">
+                현재 순위
+              </th>
+              <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">
+                변화
+              </th>
+              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                매칭 포스트
+              </th>
+              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">
+                마지막 갱신
+              </th>
               <th className="px-5 py-3.5 w-20"></th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-400">불러오는 중...</td>
+                <td colSpan={6} className="text-center py-12 text-slate-400">
+                  불러오는 중...
+                </td>
               </tr>
             ) : keywords.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td>
+                <td colSpan={6} className="text-center py-12 text-slate-400">
+                  등록된 키워드가 없습니다
+                </td>
               </tr>
             ) : (
               keywords.map((kw, index) => (
@@ -273,14 +260,18 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   <td className="px-5 py-4 font-medium text-slate-800">
                     <button
                       onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-                      className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
+                      className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : "hover:text-violet-600"}`}
                       title="순위 변화 보기"
                     >
                       {kw.keyword}
                     </button>
                   </td>
                   <td className="px-5 py-4 text-center">
-                    <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
+                    <RankBadge
+                      rank={kw.current_rank}
+                      smartBlockName={kw.smart_block_name}
+                      smartBlockRank={kw.smart_block_rank}
+                    />
                   </td>
                   <td className="px-5 py-4 text-center">
                     <RankChange current={kw.current_rank} previous={kw.previous_rank} />
@@ -291,7 +282,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                         href={kw.matched_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`text-sm ${accentText} hover:underline truncate block max-w-xs`}
+                        className="text-sm text-violet-600 hover:underline truncate block max-w-xs"
                       >
                         {kw.matched_title ?? kw.matched_url}
                       </a>
@@ -315,9 +306,14 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                         onClick={() => handleRefreshKeyword(kw)}
                         disabled={refreshingId === kw.id}
                         title="순위 새로고침"
-                        className={`text-slate-400 ${accentRefresh} transition-colors`}
+                        className="text-slate-400 hover:text-violet-500 transition-colors"
                       >
-                        <svg className={`w-4 h-4 ${refreshingId === kw.id ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className={`w-4 h-4 ${refreshingId === kw.id ? "animate-spin" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                       </button>
@@ -338,7 +334,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           </tbody>
         </table>
 
-        {/* 모바일 카드 */}
+        {/* 모바일 카드 (md 미만) */}
         <div className="md:hidden">
           {loading ? (
             <div className="text-center py-12 text-slate-400">불러오는 중...</div>
@@ -357,7 +353,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   <div className="flex items-center justify-between mb-2">
                     <button
                       onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-                      className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
+                      className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : "text-slate-800 hover:text-violet-600"}`}
                     >
                       {kw.keyword}
                     </button>
@@ -365,9 +361,14 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                       <button
                         onClick={() => handleRefreshKeyword(kw)}
                         disabled={refreshingId === kw.id}
-                        className={`text-slate-400 ${accentRefresh} transition-colors p-1`}
+                        className="text-slate-400 hover:text-violet-500 transition-colors p-1"
                       >
-                        <svg className={`w-4 h-4 ${refreshingId === kw.id ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg
+                          className={`w-4 h-4 ${refreshingId === kw.id ? "animate-spin" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                       </button>
@@ -382,7 +383,11 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                     </div>
                   </div>
                   <div className="flex items-center gap-3 mb-2">
-                    <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
+                    <RankBadge
+                      rank={kw.current_rank}
+                      smartBlockName={kw.smart_block_name}
+                      smartBlockRank={kw.smart_block_rank}
+                    />
                     <RankChange current={kw.current_rank} previous={kw.previous_rank} />
                   </div>
                   {kw.matched_url && (
@@ -390,7 +395,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                       href={kw.matched_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`text-xs ${accentText} hover:underline truncate block mb-1`}
+                      className="text-xs text-violet-600 hover:underline truncate block mb-1"
                     >
                       {kw.matched_title ?? kw.matched_url}
                     </a>
@@ -421,13 +426,13 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             value={newKeyword}
             onChange={(e) => setNewKeyword(e.target.value)}
             placeholder="새 키워드 입력"
-            className={`flex-1 px-3 md:px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+            className="flex-1 px-3 md:px-4 py-2 text-sm rounded-xl border border-slate-200 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none text-slate-800 placeholder:text-slate-400"
           />
           <motion.button
             whileTap={{ scale: 0.97 }}
             type="submit"
             disabled={addingKeyword || !newKeyword.trim()}
-            className={`px-4 md:px-5 py-2 ${accentBtn} disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors shrink-0`}
+            className="px-4 md:px-5 py-2 bg-violet-500 hover:bg-violet-600 disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors shrink-0"
           >
             {addingKeyword ? "..." : "추가"}
           </motion.button>
@@ -440,7 +445,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             keywordId={historyKeyword.id}
             keywordName={historyKeyword.name}
             onClose={() => setHistoryKeyword(null)}
-            historyApiPath={historyApi}
+            historyApiPath="/api/cafe/keywords/history"
           />
         )}
       </AnimatePresence>

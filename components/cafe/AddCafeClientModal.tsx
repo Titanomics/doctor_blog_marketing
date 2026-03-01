@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
-interface AddClientModalProps {
-  mode: "blog" | "cafe";
+interface AddCafeClientModalProps {
   onClose: () => void;
   onAdded: () => void;
 }
 
-export default function AddClientModal({ mode, onClose, onAdded }: AddClientModalProps) {
-  const isBlog = mode === "blog";
-  const [form, setForm] = useState({ name: "", assignee: "", url: "" });
+export default function AddCafeClientModal({ onClose, onAdded }: AddCafeClientModalProps) {
+  const [form, setForm] = useState({ name: "", assignee: "", cafe_url: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -20,15 +18,10 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
     setLoading(true);
     setError("");
     try {
-      const body = isBlog
-        ? { name: form.name, assignee: form.assignee, blog_url: form.url }
-        : { name: form.name, assignee: form.assignee, cafe_url: form.url };
-
-      const endpoint = isBlog ? "/api/clients" : "/api/cafe/clients";
-      const res = await fetch(endpoint, {
+      const res = await fetch("/api/cafe/clients", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify(form),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -53,21 +46,19 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
         onClick={(e) => e.stopPropagation()}
         className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md"
       >
-        <h2 className="text-lg font-bold text-slate-800 mb-5">
-          {isBlog ? "병원 추가" : "브랜드 추가"}
-        </h2>
+        <h2 className="text-lg font-bold text-slate-800 mb-5">브랜드 추가</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="text-sm font-medium text-slate-700 block mb-1.5">
-              {isBlog ? "병원명" : "브랜드명"}
+              브랜드명
             </label>
             <input
               type="text"
               required
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder={isBlog ? "예: 강남 리쥬란의원" : "예: 솔직한알, PDRN치약"}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 text-sm"
+              placeholder="예: 솔직한알, PDRN치약"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-violet-500 outline-none text-slate-800 text-sm"
             />
           </div>
           <div>
@@ -76,24 +67,23 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
             </label>
             <input
               type="text"
-              required={isBlog}
               value={form.assignee}
               onChange={(e) => setForm({ ...form, assignee: e.target.value })}
               placeholder="예: 김경록"
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 text-sm"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-violet-500 outline-none text-slate-800 text-sm"
             />
           </div>
           <div>
             <label className="text-sm font-medium text-slate-700 block mb-1.5">
-              {isBlog ? "블로그 주소" : "카페 주소"}
+              카페 주소
             </label>
             <input
               type="text"
               required
-              value={form.url}
-              onChange={(e) => setForm({ ...form, url: e.target.value })}
-              placeholder={isBlog ? "예: blog.naver.com/myhospital" : "예: cafe.naver.com/mycafe"}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 text-sm"
+              value={form.cafe_url}
+              onChange={(e) => setForm({ ...form, cafe_url: e.target.value })}
+              placeholder="예: cafe.naver.com/mycafe"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-violet-500 outline-none text-slate-800 text-sm"
             />
           </div>
 
@@ -110,7 +100,7 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 text-white text-sm font-medium transition-colors"
+              className="flex-1 py-2.5 rounded-xl bg-violet-500 hover:bg-violet-600 disabled:bg-slate-300 text-white text-sm font-medium transition-colors"
             >
               {loading ? "추가 중..." : "추가하기"}
             </button>
