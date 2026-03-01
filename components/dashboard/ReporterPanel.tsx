@@ -399,6 +399,7 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                                   rank={entry.current_rank}
                                   smartBlockName={entry.smart_block_name}
                                   smartBlockRank={entry.smart_block_rank}
+                                  noRankLabel="미노출"
                                 />
                                 <RankChange current={entry.current_rank} previous={entry.previous_rank} />
                                 <span className="text-xs text-slate-300 hidden md:block w-20 text-right">{formatDate(entry.updated_at)}</span>

@@ -2,12 +2,14 @@ interface RankBadgeProps {
   rank: number | null;
   smartBlockName?: string | null;
   smartBlockRank?: number | null;
+  noRankLabel?: string;
 }
 
 export default function RankBadge({
   rank,
   smartBlockName,
   smartBlockRank,
+  noRankLabel = "순위권 외",
 }: RankBadgeProps) {
   // 스마트블록에 노출된 경우 - 블록명과 블록 내 순위 표시
   if (smartBlockName && smartBlockRank) {
@@ -31,7 +33,7 @@ export default function RankBadge({
   if (rank === null) {
     return (
       <span className="inline-flex items-center justify-center px-3 py-1 rounded-lg text-xs font-medium bg-red-50 text-red-400">
-        순위권 외
+        {noRankLabel}
       </span>
     );
   }
