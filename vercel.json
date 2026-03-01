@@ -1,6 +1,10 @@
 {
   "crons": [
     {
+      "path": "/api/daily-batch",
+      "schedule": "0 22 * * *"
+    },
+    {
       "path": "/api/cafe/daily-report",
       "schedule": "0 0 * * *"
     }
