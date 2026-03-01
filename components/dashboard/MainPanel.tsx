@@ -231,8 +231,12 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   }
 
   const blogUrl = isBlog ? (client as Client).blog_url : null;
-  const exposedKeywords = keywords.filter((kw) => kw.current_rank !== null);
-  const unexposedKeywords = keywords.filter((kw) => kw.current_rank === null);
+  const exposedKeywords = keywords.filter(
+    (kw) => kw.current_rank !== null || kw.smart_block_rank !== null
+  );
+  const unexposedKeywords = keywords.filter(
+    (kw) => kw.current_rank === null && kw.smart_block_rank === null
+  );
 
   // 키워드 행 렌더러 (PC 테이블)
   const renderKeywordRow = (kw: AnyKeyword, index: number) => (
