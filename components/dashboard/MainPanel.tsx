@@ -28,6 +28,12 @@ const DeleteIcon = () => (
   </svg>
 );
 
+const PencilIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-1.414.586H9v-2a2 2 0 01.586-1.414z" />
+  </svg>
+);
+
 function formatDate(dateStr: string | null) {
   if (!dateStr) return "-";
   return new Date(dateStr).toLocaleDateString("ko-KR", {
@@ -52,6 +58,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [deletingClient, setDeletingClient] = useState(false);
   const [historyKeyword, setHistoryKeyword] = useState<{ id: string; name: string } | null>(null);
   const [exportLoading, setExportLoading] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingText, setEditingText] = useState("");
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -163,6 +171,18 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     }
   };
 
+  const handleSaveEdit = async (id: string) => {
+    const text = editingText.trim();
+    if (!text) return;
+    setEditingId(null);
+    await fetch(keywordsApi, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, keyword: text }),
+    });
+    fetchKeywords();
+  };
+
   const handleDeleteKeyword = async (id: string) => {
     await fetch(`${keywordsApi}?id=${id}`, { method: "DELETE" });
     fetchKeywords();
@@ -248,13 +268,30 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
     >
       <td className="px-5 py-4 font-medium text-slate-800">
-        <button
-          onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-          className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
-          title="순위 변화 보기"
-        >
-          {kw.keyword}
-        </button>
+        {editingId === kw.id ? (
+          <div className="flex items-center gap-1">
+            <input
+              autoFocus
+              value={editingText}
+              onChange={(e) => setEditingText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSaveEdit(kw.id);
+                if (e.key === "Escape") setEditingId(null);
+              }}
+              className={`px-2 py-1 text-sm border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
+            />
+            <button onClick={() => handleSaveEdit(kw.id)} className="text-green-500 hover:text-green-700 font-bold text-sm">✓</button>
+            <button onClick={() => setEditingId(null)} className="text-slate-400 hover:text-slate-600 text-sm">✕</button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+            className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
+            title="순위 변화 보기"
+          >
+            {kw.keyword}
+          </button>
+        )}
         {!isBlog && (
           <p className="text-xs text-slate-400 mt-0.5 truncate max-w-xs">
             {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
@@ -282,6 +319,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} title="순위 새로고침" className={`text-slate-400 ${accentRefresh} transition-colors`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
+            <PencilIcon />
+          </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
             <DeleteIcon />
           </button>
@@ -301,12 +341,29 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     >
       <div className="flex items-center justify-between mb-2">
         <div>
-          <button
-            onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-            className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
-          >
-            {kw.keyword}
-          </button>
+          {editingId === kw.id ? (
+            <div className="flex items-center gap-1">
+              <input
+                autoFocus
+                value={editingText}
+                onChange={(e) => setEditingText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit(kw.id);
+                  if (e.key === "Escape") setEditingId(null);
+                }}
+                className={`px-2 py-1 text-sm border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-32`}
+              />
+              <button onClick={() => handleSaveEdit(kw.id)} className="text-green-500 font-bold text-sm">✓</button>
+              <button onClick={() => setEditingId(null)} className="text-slate-400 text-sm">✕</button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+              className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
+            >
+              {kw.keyword}
+            </button>
+          )}
           {!isBlog && (
             <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
               {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
@@ -316,6 +373,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         <div className="flex items-center gap-2">
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} className={`text-slate-400 ${accentRefresh} transition-colors p-1`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
+          </button>
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
+            <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} className="text-slate-400 hover:text-red-500 transition-colors p-1">
             <DeleteIcon />
