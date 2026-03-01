@@ -13,7 +13,8 @@ interface CafeSearchApiResponse {
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const keyword = searchParams.get("keyword");
-  const cafeUrl = searchParams.get("cafeUrl");
+  const postUrl = searchParams.get("postUrl");
+  const postTitle = searchParams.get("postTitle");
 
   if (!keyword) {
     return NextResponse.json(
@@ -49,13 +50,21 @@ export async function GET(request: NextRequest) {
     let found: ViewResult | null = null;
     let foundInSmartBlock: SmartBlockResult | null = null;
 
-    if (cafeUrl) {
-      // m.cafe.naver.com → cafe.naver.com 정규화 후 매칭
-      const normalizedUrl = cafeUrl.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com");
-      const normalize = (link: string) => link.replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com");
-      found = results.find((r) => normalize(r.link).includes(normalizedUrl)) ?? null;
-      foundInSmartBlock =
-        smartBlockResults.find((r) => normalize(r.link).includes(normalizedUrl)) ?? null;
+    if (postUrl || postTitle) {
+      const normalize = (link: string) =>
+        link.replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com");
+      const normalizedPostUrl = postUrl
+        ? postUrl.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
+        : null;
+
+      const match = (r: { link: string; title: string }) => {
+        if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
+        if (postTitle && r.title.toLowerCase().includes(postTitle.toLowerCase())) return true;
+        return false;
+      };
+
+      found = results.find(match) ?? null;
+      foundInSmartBlock = smartBlockResults.find(match) ?? null;
     }
 
     const responseData: CafeSearchApiResponse = {

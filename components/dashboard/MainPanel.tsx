@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Client, CafeClient, Keyword } from "@/lib/types";
+import { Client, CafeClient, Keyword, CafeKeyword } from "@/lib/types";
 import RankBadge from "@/components/dashboard/RankBadge";
 import RankChange from "@/components/dashboard/RankChange";
 import RankHistory from "@/components/dashboard/RankHistory";
 
 type AnyClient = Client | CafeClient;
+type AnyKeyword = Keyword | CafeKeyword;
 
 interface MainPanelProps {
   mode: "blog" | "cafe";
@@ -15,28 +16,47 @@ interface MainPanelProps {
   onClientUpdated: () => void;
 }
 
-function getClientUrl(mode: "blog" | "cafe", client: AnyClient): string {
-  return mode === "blog"
-    ? (client as Client).blog_url
-    : (client as CafeClient).cafe_url;
+const RefreshIcon = ({ spinning }: { spinning?: boolean }) => (
+  <svg className={`w-4 h-4 ${spinning ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+  </svg>
+);
+
+const DeleteIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+  </svg>
+);
+
+function formatDate(dateStr: string | null) {
+  if (!dateStr) return "-";
+  return new Date(dateStr).toLocaleDateString("ko-KR", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 export default function MainPanel({ mode, client, onClientUpdated }: MainPanelProps) {
-  const [keywords, setKeywords] = useState<Keyword[]>([]);
+  const [keywords, setKeywords] = useState<AnyKeyword[]>([]);
   const [loading, setLoading] = useState(false);
   const [newKeyword, setNewKeyword] = useState("");
+  const [newPostUrl, setNewPostUrl] = useState("");
+  const [newPostTitle, setNewPostTitle] = useState("");
+  const [addError, setAddError] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
   const [batchLoading, setBatchLoading] = useState(false);
   const [batchMessage, setBatchMessage] = useState("");
   const [deletingClient, setDeletingClient] = useState(false);
   const [historyKeyword, setHistoryKeyword] = useState<{ id: string; name: string } | null>(null);
+  const [exportLoading, setExportLoading] = useState(false);
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
   const keywordsApi = `/api${apiBase}/keywords`;
   const searchApi = `/api${apiBase}/search`;
-  const urlParam = isBlog ? "blogUrl" : "cafeUrl";
   const batchApi = `/api${apiBase}/batch-track`;
   const clientsApi = `/api${apiBase}/clients`;
   const historyApi = `/api${apiBase}/keywords/history`;
@@ -44,9 +64,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const accentText = isBlog ? "text-emerald-600" : "text-violet-600";
   const accentHover = isBlog ? "hover:text-emerald-600" : "hover:text-violet-600";
   const accentBg = isBlog ? "bg-emerald-50 text-emerald-700" : "bg-violet-50 text-violet-700";
-  const accentBtn = isBlog
-    ? "bg-emerald-500 hover:bg-emerald-600"
-    : "bg-violet-500 hover:bg-violet-600";
+  const accentBtn = isBlog ? "bg-emerald-500 hover:bg-emerald-600" : "bg-violet-500 hover:bg-violet-600";
   const accentFocus = isBlog
     ? "focus:border-emerald-500 focus:ring-emerald-500/20"
     : "focus:border-violet-500 focus:ring-violet-500/20";
@@ -57,10 +75,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     setLoading(true);
     try {
       const res = await fetch(`${keywordsApi}?clientId=${client.id}`);
-      if (res.ok) {
-        const data = await res.json();
-        setKeywords(data);
-      }
+      if (res.ok) setKeywords(await res.json());
     } finally {
       setLoading(false);
     }
@@ -75,30 +90,55 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const handleAddKeyword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!client || !newKeyword.trim()) return;
+    setAddError("");
+
+    if (!isBlog && !newPostUrl.trim() && !newPostTitle.trim()) {
+      setAddError("포스팅 URL 또는 제목 중 하나는 입력해주세요.");
+      return;
+    }
+
     setAddingKeyword(true);
     try {
+      const body: Record<string, string> = { client_id: client.id, keyword: newKeyword.trim() };
+      if (!isBlog) {
+        if (newPostUrl.trim()) body.post_url = newPostUrl.trim();
+        if (newPostTitle.trim()) body.post_title = newPostTitle.trim();
+      }
+
       const res = await fetch(keywordsApi, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ client_id: client.id, keyword: newKeyword.trim() }),
+        body: JSON.stringify(body),
       });
+
       if (res.ok) {
         setNewKeyword("");
+        setNewPostUrl("");
+        setNewPostTitle("");
         fetchKeywords();
+      } else {
+        const data = await res.json();
+        setAddError(data.error ?? "오류가 발생했습니다.");
       }
     } finally {
       setAddingKeyword(false);
     }
   };
 
-  const handleRefreshKeyword = async (kw: Keyword) => {
-    if (!client) return;
+  const handleRefreshKeyword = async (kw: AnyKeyword) => {
     setRefreshingId(kw.id);
     try {
-      const clientUrl = getClientUrl(mode, client);
-      const res = await fetch(
-        `${searchApi}?keyword=${encodeURIComponent(kw.keyword)}&${urlParam}=${encodeURIComponent(clientUrl)}`
-      );
+      const params = new URLSearchParams({ keyword: kw.keyword });
+
+      if (isBlog) {
+        params.set("blogUrl", (client as Client).blog_url);
+      } else {
+        const cafeKw = kw as CafeKeyword;
+        if (cafeKw.post_url) params.set("postUrl", cafeKw.post_url);
+        if (cafeKw.post_title) params.set("postTitle", cafeKw.post_title);
+      }
+
+      const res = await fetch(`${searchApi}?${params.toString()}`);
       if (!res.ok) return;
       const data = await res.json();
 
@@ -108,7 +148,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         body: JSON.stringify({
           id: kw.id,
           previous_rank: kw.current_rank,
-          current_rank: data.foundRank,
+          current_rank: data.foundRank ?? null,
           matched_title: data.found?.title ?? data.foundInSmartBlock?.title ?? null,
           matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,
           smart_block_name: data.foundInSmartBlock?.blockName ?? null,
@@ -153,7 +193,25 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     }
   };
 
-  const isDroppedFromTop7 = (kw: Keyword) =>
+  const handleExportExcel = async () => {
+    setExportLoading(true);
+    try {
+      const res = await fetch("/api/cafe/export");
+      if (!res.ok) return;
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      const date = new Date().toISOString().split("T")[0];
+      a.download = `카페_상위노출_리포트_${date}.xlsx`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
+  const isDroppedFromTop7 = (kw: AnyKeyword) =>
     kw.previous_rank !== null &&
     kw.previous_rank <= 7 &&
     (kw.current_rank === null || kw.current_rank > 7);
@@ -166,15 +224,112 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             <span className="hidden md:inline">좌측에서 {entityLabel}을 선택하세요</span>
             <span className="md:hidden">메뉴에서 {entityLabel}을 선택하세요</span>
           </p>
-          <p className="text-slate-300 text-sm mt-2">
-            선택한 {entityLabel}의 키워드 순위가 표시됩니다
-          </p>
+          <p className="text-slate-300 text-sm mt-2">선택한 {entityLabel}의 키워드 순위가 표시됩니다</p>
         </div>
       </main>
     );
   }
 
-  const clientUrl = getClientUrl(mode, client);
+  const blogUrl = isBlog ? (client as Client).blog_url : null;
+  const exposedKeywords = keywords.filter((kw) => kw.current_rank !== null);
+  const unexposedKeywords = keywords.filter((kw) => kw.current_rank === null);
+
+  // 키워드 행 렌더러 (PC 테이블)
+  const renderKeywordRow = (kw: AnyKeyword, index: number) => (
+    <motion.tr
+      key={kw.id}
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
+    >
+      <td className="px-5 py-4 font-medium text-slate-800">
+        <button
+          onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+          className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
+          title="순위 변화 보기"
+        >
+          {kw.keyword}
+        </button>
+        {!isBlog && (
+          <p className="text-xs text-slate-400 mt-0.5 truncate max-w-xs">
+            {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
+          </p>
+        )}
+      </td>
+      <td className="px-5 py-4 text-center">
+        <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
+      </td>
+      <td className="px-5 py-4 text-center">
+        <RankChange current={kw.current_rank} previous={kw.previous_rank} />
+      </td>
+      <td className="px-5 py-4">
+        {kw.matched_url ? (
+          <a href={kw.matched_url} target="_blank" rel="noopener noreferrer" className={`text-sm ${accentText} hover:underline truncate block max-w-xs`}>
+            {kw.matched_title ?? kw.matched_url}
+          </a>
+        ) : (
+          <span className="text-sm text-slate-300">{!isBlog && kw.current_rank === null ? "미노출" : "-"}</span>
+        )}
+      </td>
+      <td className="px-5 py-4 text-xs text-slate-400">{formatDate(kw.updated_at)}</td>
+      <td className="px-5 py-4">
+        <div className="flex items-center gap-2">
+          <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} title="순위 새로고침" className={`text-slate-400 ${accentRefresh} transition-colors`}>
+            <RefreshIcon spinning={refreshingId === kw.id} />
+          </button>
+          <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
+            <DeleteIcon />
+          </button>
+        </div>
+      </td>
+    </motion.tr>
+  );
+
+  // 키워드 카드 렌더러 (모바일)
+  const renderKeywordCard = (kw: AnyKeyword, index: number) => (
+    <motion.div
+      key={kw.id}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className="p-4"
+    >
+      <div className="flex items-center justify-between mb-2">
+        <div>
+          <button
+            onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+            className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
+          >
+            {kw.keyword}
+          </button>
+          {!isBlog && (
+            <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
+              {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center gap-2">
+          <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} className={`text-slate-400 ${accentRefresh} transition-colors p-1`}>
+            <RefreshIcon spinning={refreshingId === kw.id} />
+          </button>
+          <button onClick={() => handleDeleteKeyword(kw.id)} className="text-slate-400 hover:text-red-500 transition-colors p-1">
+            <DeleteIcon />
+          </button>
+        </div>
+      </div>
+      <div className="flex items-center gap-3 mb-2">
+        <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
+        <RankChange current={kw.current_rank} previous={kw.previous_rank} />
+      </div>
+      {kw.matched_url && (
+        <a href={kw.matched_url} target="_blank" rel="noopener noreferrer" className={`text-xs ${accentText} hover:underline truncate block mb-1`}>
+          {kw.matched_title ?? kw.matched_url}
+        </a>
+      )}
+      <p className="text-xs text-slate-400">{formatDate(kw.updated_at)}</p>
+    </motion.div>
+  );
 
   return (
     <main className="flex-1 overflow-y-auto p-4 md:p-8 pt-16 md:pt-8">
@@ -183,46 +338,50 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         <div>
           <h2 className="text-xl md:text-2xl font-bold text-slate-800">{client.name}</h2>
           <div className="flex flex-wrap items-center gap-2 md:gap-4 mt-1">
-            {client.assignee && (
-              <span className="text-sm text-slate-500">담당: {client.assignee}</span>
+            {client.assignee && <span className="text-sm text-slate-500">담당: {client.assignee}</span>}
+            {isBlog && blogUrl && (
+              <a href={`https://${blogUrl}`} target="_blank" rel="noopener noreferrer" className={`text-sm ${accentText} hover:underline break-all`}>
+                {blogUrl}
+              </a>
             )}
-            <a
-              href={`https://${clientUrl}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`text-sm ${accentText} hover:underline break-all`}
-            >
-              {clientUrl}
-            </a>
-            <button
-              onClick={handleDeleteClient}
-              disabled={deletingClient}
-              className="text-xs text-red-400 hover:text-red-600 transition-colors"
-            >
+            <button onClick={handleDeleteClient} disabled={deletingClient} className="text-xs text-red-400 hover:text-red-600 transition-colors">
               {entityLabel} 삭제
             </button>
           </div>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleBatchRefresh}
-          disabled={batchLoading}
-          className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-2 self-start shrink-0"
-        >
-          {batchLoading ? (
-            <>
-              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              전체 갱신 중...
-            </>
-          ) : (
-            "전체 순위 새로고침"
+        <div className="flex items-center gap-2 self-start shrink-0">
+          {!isBlog && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleExportExcel}
+              disabled={exportLoading}
+              className="px-4 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-1.5"
+            >
+              {exportLoading ? "생성 중..." : "엑셀 다운로드"}
+            </motion.button>
           )}
-        </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleBatchRefresh}
+            disabled={batchLoading}
+            className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-2"
+          >
+            {batchLoading ? (
+              <>
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                </svg>
+                전체 갱신 중...
+              </>
+            ) : (
+              "전체 순위 새로고침"
+            )}
+          </motion.button>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -238,201 +397,186 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         )}
       </AnimatePresence>
 
-      {/* PC: 테이블 / 모바일: 카드 */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-        {/* PC 테이블 */}
-        <table className="w-full hidden md:table">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-100">
-              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48">키워드</th>
-              <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">현재 순위</th>
-              <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
-              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">매칭 포스트</th>
-              <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
-              <th className="px-5 py-3.5 w-20"></th>
-            </tr>
-          </thead>
-          <tbody>
+      {/* 블로그 모드: 기존 테이블/카드 */}
+      {isBlog ? (
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <table className="w-full hidden md:table">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-100">
+                <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48">키워드</th>
+                <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">현재 순위</th>
+                <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
+                <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">매칭 포스트</th>
+                <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
+                <th className="px-5 py-3.5 w-20"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr><td colSpan={6} className="text-center py-12 text-slate-400">불러오는 중...</td></tr>
+              ) : keywords.length === 0 ? (
+                <tr><td colSpan={6} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td></tr>
+              ) : (
+                keywords.map((kw, i) => renderKeywordRow(kw, i))
+              )}
+            </tbody>
+          </table>
+
+          <div className="md:hidden">
             {loading ? (
-              <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-400">불러오는 중...</td>
-              </tr>
+              <div className="text-center py-12 text-slate-400">불러오는 중...</div>
             ) : keywords.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td>
-              </tr>
+              <div className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</div>
             ) : (
-              keywords.map((kw, index) => (
-                <motion.tr
-                  key={kw.id}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.04 }}
-                  className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors"
-                >
-                  <td className="px-5 py-4 font-medium text-slate-800">
-                    <button
-                      onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-                      className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
-                      title="순위 변화 보기"
-                    >
-                      {kw.keyword}
-                    </button>
-                  </td>
-                  <td className="px-5 py-4 text-center">
-                    <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
-                  </td>
-                  <td className="px-5 py-4 text-center">
-                    <RankChange current={kw.current_rank} previous={kw.previous_rank} />
-                  </td>
-                  <td className="px-5 py-4">
-                    {kw.matched_url ? (
-                      <a
-                        href={kw.matched_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`text-sm ${accentText} hover:underline truncate block max-w-xs`}
-                      >
-                        {kw.matched_title ?? kw.matched_url}
-                      </a>
-                    ) : (
-                      <span className="text-sm text-slate-300">-</span>
-                    )}
-                  </td>
-                  <td className="px-5 py-4 text-xs text-slate-400">
-                    {kw.updated_at
-                      ? new Date(kw.updated_at).toLocaleDateString("ko-KR", {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "-"}
-                  </td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleRefreshKeyword(kw)}
-                        disabled={refreshingId === kw.id}
-                        title="순위 새로고침"
-                        className={`text-slate-400 ${accentRefresh} transition-colors`}
-                      >
-                        <svg className={`w-4 h-4 ${refreshingId === kw.id ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteKeyword(kw.id)}
-                        title="키워드 삭제"
-                        className="text-slate-400 hover:text-red-500 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </td>
-                </motion.tr>
-              ))
+              <div className="divide-y divide-slate-100">
+                {keywords.map((kw, i) => renderKeywordCard(kw, i))}
+              </div>
             )}
-          </tbody>
-        </table>
+          </div>
 
-        {/* 모바일 카드 */}
-        <div className="md:hidden">
-          {loading ? (
-            <div className="text-center py-12 text-slate-400">불러오는 중...</div>
-          ) : keywords.length === 0 ? (
-            <div className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</div>
-          ) : (
-            <div className="divide-y divide-slate-100">
-              {keywords.map((kw, index) => (
-                <motion.div
-                  key={kw.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.04 }}
-                  className="p-4"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <button
-                      onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-                      className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
-                    >
-                      {kw.keyword}
-                    </button>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={() => handleRefreshKeyword(kw)}
-                        disabled={refreshingId === kw.id}
-                        className={`text-slate-400 ${accentRefresh} transition-colors p-1`}
-                      >
-                        <svg className={`w-4 h-4 ${refreshingId === kw.id ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                        </svg>
-                      </button>
-                      <button
-                        onClick={() => handleDeleteKeyword(kw.id)}
-                        className="text-slate-400 hover:text-red-500 transition-colors p-1"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
-                    <RankChange current={kw.current_rank} previous={kw.previous_rank} />
-                  </div>
-                  {kw.matched_url && (
-                    <a
-                      href={kw.matched_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`text-xs ${accentText} hover:underline truncate block mb-1`}
-                    >
-                      {kw.matched_title ?? kw.matched_url}
-                    </a>
-                  )}
-                  <p className="text-xs text-slate-400">
-                    {kw.updated_at
-                      ? new Date(kw.updated_at).toLocaleDateString("ko-KR", {
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "-"}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          )}
+          <form onSubmit={handleAddKeyword} className="flex items-center gap-3 px-4 md:px-5 py-4 border-t border-slate-100 bg-slate-50/50">
+            <input
+              type="text"
+              value={newKeyword}
+              onChange={(e) => setNewKeyword(e.target.value)}
+              placeholder="새 키워드 입력"
+              className={`flex-1 px-3 md:px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+            />
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              disabled={addingKeyword || !newKeyword.trim()}
+              className={`px-4 md:px-5 py-2 ${accentBtn} disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors shrink-0`}
+            >
+              {addingKeyword ? "..." : "추가"}
+            </motion.button>
+          </form>
         </div>
+      ) : (
+        /* 카페 모드: 노출/미노출 섹션 */
+        <div className="space-y-4">
+          {/* 노출 중 섹션 */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-5 py-3 bg-violet-50 border-b border-violet-100 flex items-center justify-between">
+              <span className="text-sm font-semibold text-violet-700">노출 중</span>
+              <span className="text-xs text-violet-500">{exposedKeywords.length}개</span>
+            </div>
 
-        {/* 키워드 추가 폼 */}
-        <form
-          onSubmit={handleAddKeyword}
-          className="flex items-center gap-3 px-4 md:px-5 py-4 border-t border-slate-100 bg-slate-50/50"
-        >
-          <input
-            type="text"
-            value={newKeyword}
-            onChange={(e) => setNewKeyword(e.target.value)}
-            placeholder="새 키워드 입력"
-            className={`flex-1 px-3 md:px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
-          />
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            type="submit"
-            disabled={addingKeyword || !newKeyword.trim()}
-            className={`px-4 md:px-5 py-2 ${accentBtn} disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors shrink-0`}
-          >
-            {addingKeyword ? "..." : "추가"}
-          </motion.button>
-        </form>
-      </div>
+            <table className="w-full hidden md:table">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-100">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">키워드 / 포스팅</th>
+                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">순위</th>
+                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">노출 URL</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
+                  <th className="px-5 py-3 w-20"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                ) : exposedKeywords.length === 0 ? (
+                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
+                ) : (
+                  exposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
+                )}
+              </tbody>
+            </table>
+
+            <div className="md:hidden">
+              {loading ? (
+                <div className="text-center py-8 text-slate-400">불러오는 중...</div>
+              ) : exposedKeywords.length === 0 ? (
+                <div className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</div>
+              ) : (
+                <div className="divide-y divide-slate-100">
+                  {exposedKeywords.map((kw, i) => renderKeywordCard(kw, i))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 미노출 섹션 */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+            <div className="px-5 py-3 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-500">미노출</span>
+              <span className="text-xs text-slate-400">{unexposedKeywords.length}개</span>
+            </div>
+
+            <table className="w-full hidden md:table">
+              <thead>
+                <tr className="bg-slate-50/50 border-b border-slate-100">
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">키워드 / 포스팅</th>
+                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">상태</th>
+                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide"></th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
+                  <th className="px-5 py-3 w-20"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                ) : unexposedKeywords.length === 0 ? (
+                  <tr><td colSpan={6} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
+                ) : (
+                  unexposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
+                )}
+              </tbody>
+            </table>
+
+            <div className="md:hidden">
+              {loading ? (
+                <div className="text-center py-8 text-slate-400">불러오는 중...</div>
+              ) : unexposedKeywords.length === 0 ? (
+                <div className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</div>
+              ) : (
+                <div className="divide-y divide-slate-100">
+                  {unexposedKeywords.map((kw, i) => renderKeywordCard(kw, i))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* 카페 키워드 추가 폼 */}
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 md:p-5">
+            <p className="text-sm font-semibold text-slate-700 mb-3">키워드 추가</p>
+            <form onSubmit={handleAddKeyword} className="space-y-2">
+              <input
+                type="text"
+                value={newKeyword}
+                onChange={(e) => setNewKeyword(e.target.value)}
+                placeholder="키워드 (필수)"
+                className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+              />
+              <input
+                type="text"
+                value={newPostUrl}
+                onChange={(e) => setNewPostUrl(e.target.value)}
+                placeholder="포스팅 URL (예: https://cafe.naver.com/mycafe/12345)"
+                className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+              />
+              <input
+                type="text"
+                value={newPostTitle}
+                onChange={(e) => setNewPostTitle(e.target.value)}
+                placeholder="포스팅 제목 (URL 없으면 필수)"
+                className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+              />
+              {addError && <p className="text-red-500 text-xs">{addError}</p>}
+              <motion.button
+                whileTap={{ scale: 0.97 }}
+                type="submit"
+                disabled={addingKeyword || !newKeyword.trim()}
+                className={`w-full py-2 ${accentBtn} disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors`}
+              >
+                {addingKeyword ? "추가 중..." : "키워드 추가"}
+              </motion.button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <AnimatePresence>
         {historyKeyword && (

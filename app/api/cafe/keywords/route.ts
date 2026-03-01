@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { client_id, keyword } = body;
+  const { client_id, keyword, post_url, post_title } = body;
 
   if (!client_id || !keyword) {
     return NextResponse.json(
@@ -36,9 +36,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  if (!post_url && !post_title) {
+    return NextResponse.json(
+      { error: "포스팅 URL 또는 제목 중 하나는 입력해주세요." },
+      { status: 400 }
+    );
+  }
+
   const { data, error } = await supabase
     .from("cafe_keywords")
-    .insert({ client_id, keyword })
+    .insert({ client_id, keyword, post_url: post_url ?? null, post_title: post_title ?? null })
     .select()
     .single();
 

@@ -24,18 +24,18 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { name, assignee, cafe_url } = body;
+  const { name, assignee } = body;
 
-  if (!name || !cafe_url) {
+  if (!name) {
     return NextResponse.json(
-      { error: "브랜드명과 카페 주소를 입력해주세요." },
+      { error: "브랜드명을 입력해주세요." },
       { status: 400 }
     );
   }
 
   const { data, error } = await supabase
     .from("cafe_clients")
-    .insert({ name, assignee: assignee ?? "", cafe_url })
+    .insert({ name, assignee: assignee ?? "" })
     .select()
     .single();
 

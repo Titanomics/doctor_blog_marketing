@@ -22,7 +22,7 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
     try {
       const body = isBlog
         ? { name: form.name, assignee: form.assignee, blog_url: form.url }
-        : { name: form.name, assignee: form.assignee, cafe_url: form.url };
+        : { name: form.name, assignee: form.assignee };
 
       const endpoint = isBlog ? "/api/clients" : "/api/cafe/clients";
       const res = await fetch(endpoint, {
@@ -83,19 +83,21 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
               className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 text-sm"
             />
           </div>
-          <div>
-            <label className="text-sm font-medium text-slate-700 block mb-1.5">
-              {isBlog ? "블로그 주소" : "카페 주소"}
-            </label>
-            <input
-              type="text"
-              required
-              value={form.url}
-              onChange={(e) => setForm({ ...form, url: e.target.value })}
-              placeholder={isBlog ? "예: blog.naver.com/myhospital" : "예: cafe.naver.com/mycafe"}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 text-sm"
-            />
-          </div>
+          {isBlog && (
+            <div>
+              <label className="text-sm font-medium text-slate-700 block mb-1.5">
+                블로그 주소
+              </label>
+              <input
+                type="text"
+                required
+                value={form.url}
+                onChange={(e) => setForm({ ...form, url: e.target.value })}
+                placeholder="예: blog.naver.com/myhospital"
+                className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:border-emerald-500 outline-none text-slate-800 text-sm"
+              />
+            </div>
+          )}
 
           {error && <p className="text-red-500 text-sm">{error}</p>}
 

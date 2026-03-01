@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
   try {
     const { data: clients, error: clientsError } = await supabase
       .from("cafe_clients")
-      .select("id, name, cafe_url");
+      .select("id, name");
 
     if (clientsError) throw clientsError;
     if (!clients || clients.length === 0) {
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     for (const client of clients) {
       const { data: keywords, error: kwError } = await supabase
         .from("cafe_keywords")
-        .select("id, keyword, current_rank")
+        .select("id, keyword, current_rank, post_url, post_title")
         .eq("client_id", client.id);
 
       if (kwError || !keywords) continue;
@@ -38,9 +38,10 @@ export async function POST(request: NextRequest) {
         try {
           await sleep(DELAY_MS);
 
-          const searchRes = await fetch(
-            `${baseUrl}/api/cafe/search?keyword=${encodeURIComponent(kw.keyword)}&cafeUrl=${encodeURIComponent(client.cafe_url.trim())}`
-          );
+          const params = new URLSearchParams({ keyword: kw.keyword });
+          if (kw.post_url) params.set("postUrl", kw.post_url);
+          if (kw.post_title) params.set("postTitle", kw.post_title);
+          const searchRes = await fetch(`${baseUrl}/api/cafe/search?${params.toString()}`);
 
           if (!searchRes.ok) {
             errors.push(`[${client.name}] "${kw.keyword}" 검색 실패`);

@@ -51,9 +51,9 @@ export interface SearchApiResponse {
 
 export interface CafeClient {
   id: string;
-  name: string;        // 브랜드명
+  name: string;
   assignee: string;
-  cafe_url: string;    // 예: https://cafe.naver.com/카페아이디
+  cafe_url?: string;
   created_at: string;
 }
 
@@ -61,6 +61,8 @@ export interface CafeKeyword {
   id: string;
   client_id: string;
   keyword: string;
+  post_url: string | null;
+  post_title: string | null;
   current_rank: number | null;
   previous_rank: number | null;
   matched_title: string | null;
