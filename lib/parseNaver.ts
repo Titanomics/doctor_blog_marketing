@@ -26,7 +26,7 @@ function decodeHtmlEntities(str: string): string {
 export function parseViewSection(html: string): ViewResult[] {
   const results: ViewResult[] = [];
 
-  const viewHtml = extractViewSection(html) ?? html;
+  const viewHtml = html;
 
   // .link 과 .imgtitlelink 모두 포함 (피처드 카드 포함)
   const headlinePattern =
