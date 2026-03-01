@@ -10,6 +10,7 @@ type AnyClient = Client | CafeClient;
 interface SidebarProps {
   mode: "blog" | "cafe";
   productSubMode?: "cafe" | "reporter";
+  onProductSubModeChange?: (sub: "cafe" | "reporter") => void;
   onModeChange: () => void;
   selectedClientId: string | null;
   onClientSelect: (client: AnyClient) => void;
@@ -20,6 +21,7 @@ interface SidebarProps {
 export default function Sidebar({
   mode,
   productSubMode,
+  onProductSubModeChange,
   onModeChange,
   selectedClientId,
   onClientSelect,
@@ -34,12 +36,13 @@ export default function Sidebar({
   const [loading, setLoading] = useState(true);
 
   const isBlog = mode === "blog";
+  const isReporter = !isBlog && productSubMode === "reporter";
   const apiPath = isBlog ? "/api/clients" : "/api/cafe/clients";
   const entityLabel = isBlog ? "병원" : "브랜드";
-  const activeColor = isBlog ? "bg-emerald-500" : "bg-violet-500";
-  const activeFocus = isBlog ? "focus:border-emerald-400" : "focus:border-violet-400";
-  const activeItemBg = isBlog ? "bg-emerald-50 border-emerald-200" : "bg-violet-50 border-violet-200";
-  const activeItemText = isBlog ? "text-emerald-700" : "text-violet-700";
+  const activeColor = isBlog ? "bg-emerald-500" : isReporter ? "bg-emerald-500" : "bg-violet-500";
+  const activeFocus = isBlog ? "focus:border-emerald-400" : isReporter ? "focus:border-emerald-400" : "focus:border-violet-400";
+  const activeItemBg = isBlog ? "bg-emerald-50 border-emerald-200" : isReporter ? "bg-emerald-50 border-emerald-200" : "bg-violet-50 border-violet-200";
+  const activeItemText = isBlog ? "text-emerald-700" : isReporter ? "text-emerald-700" : "text-violet-700";
 
   const fetchClients = useCallback(async () => {
     setLoading(true);
@@ -82,18 +85,46 @@ export default function Sidebar({
   return (
     <aside className="w-72 min-h-screen bg-white border-r border-slate-100 flex flex-col">
       {/* 헤더 */}
-      <div className="flex items-center gap-2 p-4 border-b border-slate-100">
-        <button
-          onClick={onModeChange}
-          className="text-gray-400 hover:text-gray-600 text-sm transition-colors"
-        >
-          ← 돌아가기
-        </button>
-        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-          isBlog ? "bg-blue-100 text-blue-700" : productSubMode === "reporter" ? "bg-emerald-100 text-emerald-700" : "bg-violet-100 text-violet-700"
-        }`}>
-          {isBlog ? "🏥 병원" : productSubMode === "reporter" ? "📝 블로그기자단" : "☕ 카페"}
-        </span>
+      <div className="p-4 border-b border-slate-100">
+        <div className="flex items-center gap-2 mb-3">
+          <button
+            onClick={onModeChange}
+            className="text-gray-400 hover:text-gray-600 text-sm transition-colors"
+          >
+            ← 돌아가기
+          </button>
+          <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+            isBlog ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
+          }`}>
+            {isBlog ? "🏥 병원" : "📦 제품"}
+          </span>
+        </div>
+
+        {/* 제품 모드 탭 */}
+        {!isBlog && onProductSubModeChange && (
+          <div className="flex gap-1 bg-slate-100 rounded-xl p-1">
+            <button
+              onClick={() => onProductSubModeChange("cafe")}
+              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                productSubMode === "cafe"
+                  ? "bg-white text-violet-700 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              ☕ 카페
+            </button>
+            <button
+              onClick={() => onProductSubModeChange("reporter")}
+              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                productSubMode === "reporter"
+                  ? "bg-white text-emerald-700 shadow-sm"
+                  : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              📝 블로그기자단
+            </button>
+          </div>
+        )}
       </div>
 
       {/* 필터 영역 */}

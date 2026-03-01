@@ -11,7 +11,8 @@ import { Client, CafeClient } from "@/lib/types";
 type AnyClient = Client | CafeClient;
 
 export default function DashboardPage() {
-  const [mode, setMode] = useState<"blog" | "cafe" | "reporter" | null>(null);
+  const [mode, setMode] = useState<"blog" | "cafe" | null>(null);
+  const [productSubMode, setProductSubMode] = useState<"cafe" | "reporter">("cafe");
   const [selectedClient, setSelectedClient] = useState<AnyClient | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function DashboardPage() {
   const handleModeChange = () => {
     setMode(null);
     setSelectedClient(null);
+    setProductSubMode("cafe");
   };
 
   const handleClientSelect = (client: AnyClient) => {
@@ -31,8 +33,10 @@ export default function DashboardPage() {
     setRefreshTrigger((n) => n + 1);
   };
 
-  // reporter 모드는 cafe_clients를 Sidebar에서 사용
-  const sidebarMode = mode === "reporter" ? "cafe" : mode;
+  const handleProductSubModeChange = (sub: "cafe" | "reporter") => {
+    setProductSubMode(sub);
+    setSelectedClient(null);
+  };
 
   return (
     <AuthGuard>
@@ -68,8 +72,9 @@ export default function DashboardPage() {
             `}
           >
             <Sidebar
-              mode={sidebarMode as "blog" | "cafe"}
-              productSubMode={mode === "reporter" ? "reporter" : mode === "cafe" ? "cafe" : undefined}
+              mode={mode}
+              productSubMode={mode === "cafe" ? productSubMode : undefined}
+              onProductSubModeChange={mode === "cafe" ? handleProductSubModeChange : undefined}
               onModeChange={handleModeChange}
               selectedClientId={selectedClient?.id ?? null}
               onClientSelect={handleClientSelect}
@@ -78,7 +83,7 @@ export default function DashboardPage() {
             />
           </div>
 
-          {mode === "reporter" ? (
+          {mode === "cafe" && productSubMode === "reporter" ? (
             <ReporterPanel
               client={selectedClient as CafeClient | null}
               onClientUpdated={handleClientUpdated}
