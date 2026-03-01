@@ -9,6 +9,7 @@ type AnyClient = Client | CafeClient;
 
 interface SidebarProps {
   mode: "blog" | "cafe";
+  productSubMode?: "cafe" | "reporter";
   onModeChange: () => void;
   selectedClientId: string | null;
   onClientSelect: (client: AnyClient) => void;
@@ -18,6 +19,7 @@ interface SidebarProps {
 
 export default function Sidebar({
   mode,
+  productSubMode,
   onModeChange,
   selectedClientId,
   onClientSelect,
@@ -88,9 +90,9 @@ export default function Sidebar({
           ← 돌아가기
         </button>
         <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-          isBlog ? "bg-blue-100 text-blue-700" : "bg-green-100 text-green-700"
+          isBlog ? "bg-blue-100 text-blue-700" : productSubMode === "reporter" ? "bg-emerald-100 text-emerald-700" : "bg-violet-100 text-violet-700"
         }`}>
-          {isBlog ? "🏥 병원" : "📦 제품"}
+          {isBlog ? "🏥 병원" : productSubMode === "reporter" ? "📝 블로그기자단" : "☕ 카페"}
         </span>
       </div>
 

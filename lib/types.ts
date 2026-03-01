@@ -80,3 +80,25 @@ export interface CafeKeywordHistory {
   tracked_date: string;
   created_at: string;
 }
+
+export interface ReporterKeyword {
+  id: string;
+  client_id: string;
+  keyword: string;
+  created_at: string;
+  entries?: ReporterBlogEntry[];
+}
+
+export interface ReporterBlogEntry {
+  id: string;
+  keyword_id: string;
+  blog_url: string;
+  current_rank: number | null;
+  previous_rank: number | null;
+  smart_block_name: string | null;
+  smart_block_rank: number | null;
+  matched_title: string | null;
+  matched_url: string | null;
+  updated_at: string;
+  created_at: string;
+}

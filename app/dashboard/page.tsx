@@ -5,12 +5,13 @@ import AuthGuard from "@/components/AuthGuard";
 import ModeSelect from "@/components/ModeSelect";
 import Sidebar from "@/components/dashboard/Sidebar";
 import MainPanel from "@/components/dashboard/MainPanel";
+import ReporterPanel from "@/components/dashboard/ReporterPanel";
 import { Client, CafeClient } from "@/lib/types";
 
 type AnyClient = Client | CafeClient;
 
 export default function DashboardPage() {
-  const [mode, setMode] = useState<"blog" | "cafe" | null>(null);
+  const [mode, setMode] = useState<"blog" | "cafe" | "reporter" | null>(null);
   const [selectedClient, setSelectedClient] = useState<AnyClient | null>(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -29,6 +30,9 @@ export default function DashboardPage() {
     setSelectedClient(null);
     setRefreshTrigger((n) => n + 1);
   };
+
+  // reporter 모드는 cafe_clients를 Sidebar에서 사용
+  const sidebarMode = mode === "reporter" ? "cafe" : mode;
 
   return (
     <AuthGuard>
@@ -64,7 +68,8 @@ export default function DashboardPage() {
             `}
           >
             <Sidebar
-              mode={mode}
+              mode={sidebarMode as "blog" | "cafe"}
+              productSubMode={mode === "reporter" ? "reporter" : mode === "cafe" ? "cafe" : undefined}
               onModeChange={handleModeChange}
               selectedClientId={selectedClient?.id ?? null}
               onClientSelect={handleClientSelect}
@@ -73,11 +78,18 @@ export default function DashboardPage() {
             />
           </div>
 
-          <MainPanel
-            mode={mode}
-            client={selectedClient}
-            onClientUpdated={handleClientUpdated}
-          />
+          {mode === "reporter" ? (
+            <ReporterPanel
+              client={selectedClient as CafeClient | null}
+              onClientUpdated={handleClientUpdated}
+            />
+          ) : (
+            <MainPanel
+              mode={mode}
+              client={selectedClient}
+              onClientUpdated={handleClientUpdated}
+            />
+          )}
         </div>
       )}
     </AuthGuard>
