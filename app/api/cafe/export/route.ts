@@ -36,7 +36,7 @@ export async function GET() {
     const date = new Date().toISOString().split("T")[0];
     const excelBuffer = generateCafeReport(keywords, date);
 
-    return new NextResponse(excelBuffer, {
+    return new NextResponse(new Uint8Array(excelBuffer), {
       status: 200,
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
