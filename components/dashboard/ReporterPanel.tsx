@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CafeClient, ReporterKeyword, ReporterBlogEntry } from "@/lib/types";
 import RankBadge from "@/components/dashboard/RankBadge";
@@ -20,6 +20,15 @@ const RefreshIcon = ({ spinning }: { spinning?: boolean }) => (
 const DeleteIcon = () => (
   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+  </svg>
+);
+
+const ChevronIcon = ({ open }: { open: boolean }) => (
+  <svg
+    className={`w-4 h-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+    fill="none" stroke="currentColor" viewBox="0 0 24 24"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
   </svg>
 );
 
@@ -63,6 +72,19 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
   // 새로고침
   const [refreshingEntryId, setRefreshingEntryId] = useState<string | null>(null);
 
+  // 키워드 열기/닫기
+  const [openKeywords, setOpenKeywords] = useState<Set<string>>(new Set());
+  const initializedRef = useRef(false);
+
+  const toggleKeyword = (id: string) => {
+    setOpenKeywords((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   // 키워드 편집
   const [editingKeywordId, setEditingKeywordId] = useState<string | null>(null);
   const [editingKeywordText, setEditingKeywordText] = useState("");
@@ -75,6 +97,11 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
       if (res.ok) {
         const data = await res.json();
         setKeywords(data);
+        // 첫 로드 시 첫 번째 키워드 자동 열기
+        if (!initializedRef.current && data.length > 0) {
+          setOpenKeywords(new Set([data[0].id]));
+          initializedRef.current = true;
+        }
       }
     } finally {
       setLoading(false);
@@ -84,6 +111,8 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
   useEffect(() => {
     setKeywords([]);
     setBatchMessage("");
+    setOpenKeywords(new Set());
+    initializedRef.current = false;
     fetchKeywords();
   }, [fetchKeywords]);
 
@@ -276,6 +305,7 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
 
           {keywords.map((kw, kwIndex) => {
             const entries = kw.entries ?? [];
+            const isOpen = openKeywords.has(kw.id);
             return (
               <motion.div
                 key={kw.id}
@@ -284,11 +314,18 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                 transition={{ delay: kwIndex * 0.04 }}
                 className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden"
               >
-                {/* 키워드 헤더 */}
-                <div className="px-5 py-3.5 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between">
+                {/* 키워드 헤더 (클릭 시 열기/닫기) */}
+                <div
+                  className="px-5 py-3.5 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between cursor-pointer select-none"
+                  onClick={() => toggleKeyword(kw.id)}
+                >
                   <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <ChevronIcon open={isOpen} />
                     {editingKeywordId === kw.id ? (
-                      <div className="flex items-center gap-1">
+                      <div
+                        className="flex items-center gap-1"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <input
                           autoFocus
                           value={editingKeywordText}
@@ -307,7 +344,10 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                     )}
                     <span className="text-xs text-emerald-500 shrink-0">{entries.length}/10</span>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                  <div
+                    className="flex items-center gap-1.5 shrink-0 ml-2"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <button
                       onClick={() => { setEditingKeywordId(kw.id); setEditingKeywordText(kw.keyword); }}
                       className="text-emerald-400 hover:text-emerald-600 transition-colors p-1"
@@ -325,96 +365,110 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                   </div>
                 </div>
 
-                {/* 블로그 URL 목록 */}
-                {entries.length > 0 && (
-                  <div className="divide-y divide-slate-50">
-                    {entries.map((entry) => (
-                      <div key={entry.id} className="px-4 md:px-5 py-3 flex items-center gap-3 hover:bg-slate-50/50 transition-colors">
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs text-slate-500 truncate font-mono">{shortUrl(entry.blog_url)}</p>
-                          {entry.matched_title && (
-                            <a
-                              href={entry.matched_url ?? entry.blog_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-xs text-emerald-600 hover:underline truncate block mt-0.5"
-                            >
-                              {entry.matched_title}
-                            </a>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <RankBadge
-                            rank={entry.current_rank}
-                            smartBlockName={entry.smart_block_name}
-                            smartBlockRank={entry.smart_block_rank}
-                          />
-                          <RankChange current={entry.current_rank} previous={entry.previous_rank} />
-                          <span className="text-xs text-slate-300 hidden md:block w-20 text-right">{formatDate(entry.updated_at)}</span>
-                          <button
-                            onClick={() => handleRefreshEntry(entry, kw.keyword)}
-                            disabled={refreshingEntryId === entry.id}
-                            className="text-slate-400 hover:text-emerald-500 transition-colors p-1"
-                            title="순위 새로고침"
-                          >
-                            <RefreshIcon spinning={refreshingEntryId === entry.id} />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteEntry(entry.id)}
-                            className="text-slate-400 hover:text-red-500 transition-colors p-1"
-                            title="URL 삭제"
-                          >
-                            <DeleteIcon />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* URL 추가 영역 */}
-                <div className="px-4 md:px-5 py-3 border-t border-slate-50 bg-slate-50/30">
-                  {addingUrlFor === kw.id ? (
-                    <div className="flex items-center gap-2">
-                      <input
-                        autoFocus
-                        type="text"
-                        value={newUrl}
-                        onChange={(e) => { setNewUrl(e.target.value); setUrlError(""); }}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") handleAddUrl(kw.id);
-                          if (e.key === "Escape") { setAddingUrlFor(null); setNewUrl(""); setUrlError(""); }
-                        }}
-                        placeholder="blog.naver.com/username/postId"
-                        className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-slate-800"
-                      />
-                      <button
-                        onClick={() => handleAddUrl(kw.id)}
-                        disabled={addingUrl || !newUrl.trim()}
-                        className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 text-white text-xs rounded-lg transition-colors shrink-0"
-                      >
-                        {addingUrl ? "..." : "추가"}
-                      </button>
-                      <button
-                        onClick={() => { setAddingUrlFor(null); setNewUrl(""); setUrlError(""); }}
-                        className="text-slate-400 hover:text-slate-600 text-xs"
-                      >
-                        취소
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => { setAddingUrlFor(kw.id); setNewUrl(""); setUrlError(""); }}
-                      disabled={entries.length >= 10}
-                      className="text-xs text-emerald-500 hover:text-emerald-700 disabled:text-slate-300 transition-colors font-medium"
+                {/* 아코디언 본문 */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="content"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
+                      style={{ overflow: "hidden" }}
                     >
-                      + URL 추가 {entries.length >= 10 ? "(최대 10개)" : ""}
-                    </button>
+                      {/* 블로그 URL 목록 (최대 5개 높이 스크롤) */}
+                      {entries.length > 0 && (
+                        <div className="divide-y divide-slate-50 max-h-[280px] overflow-y-auto">
+                          {entries.map((entry) => (
+                            <div key={entry.id} className="px-4 md:px-5 py-3 flex items-center gap-3 hover:bg-slate-50/50 transition-colors">
+                              <div className="flex-1 min-w-0">
+                                <p className="text-xs text-slate-500 truncate font-mono">{shortUrl(entry.blog_url)}</p>
+                                {entry.matched_title && (
+                                  <a
+                                    href={entry.matched_url ?? entry.blog_url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-emerald-600 hover:underline truncate block mt-0.5"
+                                  >
+                                    {entry.matched_title}
+                                  </a>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2 shrink-0">
+                                <RankBadge
+                                  rank={entry.current_rank}
+                                  smartBlockName={entry.smart_block_name}
+                                  smartBlockRank={entry.smart_block_rank}
+                                />
+                                <RankChange current={entry.current_rank} previous={entry.previous_rank} />
+                                <span className="text-xs text-slate-300 hidden md:block w-20 text-right">{formatDate(entry.updated_at)}</span>
+                                <button
+                                  onClick={() => handleRefreshEntry(entry, kw.keyword)}
+                                  disabled={refreshingEntryId === entry.id}
+                                  className="text-slate-400 hover:text-emerald-500 transition-colors p-1"
+                                  title="순위 새로고침"
+                                >
+                                  <RefreshIcon spinning={refreshingEntryId === entry.id} />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteEntry(entry.id)}
+                                  className="text-slate-400 hover:text-red-500 transition-colors p-1"
+                                  title="URL 삭제"
+                                >
+                                  <DeleteIcon />
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* URL 추가 영역 */}
+                      <div className="px-4 md:px-5 py-3 border-t border-slate-50 bg-slate-50/30">
+                        {addingUrlFor === kw.id ? (
+                          <div className="flex items-center gap-2">
+                            <input
+                              autoFocus
+                              type="text"
+                              value={newUrl}
+                              onChange={(e) => { setNewUrl(e.target.value); setUrlError(""); }}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter") handleAddUrl(kw.id);
+                                if (e.key === "Escape") { setAddingUrlFor(null); setNewUrl(""); setUrlError(""); }
+                              }}
+                              placeholder="blog.naver.com/username/postId"
+                              className="flex-1 px-3 py-1.5 text-xs rounded-lg border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-slate-800"
+                            />
+                            <button
+                              onClick={() => handleAddUrl(kw.id)}
+                              disabled={addingUrl || !newUrl.trim()}
+                              className="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 disabled:bg-slate-300 text-white text-xs rounded-lg transition-colors shrink-0"
+                            >
+                              {addingUrl ? "..." : "추가"}
+                            </button>
+                            <button
+                              onClick={() => { setAddingUrlFor(null); setNewUrl(""); setUrlError(""); }}
+                              className="text-slate-400 hover:text-slate-600 text-xs"
+                            >
+                              취소
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => { setAddingUrlFor(kw.id); setNewUrl(""); setUrlError(""); }}
+                            disabled={entries.length >= 10}
+                            className="text-xs text-emerald-500 hover:text-emerald-700 disabled:text-slate-300 transition-colors font-medium"
+                          >
+                            + URL 추가 {entries.length >= 10 ? "(최대 10개)" : ""}
+                          </button>
+                        )}
+                        {urlError && addingUrlFor === kw.id && (
+                          <p className="text-red-500 text-xs mt-1">{urlError}</p>
+                        )}
+                      </div>
+                    </motion.div>
                   )}
-                  {urlError && addingUrlFor === kw.id && (
-                    <p className="text-red-500 text-xs mt-1">{urlError}</p>
-                  )}
-                </div>
+                </AnimatePresence>
               </motion.div>
             );
           })}
