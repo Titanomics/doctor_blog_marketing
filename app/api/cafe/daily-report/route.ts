@@ -77,7 +77,16 @@ async function fetchAllKeywordsWithRanks(baseUrl: string) {
   return result;
 }
 
+// Vercel Cron은 GET으로 호출하므로 GET도 동일 로직으로 처리
+export async function GET(request: NextRequest) {
+  return handler(request);
+}
+
 export async function POST(request: NextRequest) {
+  return handler(request);
+}
+
+async function handler(request: NextRequest) {
   // Vercel Cron 또는 Bearer 토큰 인증
   const auth = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
