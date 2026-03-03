@@ -60,6 +60,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [exportLoading, setExportLoading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editingText, setEditingText] = useState("");
+  const [editingPostUrl, setEditingPostUrl] = useState("");
+  const [editingPostTitle, setEditingPostTitle] = useState("");
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -175,10 +177,15 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     const text = editingText.trim();
     if (!text) return;
     setEditingId(null);
+    const body: Record<string, string | null> = { id, keyword: text };
+    if (!isBlog) {
+      body.post_url = editingPostUrl.trim() || null;
+      body.post_title = editingPostTitle.trim() || null;
+    }
     await fetch(keywordsApi, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, keyword: text }),
+      body: JSON.stringify(body),
     });
     fetchKeywords();
   };
@@ -269,19 +276,42 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     >
       <td className="px-5 py-4 font-medium text-slate-800">
         {editingId === kw.id ? (
-          <div className="flex items-center gap-1">
-            <input
-              autoFocus
-              value={editingText}
-              onChange={(e) => setEditingText(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleSaveEdit(kw.id);
-                if (e.key === "Escape") setEditingId(null);
-              }}
-              className={`px-2 py-1 text-sm border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
-            />
-            <button onClick={() => handleSaveEdit(kw.id)} className="text-green-500 hover:text-green-700 font-bold text-sm">✓</button>
-            <button onClick={() => setEditingId(null)} className="text-slate-400 hover:text-slate-600 text-sm">✕</button>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1">
+              <input
+                autoFocus
+                value={editingText}
+                onChange={(e) => setEditingText(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleSaveEdit(kw.id);
+                  if (e.key === "Escape") setEditingId(null);
+                }}
+                placeholder="키워드"
+                className={`px-2 py-1 text-sm border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
+              />
+              <button onClick={() => handleSaveEdit(kw.id)} className="text-green-500 hover:text-green-700 font-bold text-sm">✓</button>
+              <button onClick={() => setEditingId(null)} className="text-slate-400 hover:text-slate-600 text-sm">✕</button>
+            </div>
+            {!isBlog && (
+              <>
+                <input
+                  value={editingPostUrl}
+                  onChange={(e) => setEditingPostUrl(e.target.value)}
+                  placeholder="포스팅 URL"
+                  className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-56`}
+                />
+                <input
+                  value={editingPostTitle}
+                  onChange={(e) => setEditingPostTitle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit(kw.id);
+                    if (e.key === "Escape") setEditingId(null);
+                  }}
+                  placeholder="포스팅 제목"
+                  className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-56`}
+                />
+              </>
+            )}
           </div>
         ) : (
           <button
@@ -292,7 +322,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             {kw.keyword}
           </button>
         )}
-        {!isBlog && (
+        {!isBlog && editingId !== kw.id && (
           <p className="text-xs text-slate-400 mt-0.5 truncate max-w-xs">
             {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
           </p>
@@ -319,7 +349,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} title="순위 새로고침" className={`text-slate-400 ${accentRefresh} transition-colors`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
@@ -342,19 +372,42 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       <div className="flex items-center justify-between mb-2">
         <div>
           {editingId === kw.id ? (
-            <div className="flex items-center gap-1">
-              <input
-                autoFocus
-                value={editingText}
-                onChange={(e) => setEditingText(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSaveEdit(kw.id);
-                  if (e.key === "Escape") setEditingId(null);
-                }}
-                className={`px-2 py-1 text-sm border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-32`}
-              />
-              <button onClick={() => handleSaveEdit(kw.id)} className="text-green-500 font-bold text-sm">✓</button>
-              <button onClick={() => setEditingId(null)} className="text-slate-400 text-sm">✕</button>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <input
+                  autoFocus
+                  value={editingText}
+                  onChange={(e) => setEditingText(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit(kw.id);
+                    if (e.key === "Escape") setEditingId(null);
+                  }}
+                  placeholder="키워드"
+                  className={`px-2 py-1 text-sm border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-32`}
+                />
+                <button onClick={() => handleSaveEdit(kw.id)} className="text-green-500 font-bold text-sm">✓</button>
+                <button onClick={() => setEditingId(null)} className="text-slate-400 text-sm">✕</button>
+              </div>
+              {!isBlog && (
+                <>
+                  <input
+                    value={editingPostUrl}
+                    onChange={(e) => setEditingPostUrl(e.target.value)}
+                    placeholder="포스팅 URL"
+                    className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-48`}
+                  />
+                  <input
+                    value={editingPostTitle}
+                    onChange={(e) => setEditingPostTitle(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveEdit(kw.id);
+                      if (e.key === "Escape") setEditingId(null);
+                    }}
+                    placeholder="포스팅 제목"
+                    className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-48`}
+                  />
+                </>
+              )}
             </div>
           ) : (
             <button
@@ -364,7 +417,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.keyword}
             </button>
           )}
-          {!isBlog && (
+          {!isBlog && editingId !== kw.id && (
             <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
               {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
             </p>
