@@ -81,22 +81,40 @@ async function fetchReporterStatusChanges(): Promise<{
   newlyExposed: ReporterStatusChange[];
   newlyUnexposed: ReporterStatusChange[];
 }> {
-  // 상태가 바뀐 entry만 조회
-  const { data: entries } = await supabase
-    .from("reporter_blog_entries")
-    .select("keyword_id, blog_url, previous_rank, current_rank");
+  // 오늘/어제 날짜
+  const today = new Date().toISOString().split("T")[0];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
 
-  if (!entries || entries.length === 0) return { newlyExposed: [], newlyUnexposed: [] };
+  // 오늘 & 어제 히스토리 조회
+  const [{ data: todayHist }, { data: yesterdayHist }] = await Promise.all([
+    supabase.from("reporter_blog_history").select("entry_id, rank").eq("tracked_date", today),
+    supabase.from("reporter_blog_history").select("entry_id, rank").eq("tracked_date", yesterday),
+  ]);
 
-  const changed = entries.filter(
-    (e) =>
-      (e.previous_rank === null && e.current_rank !== null) ||
-      (e.previous_rank !== null && e.current_rank === null)
-  );
+  if (!todayHist || todayHist.length === 0) return { newlyExposed: [], newlyUnexposed: [] };
+
+  // 어제 기록이 없는 entry는 최초 등록이므로 제외
+  const yesterdayMap = new Map((yesterdayHist ?? []).map((h) => [h.entry_id, h.rank]));
+
+  const changed = todayHist.filter((t) => {
+    if (!yesterdayMap.has(t.entry_id)) return false; // 어제 기록 없으면 제외
+    const wasNull = yesterdayMap.get(t.entry_id) === null;
+    const isNull = t.rank === null;
+    return wasNull !== isNull; // 상태가 바뀐 경우만
+  });
 
   if (changed.length === 0) return { newlyExposed: [], newlyUnexposed: [] };
 
-  const kwIds = [...new Set(changed.map((e) => e.keyword_id))];
+  // entry → keyword → client 조회
+  const entryIds = changed.map((c) => c.entry_id);
+  const { data: entries } = await supabase
+    .from("reporter_blog_entries")
+    .select("id, blog_url, keyword_id")
+    .in("id", entryIds);
+
+  if (!entries || entries.length === 0) return { newlyExposed: [], newlyUnexposed: [] };
+
+  const kwIds = [...new Set(entries.map((e) => e.keyword_id))];
   const { data: keywords } = await supabase
     .from("reporter_keywords")
     .select("id, keyword, client_id")
@@ -108,23 +126,26 @@ async function fetchReporterStatusChanges(): Promise<{
     .select("id, name")
     .in("id", clientIds);
 
+  const entryMap = new Map(entries.map((e) => [e.id, e]));
   const kwMap = new Map((keywords ?? []).map((k) => [k.id, k]));
   const clientMap = new Map((clients ?? []).map((c) => [c.id, c.name]));
 
   const newlyExposed: ReporterStatusChange[] = [];
   const newlyUnexposed: ReporterStatusChange[] = [];
 
-  for (const entry of changed) {
+  for (const hist of changed) {
+    const entry = entryMap.get(hist.entry_id);
+    if (!entry) continue;
     const kw = kwMap.get(entry.keyword_id);
     if (!kw) continue;
     const item: ReporterStatusChange = {
       clientName: clientMap.get(kw.client_id) ?? "",
       keyword: kw.keyword,
       blogUrl: entry.blog_url,
-      previousRank: entry.previous_rank,
-      currentRank: entry.current_rank,
+      previousRank: yesterdayMap.get(hist.entry_id) ?? null,
+      currentRank: hist.rank,
     };
-    if (entry.previous_rank === null) newlyExposed.push(item);
+    if (hist.rank !== null) newlyExposed.push(item);
     else newlyUnexposed.push(item);
   }
 
