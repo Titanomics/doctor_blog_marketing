@@ -2,11 +2,11 @@
   "crons": [
     {
       "path": "/api/daily-batch",
-      "schedule": "0 22 * * *"
+      "schedule": "0 21 * * *"
     },
     {
       "path": "/api/cafe/daily-report",
-      "schedule": "0 0 * * *"
+      "schedule": "0 23 * * *"
     }
   ]
 }

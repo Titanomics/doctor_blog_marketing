@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// 매일 KST 07:00 (UTC 22:00)에 블로그 + 카페 전체 키워드 자동 업데이트
+// 매일 KST 06:00 (UTC 21:00)에 블로그 + 카페 전체 키워드 자동 업데이트
 export async function GET(request: NextRequest) {
   const baseUrl = new URL(request.url).origin;
 
