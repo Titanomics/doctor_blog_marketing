@@ -62,6 +62,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [editingText, setEditingText] = useState("");
   const [editingPostUrl, setEditingPostUrl] = useState("");
   const [editingPostTitle, setEditingPostTitle] = useState("");
+  const [rankSort, setRankSort] = useState<"none" | "asc" | "desc">("none");
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -256,6 +257,15 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       </main>
     );
   }
+
+  const sortedKeywords = rankSort === "none" ? keywords : [...keywords].sort((a, b) => {
+    const aRank = a.current_rank;
+    const bRank = b.current_rank;
+    if (aRank === null && bRank === null) return 0;
+    if (aRank === null) return 1;
+    if (bRank === null) return -1;
+    return rankSort === "asc" ? aRank - bRank : bRank - aRank;
+  });
 
   const blogUrl = isBlog ? (client as Client).blog_url : null;
   const exposedKeywords = keywords.filter(
@@ -521,7 +531,12 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
                 <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48">키워드</th>
-                <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">현재 순위</th>
+                <th
+                  className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24 cursor-pointer select-none hover:text-emerald-600 transition-colors"
+                  onClick={() => setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none")}
+                >
+                  현재 순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
+                </th>
                 <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
                 <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">매칭 포스트</th>
                 <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
@@ -534,7 +549,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               ) : keywords.length === 0 ? (
                 <tr><td colSpan={6} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td></tr>
               ) : (
-                keywords.map((kw, i) => renderKeywordRow(kw, i))
+                sortedKeywords.map((kw, i) => renderKeywordRow(kw, i))
               )}
             </tbody>
           </table>
@@ -542,11 +557,11 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <div className="md:hidden">
             {loading ? (
               <div className="text-center py-12 text-slate-400">불러오는 중...</div>
-            ) : keywords.length === 0 ? (
+            ) : sortedKeywords.length === 0 ? (
               <div className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</div>
             ) : (
               <div className="divide-y divide-slate-100">
-                {keywords.map((kw, i) => renderKeywordCard(kw, i))}
+                {sortedKeywords.map((kw, i) => renderKeywordCard(kw, i))}
               </div>
             )}
           </div>

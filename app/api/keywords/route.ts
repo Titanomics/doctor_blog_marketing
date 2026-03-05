@@ -36,6 +36,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // 띄어쓰기 무시 중복 체크
+  const { data: existing } = await supabase
+    .from("keywords")
+    .select("keyword")
+    .eq("client_id", client_id);
+
+  const normalize = (s: string) => s.replace(/\s/g, "");
+  const isDuplicate = (existing ?? []).some(
+    (row) => normalize(row.keyword) === normalize(keyword)
+  );
+  if (isDuplicate) {
+    return NextResponse.json(
+      { error: "이미 등록된 키워드입니다." },
+      { status: 409 }
+    );
+  }
+
   const { data, error } = await supabase
     .from("keywords")
     .insert({ client_id, keyword })
