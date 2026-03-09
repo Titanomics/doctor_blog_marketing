@@ -10,6 +10,7 @@ export interface Keyword {
   id: string;
   client_id: string;
   keyword: string;
+  priority: number;
   current_rank: number | null;
   previous_rank: number | null;
   matched_title: string | null;

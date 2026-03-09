@@ -63,6 +63,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [editingPostUrl, setEditingPostUrl] = useState("");
   const [editingPostTitle, setEditingPostTitle] = useState("");
   const [rankSort, setRankSort] = useState<"none" | "asc" | "desc">("none");
+  const [prioritySort, setPrioritySort] = useState<"none" | "asc" | "desc">("none");
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -191,6 +192,15 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     fetchKeywords();
   };
 
+  const handlePriorityChange = async (id: string, priority: number) => {
+    setKeywords(prev => prev.map(kw => kw.id === id ? { ...kw, priority } : kw));
+    await fetch(keywordsApi, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, priority }),
+    });
+  };
+
   const handleDeleteKeyword = async (id: string) => {
     await fetch(`${keywordsApi}?id=${id}`, { method: "DELETE" });
     fetchKeywords();
@@ -258,14 +268,26 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     );
   }
 
-  const sortedKeywords = rankSort === "none" ? keywords : [...keywords].sort((a, b) => {
-    const aRank = a.current_rank;
-    const bRank = b.current_rank;
-    if (aRank === null && bRank === null) return 0;
-    if (aRank === null) return 1;
-    if (bRank === null) return -1;
-    return rankSort === "asc" ? aRank - bRank : bRank - aRank;
-  });
+  const sortedKeywords = (() => {
+    if (prioritySort !== "none") {
+      return [...keywords].sort((a, b) => {
+        const aPri = (a as Keyword).priority ?? 3;
+        const bPri = (b as Keyword).priority ?? 3;
+        return prioritySort === "desc" ? bPri - aPri : aPri - bPri;
+      });
+    }
+    if (rankSort !== "none") {
+      return [...keywords].sort((a, b) => {
+        const aRank = a.current_rank;
+        const bRank = b.current_rank;
+        if (aRank === null && bRank === null) return 0;
+        if (aRank === null) return 1;
+        if (bRank === null) return -1;
+        return rankSort === "asc" ? aRank - bRank : bRank - aRank;
+      });
+    }
+    return keywords;
+  })();
 
   const blogUrl = isBlog ? (client as Client).blog_url : null;
   const exposedKeywords = keywords.filter(
@@ -338,6 +360,21 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           </p>
         )}
       </td>
+      {isBlog && (
+        <td className="px-5 py-4 text-center">
+          <div className="flex justify-center gap-0.5">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                onClick={() => handlePriorityChange(kw.id, star)}
+                className={`text-sm transition-colors ${star <= ((kw as Keyword).priority ?? 3) ? "text-amber-400" : "text-slate-200 hover:text-amber-300"}`}
+              >
+                ★
+              </button>
+            ))}
+          </div>
+        </td>
+      )}
       <td className="px-5 py-4 text-center">
         <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
       </td>
@@ -445,6 +482,19 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           </button>
         </div>
       </div>
+      {isBlog && (
+        <div className="flex gap-0.5 mb-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              onClick={() => handlePriorityChange(kw.id, star)}
+              className={`text-sm transition-colors ${star <= ((kw as Keyword).priority ?? 3) ? "text-amber-400" : "text-slate-200 hover:text-amber-300"}`}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+      )}
       <div className="flex items-center gap-3 mb-2">
         <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
         <RankChange current={kw.current_rank} previous={kw.previous_rank} />
@@ -532,8 +582,14 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               <tr className="bg-slate-50 border-b border-slate-100">
                 <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48">키워드</th>
                 <th
+                  className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-28 cursor-pointer select-none hover:text-emerald-600 transition-colors"
+                  onClick={() => { setPrioritySort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setRankSort("none"); }}
+                >
+                  중요도 {prioritySort === "desc" ? "▼" : prioritySort === "asc" ? "▲" : ""}
+                </th>
+                <th
                   className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24 cursor-pointer select-none hover:text-emerald-600 transition-colors"
-                  onClick={() => setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none")}
+                  onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setPrioritySort("none"); }}
                 >
                   현재 순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
                 </th>
@@ -545,9 +601,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={6} className="text-center py-12 text-slate-400">불러오는 중...</td></tr>
+                <tr><td colSpan={7} className="text-center py-12 text-slate-400">불러오는 중...</td></tr>
               ) : keywords.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td></tr>
+                <tr><td colSpan={7} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td></tr>
               ) : (
                 sortedKeywords.map((kw, i) => renderKeywordRow(kw, i))
               )}
