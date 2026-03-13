@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
-import type { ViewResult, SmartBlockResult } from "@/lib/parseNaver";
+import { parseViewSection, parseSmartBlocks, parseReplies } from "@/lib/parseNaver";
+import type { ViewResult, SmartBlockResult, ReplyResult } from "@/lib/parseNaver";
 
 interface CafeSearchApiResponse {
   results: ViewResult[];
@@ -8,6 +8,8 @@ interface CafeSearchApiResponse {
   foundRank: number | null;
   smartBlockResults: SmartBlockResult[];
   foundInSmartBlock: SmartBlockResult | null;
+  replyResults: ReplyResult[];
+  foundInReply: ReplyResult | null;
 }
 
 export async function GET(request: NextRequest) {
@@ -46,9 +48,11 @@ export async function GET(request: NextRequest) {
     const html = await response.text();
     const results = parseViewSection(html);
     const smartBlockResults = parseSmartBlocks(html);
+    const replyResults = parseReplies(html);
 
     let found: ViewResult | null = null;
     let foundInSmartBlock: SmartBlockResult | null = null;
+    let foundInReply: ReplyResult | null = null;
 
     if (postUrl || postTitle) {
       const normalize = (link: string) =>
@@ -57,14 +61,24 @@ export async function GET(request: NextRequest) {
         ? postUrl.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
         : null;
 
-      const match = (r: { link: string; title: string }) => {
+      const match = (r: { link: string; title?: string }) => {
         if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
-        if (postTitle && r.title.toLowerCase().includes(postTitle.toLowerCase())) return true;
+        if (postTitle && "title" in r && r.title && r.title.toLowerCase().includes(postTitle.toLowerCase())) return true;
+        return false;
+      };
+
+      const matchReply = (r: ReplyResult) => {
+        if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
+        if (postTitle && r.text.toLowerCase().includes(postTitle.toLowerCase())) return true;
         return false;
       };
 
       found = results.find(match) ?? null;
       foundInSmartBlock = smartBlockResults.find(match) ?? null;
+      // 꼬리글은 VIEW/스마트블록에서 못 찾았을 때만 체크
+      if (!found && !foundInSmartBlock) {
+        foundInReply = replyResults.find(matchReply) ?? null;
+      }
     }
 
     const responseData: CafeSearchApiResponse = {
@@ -73,6 +87,8 @@ export async function GET(request: NextRequest) {
       foundRank: found ? found.rank : null,
       smartBlockResults,
       foundInSmartBlock,
+      replyResults,
+      foundInReply,
     };
 
     return NextResponse.json(responseData);

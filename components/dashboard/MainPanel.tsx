@@ -154,6 +154,15 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       if (!res.ok) return;
       const data = await res.json();
 
+      const isReply = !!data.foundInReply && !data.found && !data.foundInSmartBlock;
+      const cafeKw = kw as CafeKeyword;
+      let replySince = cafeKw.reply_since ?? null;
+      if (isReply && !cafeKw.is_reply) {
+        replySince = new Date().toISOString();
+      } else if (!isReply && !cafeKw.is_reply) {
+        replySince = null;
+      }
+
       await fetch(keywordsApi, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -165,6 +174,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,
           smart_block_name: data.foundInSmartBlock?.blockName ?? null,
           smart_block_rank: data.foundInSmartBlock?.rank ?? null,
+          is_reply: isReply,
+          reply_since: replySince,
           updated_at: new Date().toISOString(),
         }),
       });
@@ -291,10 +302,10 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
 
   const blogUrl = isBlog ? (client as Client).blog_url : null;
   const exposedKeywords = keywords.filter(
-    (kw) => kw.current_rank !== null || kw.smart_block_rank !== null
+    (kw) => (kw.current_rank !== null || kw.smart_block_rank !== null) && !(kw as CafeKeyword).is_reply
   );
   const unexposedKeywords = keywords.filter(
-    (kw) => kw.current_rank === null && kw.smart_block_rank === null
+    (kw) => (kw.current_rank === null && kw.smart_block_rank === null) || (kw as CafeKeyword).is_reply
   );
 
   // 키워드 행 렌더러 (PC 테이블)
@@ -376,7 +387,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         </td>
       )}
       <td className="px-5 py-4 text-center">
-        <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
+        <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} isReply={(kw as CafeKeyword).is_reply} replySince={(kw as CafeKeyword).reply_since} />
       </td>
       <td className="px-5 py-4 text-center">
         <RankChange current={kw.current_rank} previous={kw.previous_rank} />
@@ -496,7 +507,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         </div>
       )}
       <div className="flex items-center gap-3 mb-2">
-        <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} />
+        <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} isReply={(kw as CafeKeyword).is_reply} replySince={(kw as CafeKeyword).reply_since} />
         <RankChange current={kw.current_rank} previous={kw.previous_rank} />
       </div>
       {kw.matched_url && (

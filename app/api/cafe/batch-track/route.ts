@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
     for (const client of clients) {
       const { data: keywords, error: kwError } = await supabase
         .from("cafe_keywords")
-        .select("id, keyword, current_rank, post_url, post_title")
+        .select("id, keyword, current_rank, post_url, post_title, is_reply, reply_since")
         .eq("client_id", client.id);
 
       if (kwError || !keywords) continue;
@@ -51,6 +51,20 @@ export async function POST(request: NextRequest) {
           const data = await searchRes.json();
 
           const newRank = data.foundRank ?? null;
+          const isReply = !!data.foundInReply && !data.found && !data.foundInSmartBlock;
+
+          // 꼬리글 상태 전환 로직
+          let replySince = kw.reply_since;
+          if (isReply && !kw.is_reply) {
+            // 새로 꼬리글에 진입 → reply_since 기록
+            replySince = new Date().toISOString();
+          } else if (!isReply) {
+            // 꼬리글 아님 → reply_since 유지 (탈출 표시용), 다음 배치에서 클리어
+            if (!kw.is_reply) {
+              replySince = null; // 이전에도 꼬리글 아니었으면 클리어
+            }
+            // kw.is_reply === true && !isReply → 꼬리글탈출! reply_since 유지
+          }
 
           const { error: updateError } = await supabase
             .from("cafe_keywords")
@@ -63,6 +77,8 @@ export async function POST(request: NextRequest) {
                 data.found?.link ?? data.foundInSmartBlock?.link ?? null,
               smart_block_name: data.foundInSmartBlock?.blockName ?? null,
               smart_block_rank: data.foundInSmartBlock?.rank ?? null,
+              is_reply: isReply,
+              reply_since: replySince,
               updated_at: new Date().toISOString(),
             })
             .eq("id", kw.id);

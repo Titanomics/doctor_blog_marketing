@@ -11,6 +11,11 @@ export interface SmartBlockResult {
   blockName: string;  // 예: "'대구심장내과' 인기글", "대구수성구심장내과"
 }
 
+export interface ReplyResult {
+  link: string;
+  text: string;
+}
+
 /**
  * 블로그 URL 매칭 - 여러 URL 형식을 유연하게 지원
  * - 직접: blog.naver.com/oenough/224181717584
@@ -148,6 +153,32 @@ export function parseSmartBlocks(html: string): SmartBlockResult[] {
         blockName,
       });
     });
+  }
+
+  return results;
+}
+
+/**
+ * 꼬리글(댓글 스니펫) 파싱 - fds-reply-box 클래스의 링크들
+ * 스마트블록 메인 글 아래 RE 태그로 표시되는 댓글 영역
+ */
+export function parseReplies(html: string): ReplyResult[] {
+  const results: ReplyResult[] = [];
+  const pattern = /href="(https?:\/\/[^"]+)"[^>]*fds-reply-box[^>]*>[\s\S]*?<\/a>/g;
+  let m;
+  const seen = new Set<string>();
+
+  while ((m = pattern.exec(html)) !== null) {
+    const fullLink = m[1];
+    // URL에서 ?art= 파라미터 제거하여 기본 카페 URL만 추출
+    const link = fullLink.replace(/\?art=.*$/, "");
+    const textMatch = /sds-comps-text-type-body2[^>]*>([^<]+)</g.exec(m[0]);
+    const text = textMatch ? textMatch[1].trim() : "";
+
+    if (!seen.has(link)) {
+      seen.add(link);
+      results.push({ link, text });
+    }
   }
 
   return results;

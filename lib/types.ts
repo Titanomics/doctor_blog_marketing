@@ -70,6 +70,8 @@ export interface CafeKeyword {
   matched_url: string | null;
   smart_block_name: string | null;
   smart_block_rank: number | null;
+  is_reply: boolean;
+  reply_since: string | null;
   updated_at: string;
   created_at: string;
 }
