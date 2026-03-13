@@ -4,9 +4,18 @@ interface ReportKeyword {
   clientName: string;
   keyword: string;
   current_rank: number | null;
+  previous_rank: number | null;
   post_url: string | null;
   post_title: string | null;
   matched_url: string | null;
+}
+
+function rankChange(current: number | null, previous: number | null): string {
+  if (current === null || previous === null) return "";
+  const diff = previous - current;
+  if (diff > 0) return `▲${diff}`;
+  if (diff < 0) return `▼${Math.abs(diff)}`;
+  return "-";
 }
 
 export function generateCafeReport(keywords: ReportKeyword[], date: string): Buffer {
@@ -16,7 +25,9 @@ export function generateCafeReport(keywords: ReportKeyword[], date: string): Buf
   const exposedRows = exposed.map((k) => ({
     브랜드명: k.clientName,
     키워드: k.keyword,
-    순위: k.current_rank,
+    현재순위: k.current_rank,
+    이전순위: k.previous_rank ?? "",
+    변동: rankChange(k.current_rank, k.previous_rank),
     노출URL: k.matched_url ?? "",
     포스팅URL: k.post_url ?? "",
     포스팅제목: k.post_title ?? "",
@@ -25,6 +36,8 @@ export function generateCafeReport(keywords: ReportKeyword[], date: string): Buf
   const unexposedRows = unexposed.map((k) => ({
     브랜드명: k.clientName,
     키워드: k.keyword,
+    이전순위: k.previous_rank ?? "",
+    변동: k.previous_rank !== null ? "순위권 밖" : "",
     포스팅URL: k.post_url ?? "",
     포스팅제목: k.post_title ?? "",
   }));
