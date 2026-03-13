@@ -75,8 +75,22 @@ export async function GET(request: NextRequest) {
 
       found = results.find(match) ?? null;
       foundInSmartBlock = smartBlockResults.find(match) ?? null;
-      // 꼬리글은 VIEW/스마트블록에서 못 찾았을 때만 체크
-      if (!found && !foundInSmartBlock) {
+
+      // 꼬리글 URL 셋 (base URL, ?art= 제거된 형태)
+      const replyUrlSet = new Set(replyResults.map((r) => r.link));
+
+      // VIEW/스마트블록에서 찾았어도 같은 URL이 꼬리글에 있으면 → 꼬리글로 처리
+      if (found && replyUrlSet.has(found.link.replace(/\?art=.*$/, ""))) {
+        foundInReply = replyResults.find((r) => r.link === found!.link.replace(/\?art=.*$/, "")) ?? null;
+        found = null;
+      }
+      if (foundInSmartBlock && replyUrlSet.has(foundInSmartBlock.link.replace(/\?art=.*$/, ""))) {
+        foundInReply = replyResults.find((r) => r.link === foundInSmartBlock!.link.replace(/\?art=.*$/, "")) ?? null;
+        foundInSmartBlock = null;
+      }
+
+      // VIEW/스마트블록 어디에도 없으면 꼬리글 직접 매칭
+      if (!found && !foundInSmartBlock && !foundInReply) {
         foundInReply = replyResults.find(matchReply) ?? null;
       }
     }
