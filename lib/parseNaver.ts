@@ -159,31 +159,17 @@ export function parseSmartBlocks(html: string): SmartBlockResult[] {
 }
 
 /**
- * 꼬리글(댓글 스니펫) 파싱
- * 두 가지 패턴:
- * 1) fds-reply-box 클래스의 링크 (RE 댓글 영역)
- * 2) data-heatmap-target=".series" 링크 (시리즈/관련글 스니펫, body2 텍스트)
+ * 꼬리글 파싱
+ * data-heatmap-target=".series" 링크만 사용
+ * (fds-reply-box는 메인 글의 댓글 스니펫이므로 꼬리글이 아님)
  */
 export function parseReplies(html: string): ReplyResult[] {
   const results: ReplyResult[] = [];
   const seen = new Set<string>();
 
-  // 패턴1: fds-reply-box
-  const pattern1 = /href="(https?:\/\/[^"]+)"[^>]*fds-reply-box[^>]*>[\s\S]*?<\/a>/g;
+  const pattern = /href="(https?:\/\/[^"]+)"[^>]*data-heatmap-target="\.series"[^>]*>[\s\S]*?<\/a>/g;
   let m;
-  while ((m = pattern1.exec(html)) !== null) {
-    const link = m[1].replace(/\?art=.*$/, "");
-    const textMatch = /sds-comps-text-type-body2[^>]*>([^<]+)/g.exec(m[0]);
-    const text = textMatch ? textMatch[1].replace(/<[^>]*>/g, "").trim() : "";
-    if (!seen.has(link)) {
-      seen.add(link);
-      results.push({ link, text });
-    }
-  }
-
-  // 패턴2: data-heatmap-target=".series" (스마트블록 내 꼬리글)
-  const pattern2 = /href="(https?:\/\/[^"]+)"[^>]*data-heatmap-target="\.series"[^>]*>[\s\S]*?<\/a>/g;
-  while ((m = pattern2.exec(html)) !== null) {
+  while ((m = pattern.exec(html)) !== null) {
     const link = m[1].replace(/\?art=.*$/, "");
     const textMatch = /sds-comps-text-type-body2[^>]*>([^<]+)/g.exec(m[0]);
     const text = textMatch ? textMatch[1].replace(/<[^>]*>/g, "").trim() : "";
