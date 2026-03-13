@@ -44,6 +44,13 @@ function formatDate(dateStr: string | null) {
   });
 }
 
+function formatCreatedDate(dateStr: string) {
+  const created = new Date(dateStr);
+  const days = Math.floor((Date.now() - created.getTime()) / 86400000);
+  const dateLabel = created.toISOString().split("T")[0];
+  return { dateLabel, days };
+}
+
 export default function MainPanel({ mode, client, onClientUpdated }: MainPanelProps) {
   const [keywords, setKeywords] = useState<AnyKeyword[]>([]);
   const [loading, setLoading] = useState(false);
@@ -402,6 +409,17 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         )}
       </td>
       <td className="px-5 py-4 text-xs text-slate-400">{formatDate(kw.updated_at)}</td>
+      {!isBlog && (() => {
+        const { dateLabel, days } = formatCreatedDate(kw.created_at);
+        const isUnexposed = kw.current_rank === null && kw.smart_block_rank === null || (kw as CafeKeyword).is_reply;
+        const isOld = days >= 30 && isUnexposed;
+        return (
+          <td className={`px-5 py-4 text-xs ${isOld ? "text-red-500 font-semibold" : "text-slate-400"}`}>
+            <div>{dateLabel}</div>
+            <div>({days}일 지남)</div>
+          </td>
+        );
+      })()}
       <td className="px-5 py-4">
         <div className="flex items-center gap-2">
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} title="순위 새로고침" className={`text-slate-400 ${accentRefresh} transition-colors`}>
@@ -516,6 +534,16 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         </a>
       )}
       <p className="text-xs text-slate-400">{formatDate(kw.updated_at)}</p>
+      {!isBlog && (() => {
+        const { dateLabel, days } = formatCreatedDate(kw.created_at);
+        const isUnexposed = kw.current_rank === null && kw.smart_block_rank === null || (kw as CafeKeyword).is_reply;
+        const isOld = days >= 30 && isUnexposed;
+        return (
+          <p className={`text-xs mt-0.5 ${isOld ? "text-red-500 font-semibold" : "text-slate-400"}`}>
+            등록일 {dateLabel} ({days}일 지남)
+          </p>
+        );
+      })()}
     </motion.div>
   );
 
@@ -669,14 +697,15 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">노출 URL</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32">등록일</th>
                   <th className="px-5 py-3 w-20"></th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                  <tr><td colSpan={7} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
                 ) : exposedKeywords.length === 0 ? (
-                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
+                  <tr><td colSpan={7} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
                 ) : (
                   exposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
                 )}
@@ -711,14 +740,15 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide"></th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36">마지막 갱신</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32">등록일</th>
                   <th className="px-5 py-3 w-20"></th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                  <tr><td colSpan={7} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
                 ) : unexposedKeywords.length === 0 ? (
-                  <tr><td colSpan={6} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
+                  <tr><td colSpan={7} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
                 ) : (
                   unexposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
                 )}
