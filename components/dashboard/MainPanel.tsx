@@ -379,18 +379,13 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             )}
           </div>
         ) : (
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-              className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
-              title="순위 변화 보기"
-            >
-              {kw.keyword}
-            </button>
-            {!isBlog && (kw as CafeKeyword).author_name && (
-              <span className="text-xs text-slate-400 shrink-0">({(kw as CafeKeyword).author_name})</span>
-            )}
-          </div>
+          <button
+            onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+            className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
+            title="순위 변화 보기"
+          >
+            {kw.keyword}
+          </button>
         )}
         {!isBlog && editingId !== kw.id && (
           <p className="text-xs text-slate-400 mt-0.5 truncate max-w-xs">
@@ -398,7 +393,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           </p>
         )}
       </td>
-      {isBlog && (
+      {isBlog ? (
         <td className="px-5 py-4 text-center">
           <div className="flex justify-center gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -411,6 +406,10 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               </button>
             ))}
           </div>
+        </td>
+      ) : (
+        <td className="px-5 py-4 text-sm text-slate-500 truncate max-w-[120px]">
+          {(kw as CafeKeyword).author_name ?? <span className="text-slate-300">-</span>}
         </td>
       )}
       <td className="px-5 py-4 text-center">
@@ -728,6 +727,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100">
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">키워드 / 포스팅</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
                   <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">순위</th>
                   <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">노출 URL</th>
@@ -738,9 +738,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={7} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                  <tr><td colSpan={8} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
                 ) : exposedKeywords.length === 0 ? (
-                  <tr><td colSpan={7} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
+                  <tr><td colSpan={8} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
                 ) : (
                   exposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
                 )}
@@ -771,6 +771,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               <thead>
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">키워드 / 포스팅</th>
+                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
                   <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">상태</th>
                   <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide"></th>
@@ -781,9 +782,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan={7} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                  <tr><td colSpan={8} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
                 ) : unexposedKeywords.length === 0 ? (
-                  <tr><td colSpan={7} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
+                  <tr><td colSpan={8} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
                 ) : (
                   unexposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
                 )}
