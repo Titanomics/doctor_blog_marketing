@@ -64,6 +64,7 @@ export interface CafeKeyword {
   keyword: string;
   post_url: string | null;
   post_title: string | null;
+  author_name: string | null;
   current_rank: number | null;
   previous_rank: number | null;
   matched_title: string | null;

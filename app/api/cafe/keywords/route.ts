@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { client_id, keyword, post_url, post_title } = body;
+  const { client_id, keyword, post_url, post_title, author_name } = body;
 
   if (!client_id || !keyword) {
     return NextResponse.json(
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
 
   const { data, error } = await supabase
     .from("cafe_keywords")
-    .insert({ client_id, keyword, post_url: post_url ?? null, post_title: post_title ?? null })
+    .insert({ client_id, keyword, post_url: post_url ?? null, post_title: post_title ?? null, author_name: author_name ?? null })
     .select()
     .single();
 

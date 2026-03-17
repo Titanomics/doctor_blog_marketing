@@ -57,6 +57,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [newKeyword, setNewKeyword] = useState("");
   const [newPostUrl, setNewPostUrl] = useState("");
   const [newPostTitle, setNewPostTitle] = useState("");
+  const [newAuthorName, setNewAuthorName] = useState("");
   const [addError, setAddError] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
@@ -69,6 +70,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [editingText, setEditingText] = useState("");
   const [editingPostUrl, setEditingPostUrl] = useState("");
   const [editingPostTitle, setEditingPostTitle] = useState("");
+  const [editingAuthorName, setEditingAuthorName] = useState("");
   const [rankSort, setRankSort] = useState<"none" | "asc" | "desc">("none");
   const [prioritySort, setPrioritySort] = useState<"none" | "asc" | "desc">("none");
 
@@ -122,6 +124,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       if (!isBlog) {
         if (newPostUrl.trim()) body.post_url = newPostUrl.trim();
         if (newPostTitle.trim()) body.post_title = newPostTitle.trim();
+        if (newAuthorName.trim()) body.author_name = newAuthorName.trim();
       }
 
       const res = await fetch(keywordsApi, {
@@ -134,6 +137,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         setNewKeyword("");
         setNewPostUrl("");
         setNewPostTitle("");
+        setNewAuthorName("");
         fetchKeywords();
       } else {
         const data = await res.json();
@@ -201,6 +205,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     if (!isBlog) {
       body.post_url = editingPostUrl.trim() || null;
       body.post_title = editingPostTitle.trim() || null;
+      body.author_name = editingAuthorName.trim() || null;
     }
     await fetch(keywordsApi, {
       method: "PATCH",
@@ -360,17 +365,32 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   placeholder="포스팅 제목"
                   className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-56`}
                 />
+                <input
+                  value={editingAuthorName}
+                  onChange={(e) => setEditingAuthorName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit(kw.id);
+                    if (e.key === "Escape") setEditingId(null);
+                  }}
+                  placeholder="작성자"
+                  className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
+                />
               </>
             )}
           </div>
         ) : (
-          <button
-            onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-            className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
-            title="순위 변화 보기"
-          >
-            {kw.keyword}
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+              className={`transition-colors cursor-pointer text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : accentHover}`}
+              title="순위 변화 보기"
+            >
+              {kw.keyword}
+            </button>
+            {!isBlog && (kw as CafeKeyword).author_name && (
+              <span className="text-xs text-slate-400 shrink-0">({(kw as CafeKeyword).author_name})</span>
+            )}
+          </div>
         )}
         {!isBlog && editingId !== kw.id && (
           <p className="text-xs text-slate-400 mt-0.5 truncate max-w-xs">
@@ -425,7 +445,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} title="순위 새로고침" className={`text-slate-400 ${accentRefresh} transition-colors`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
@@ -482,16 +502,31 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                     placeholder="포스팅 제목"
                     className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-48`}
                   />
+                  <input
+                    value={editingAuthorName}
+                    onChange={(e) => setEditingAuthorName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveEdit(kw.id);
+                      if (e.key === "Escape") setEditingId(null);
+                    }}
+                    placeholder="작성자"
+                    className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-36`}
+                  />
                 </>
               )}
             </div>
           ) : (
-            <button
-              onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
-              className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
-            >
-              {kw.keyword}
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => setHistoryKeyword({ id: kw.id, name: kw.keyword })}
+                className={`font-medium transition-colors text-left ${isDroppedFromTop7(kw) ? "text-red-500 hover:text-red-600" : `text-slate-800 ${accentHover}`}`}
+              >
+                {kw.keyword}
+              </button>
+              {!isBlog && (kw as CafeKeyword).author_name && (
+                <span className="text-xs text-slate-400">({(kw as CafeKeyword).author_name})</span>
+              )}
+            </div>
           )}
           {!isBlog && editingId !== kw.id && (
             <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">
@@ -503,7 +538,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} className={`text-slate-400 ${accentRefresh} transition-colors p-1`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} className="text-slate-400 hover:text-red-500 transition-colors p-1">
@@ -791,6 +826,13 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                 value={newPostTitle}
                 onChange={(e) => setNewPostTitle(e.target.value)}
                 placeholder="포스팅 제목 (URL 없으면 필수)"
+                className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+              />
+              <input
+                type="text"
+                value={newAuthorName}
+                onChange={(e) => setNewAuthorName(e.target.value)}
+                placeholder="작성자 (선택)"
                 className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
               />
               {addError && <p className="text-red-500 text-xs">{addError}</p>}
