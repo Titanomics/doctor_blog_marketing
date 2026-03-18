@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generateCafeReport } from "@/lib/generateCafeReport";
 import { sendReportEmail, ReporterStatusChange, CafeKeywordSummary } from "@/lib/sendReportEmail";
+import { getKSTDateString, getKSTYesterdayString } from "@/lib/dateUtils";
 
 async function fetchAllKeywordsFromDB() {
   const { data: clients } = await supabase
@@ -48,9 +49,9 @@ async function fetchReporterStatusChanges(): Promise<{
   newlyExposed: ReporterStatusChange[];
   newlyUnexposed: ReporterStatusChange[];
 }> {
-  // 오늘/어제 날짜
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+  // 오늘/어제 날짜 (KST 기준)
+  const today = getKSTDateString();
+  const yesterday = getKSTYesterdayString();
 
   // 오늘 & 어제 히스토리 조회
   const [{ data: todayHist }, { data: yesterdayHist }] = await Promise.all([
@@ -137,7 +138,7 @@ async function handler(request: NextRequest) {
   }
 
   try {
-    const date = new Date().toISOString().split("T")[0];
+    const date = getKSTDateString();
 
     const [keywords, reporterChanges] = await Promise.all([
       fetchAllKeywordsFromDB(),

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generateCafeReport } from "@/lib/generateCafeReport";
+import { getKSTDateString } from "@/lib/dateUtils";
 
 export async function GET() {
   try {
@@ -34,7 +35,7 @@ export async function GET() {
       }
     }
 
-    const date = new Date().toISOString().split("T")[0];
+    const date = getKSTDateString();
     const excelBuffer = generateCafeReport(keywords, date);
 
     return new NextResponse(new Uint8Array(excelBuffer), {

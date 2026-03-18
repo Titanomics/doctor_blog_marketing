@@ -1,10 +1,11 @@
 import { supabase } from "@/lib/supabase";
+import { getKSTDateString } from "@/lib/dateUtils";
 
 export async function saveReporterHistory(
   entryId: string,
   rank: number | null
 ) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = getKSTDateString();
 
   await supabase.from("reporter_blog_history").upsert(
     {

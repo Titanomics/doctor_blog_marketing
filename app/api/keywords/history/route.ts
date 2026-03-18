@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { getKSTDateString } from "@/lib/dateUtils";
 
 // GET /api/keywords/history?keywordId=UUID - 최근 30일 히스토리
 export async function GET(request: NextRequest) {
@@ -12,14 +13,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
 
   const { data, error } = await supabase
     .from("keyword_history")
     .select("*")
     .eq("keyword_id", keywordId)
-    .gte("tracked_date", thirtyDaysAgo.toISOString().split("T")[0])
+    .gte("tracked_date", getKSTDateString(thirtyDaysAgo))
     .order("tracked_date", { ascending: false });
 
   if (error) {

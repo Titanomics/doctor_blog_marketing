@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { getKSTDateString } from "@/lib/dateUtils";
 
 export async function GET(request: NextRequest) {
   const keywordId = request.nextUrl.searchParams.get("keywordId");
@@ -11,9 +12,8 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-  const fromDate = thirtyDaysAgo.toISOString().split("T")[0];
+  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
+  const fromDate = getKSTDateString(thirtyDaysAgo);
 
   const { data, error } = await supabase
     .from("cafe_keyword_history")
