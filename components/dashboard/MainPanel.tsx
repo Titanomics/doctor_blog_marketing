@@ -174,21 +174,25 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         replySince = null;
       }
 
+      const patchBody: Record<string, unknown> = {
+        id: kw.id,
+        previous_rank: kw.current_rank,
+        current_rank: data.foundRank ?? null,
+        matched_title: data.found?.title ?? data.foundInSmartBlock?.title ?? null,
+        matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,
+        smart_block_name: data.foundInSmartBlock?.blockName ?? null,
+        smart_block_rank: data.foundInSmartBlock?.rank ?? null,
+        updated_at: new Date().toISOString(),
+      };
+      if (!isBlog) {
+        patchBody.is_reply = isReply;
+        patchBody.reply_since = replySince;
+      }
+
       await fetch(keywordsApi, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: kw.id,
-          previous_rank: kw.current_rank,
-          current_rank: data.foundRank ?? null,
-          matched_title: data.found?.title ?? data.foundInSmartBlock?.title ?? null,
-          matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,
-          smart_block_name: data.foundInSmartBlock?.blockName ?? null,
-          smart_block_rank: data.foundInSmartBlock?.rank ?? null,
-          is_reply: isReply,
-          reply_since: replySince,
-          updated_at: new Date().toISOString(),
-        }),
+        body: JSON.stringify(patchBody),
       });
 
       fetchKeywords();
