@@ -1,20 +1,36 @@
 {
   "crons": [
     {
-      "path": "/api/batch-track",
-      "schedule": "0 21 * * *"
+      "path": "/api/batch-track?run=1",
+      "schedule": "0 18 * * *"
     },
     {
-      "path": "/api/cafe/batch-track",
-      "schedule": "5 21 * * *"
+      "path": "/api/cafe/batch-track?run=1",
+      "schedule": "5 18 * * *"
     },
     {
-      "path": "/api/reporter/batch-track",
-      "schedule": "10 21 * * *"
+      "path": "/api/reporter/batch-track?run=1",
+      "schedule": "10 18 * * *"
     },
     {
-      "path": "/api/cafe/daily-report",
-      "schedule": "0 23 * * *"
+      "path": "/api/cafe/daily-report?run=1",
+      "schedule": "30 21 * * *"
+    },
+    {
+      "path": "/api/batch-track?run=2",
+      "schedule": "30 3 * * *"
+    },
+    {
+      "path": "/api/cafe/batch-track?run=2",
+      "schedule": "35 3 * * *"
+    },
+    {
+      "path": "/api/reporter/batch-track?run=2",
+      "schedule": "40 3 * * *"
+    },
+    {
+      "path": "/api/cafe/daily-report?run=2",
+      "schedule": "0 5 * * *"
     }
   ]
 }
