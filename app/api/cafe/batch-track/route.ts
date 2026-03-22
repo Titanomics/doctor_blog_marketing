@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
 
+export const maxDuration = 300;
+
 const DELAY_MS = 800;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function POST(request: NextRequest) {
+async function handler(request: NextRequest) {
   try {
     const { data: clients, error: clientsError } = await supabase
       .from("cafe_clients")
@@ -107,4 +109,12 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function POST(request: NextRequest) {
+  return handler(request);
+}
+
+export async function GET(request: NextRequest) {
+  return handler(request);
 }

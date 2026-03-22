@@ -3,13 +3,15 @@ import { supabase } from "@/lib/supabase";
 import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
 import { saveKeywordHistory } from "@/lib/saveHistory";
 
+export const maxDuration = 300;
+
 const DELAY_MS = 800;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function POST() {
+async function handler() {
   try {
     const { data: clients, error: clientsError } = await supabase
       .from("clients")
@@ -105,4 +107,12 @@ export async function POST() {
       { status: 500 }
     );
   }
+}
+
+export async function POST() {
+  return handler();
+}
+
+export async function GET() {
+  return handler();
 }

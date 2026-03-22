@@ -4,6 +4,8 @@ import { generateCafeReport } from "@/lib/generateCafeReport";
 import { sendReportEmail, ReporterStatusChange, CafeKeywordSummary } from "@/lib/sendReportEmail";
 import { getKSTDateString, getKSTYesterdayString } from "@/lib/dateUtils";
 
+export const maxDuration = 300;
+
 async function fetchAllKeywordsFromDB() {
   const { data: clients } = await supabase
     .from("cafe_clients")

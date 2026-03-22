@@ -1,8 +1,16 @@
 {
   "crons": [
     {
-      "path": "/api/daily-batch",
+      "path": "/api/batch-track",
       "schedule": "0 21 * * *"
+    },
+    {
+      "path": "/api/cafe/batch-track",
+      "schedule": "5 21 * * *"
+    },
+    {
+      "path": "/api/reporter/batch-track",
+      "schedule": "10 21 * * *"
     },
     {
       "path": "/api/cafe/daily-report",

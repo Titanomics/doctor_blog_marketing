@@ -3,6 +3,8 @@ import { supabase } from "@/lib/supabase";
 import { parseViewSection, parseSmartBlocks, matchesBlogUrl } from "@/lib/parseNaver";
 import { saveReporterHistory } from "@/lib/saveReporterHistory";
 
+export const maxDuration = 300;
+
 const DELAY_MS = 800;
 
 function sleep(ms: number) {
