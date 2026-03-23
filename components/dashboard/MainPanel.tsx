@@ -44,6 +44,21 @@ function formatDate(dateStr: string | null) {
   });
 }
 
+const COOLDOWN_MS = 60 * 60 * 1000; // 1시간
+
+function isCooldown(updatedAt: string | null): boolean {
+  if (!updatedAt) return false;
+  return Date.now() - new Date(updatedAt).getTime() < COOLDOWN_MS;
+}
+
+function cooldownRemaining(updatedAt: string | null): string {
+  if (!updatedAt) return "";
+  const diff = COOLDOWN_MS - (Date.now() - new Date(updatedAt).getTime());
+  if (diff <= 0) return "";
+  const min = Math.ceil(diff / 60000);
+  return `${min}분 후 새로고침 가능`;
+}
+
 function formatCreatedDate(dateStr: string) {
   const created = new Date(dateStr);
   const days = Math.floor((Date.now() - created.getTime()) / 86400000);
@@ -233,7 +248,20 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     fetchKeywords();
   };
 
+  const batchCooldown = keywords.some((kw) => isCooldown(kw.updated_at));
+  const batchCooldownLabel = (() => {
+    if (!batchCooldown) return "";
+    const latest = keywords.reduce((max, kw) => {
+      const t = kw.updated_at ? new Date(kw.updated_at).getTime() : 0;
+      return t > max ? t : max;
+    }, 0);
+    if (!latest) return "";
+    const diff = COOLDOWN_MS - (Date.now() - latest);
+    return diff > 0 ? `${Math.ceil(diff / 60000)}분 후 가능` : "";
+  })();
+
   const handleBatchRefresh = async () => {
+    if (batchCooldown) return;
     setBatchLoading(true);
     setBatchMessage("");
     try {
@@ -445,7 +473,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       })()}
       <td className="px-5 py-4">
         <div className="flex items-center gap-2">
-          <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} title="순위 새로고침" className={`text-slate-400 ${accentRefresh} transition-colors`}>
+          <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id || isCooldown(kw.updated_at)} title={isCooldown(kw.updated_at) ? cooldownRemaining(kw.updated_at) : "순위 새로고침"} className={`text-slate-400 ${isCooldown(kw.updated_at) ? "opacity-30 cursor-not-allowed" : accentRefresh} transition-colors`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
           <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
@@ -538,7 +566,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           )}
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id} className={`text-slate-400 ${accentRefresh} transition-colors p-1`}>
+          <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id || isCooldown(kw.updated_at)} title={isCooldown(kw.updated_at) ? cooldownRemaining(kw.updated_at) : "순위 새로고침"} className={`text-slate-400 ${isCooldown(kw.updated_at) ? "opacity-30 cursor-not-allowed" : accentRefresh} transition-colors p-1`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
           <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
@@ -620,7 +648,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleBatchRefresh}
-            disabled={batchLoading}
+            disabled={batchLoading || batchCooldown}
+            title={batchCooldown ? batchCooldownLabel : ""}
             className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-2"
           >
             {batchLoading ? (
@@ -631,6 +660,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                 </svg>
                 전체 갱신 중...
               </>
+            ) : batchCooldown ? (
+              batchCooldownLabel
             ) : (
               "전체 순위 새로고침"
             )}

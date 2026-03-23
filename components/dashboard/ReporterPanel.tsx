@@ -48,6 +48,21 @@ function formatDate(dateStr: string | null) {
   });
 }
 
+const COOLDOWN_MS = 60 * 60 * 1000;
+
+function isCooldown(updatedAt: string | null): boolean {
+  if (!updatedAt) return false;
+  return Date.now() - new Date(updatedAt).getTime() < COOLDOWN_MS;
+}
+
+function cooldownRemaining(updatedAt: string | null): string {
+  if (!updatedAt) return "";
+  const diff = COOLDOWN_MS - (Date.now() - new Date(updatedAt).getTime());
+  if (diff <= 0) return "";
+  const min = Math.ceil(diff / 60000);
+  return `${min}분 후 새로고침 가능`;
+}
+
 function shortUrl(url: string) {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
@@ -209,7 +224,25 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
     }
   };
 
+  const batchCooldown = keywords.some((kw) =>
+    kw.entries?.some((e) => isCooldown(e.updated_at))
+  );
+  const batchCooldownLabel = (() => {
+    if (!batchCooldown) return "";
+    let latest = 0;
+    for (const kw of keywords) {
+      for (const e of kw.entries ?? []) {
+        const t = e.updated_at ? new Date(e.updated_at).getTime() : 0;
+        if (t > latest) latest = t;
+      }
+    }
+    if (!latest) return "";
+    const diff = COOLDOWN_MS - (Date.now() - latest);
+    return diff > 0 ? `${Math.ceil(diff / 60000)}분 후 가능` : "";
+  })();
+
   const handleBatchRefresh = async () => {
+    if (batchCooldown) return;
     setBatchLoading(true);
     setBatchMessage("");
     try {
@@ -265,7 +298,8 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleBatchRefresh}
-          disabled={batchLoading}
+          disabled={batchLoading || batchCooldown}
+          title={batchCooldown ? batchCooldownLabel : ""}
           className="px-5 py-2.5 bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 text-white text-sm font-medium rounded-xl transition-colors flex items-center gap-2 self-start shrink-0"
         >
           {batchLoading ? (
@@ -276,6 +310,8 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
               </svg>
               전체 갱신 중...
             </>
+          ) : batchCooldown ? (
+            batchCooldownLabel
           ) : (
             "전체 순위 새로고침"
           )}
@@ -405,9 +441,9 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                                 <span className="text-xs text-slate-300 hidden md:block w-20 text-right">{formatDate(entry.updated_at)}</span>
                                 <button
                                   onClick={() => handleRefreshEntry(entry, kw.keyword)}
-                                  disabled={refreshingEntryId === entry.id}
-                                  className="text-slate-400 hover:text-emerald-500 transition-colors p-1"
-                                  title="순위 새로고침"
+                                  disabled={refreshingEntryId === entry.id || isCooldown(entry.updated_at)}
+                                  className={`text-slate-400 ${isCooldown(entry.updated_at) ? "opacity-30 cursor-not-allowed" : "hover:text-emerald-500"} transition-colors p-1`}
+                                  title={isCooldown(entry.updated_at) ? cooldownRemaining(entry.updated_at) : "순위 새로고침"}
                                 >
                                   <RefreshIcon spinning={refreshingEntryId === entry.id} />
                                 </button>
