@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
         "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
         Accept: "text/html,application/xhtml+xml",
       },
+      cache: "no-store",
     });
 
     if (!response.ok) {
