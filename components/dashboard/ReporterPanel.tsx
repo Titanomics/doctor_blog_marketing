@@ -246,7 +246,7 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
     setBatchLoading(true);
     setBatchMessage("");
     try {
-      const res = await fetch("/api/reporter/batch-track", { method: "POST" });
+      const res = await fetch(`/api/reporter/batch-track?clientId=${client!.id}`, { method: "POST" });
       const data = await res.json();
       setBatchMessage(data.message ?? "완료");
       fetchKeywords();

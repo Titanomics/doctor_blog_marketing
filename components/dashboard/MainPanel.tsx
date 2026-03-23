@@ -265,7 +265,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     setBatchLoading(true);
     setBatchMessage("");
     try {
-      const res = await fetch(batchApi, { method: "POST" });
+      const res = await fetch(`${batchApi}?clientId=${client!.id}`, { method: "POST" });
       const data = await res.json();
       setBatchMessage(data.message ?? "완료");
       fetchKeywords();
