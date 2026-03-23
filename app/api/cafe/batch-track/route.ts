@@ -110,7 +110,7 @@ async function handler(request: NextRequest) {
       });
     }
 
-    // clientId 없으면 팬아웃: 클라이언트별로 개별 호출
+    // clientId 없으면 팬아웃: 클라이언트별로 병렬 호출
     const { data: clients, error: clientsError } = await supabase
       .from("cafe_clients")
       .select("id, name");
@@ -123,21 +123,23 @@ async function handler(request: NextRequest) {
     let totalUpdated = 0;
     const allErrors: string[] = [];
 
-    for (const client of clients) {
-      try {
-        const res = await fetch(
-          `${baseUrl}/api/cafe/batch-track?clientId=${client.id}`,
-          { method: "POST" }
-        );
-        if (res.ok) {
-          const data = await res.json();
-          totalUpdated += data.updated ?? 0;
-          if (data.errors?.length) allErrors.push(...data.errors);
-        } else {
-          allErrors.push(`[${client.name}] 배치 호출 실패`);
-        }
-      } catch {
-        allErrors.push(`[${client.name}] 배치 호출 오류`);
+    const results = await Promise.allSettled(
+      clients.map((client) =>
+        fetch(`${baseUrl}/api/cafe/batch-track?clientId=${client.id}`, { method: "POST" })
+          .then(async (res) => {
+            if (res.ok) return res.json();
+            throw new Error(`[${client.name}] 배치 호출 실패`);
+          })
+      )
+    );
+
+    for (let i = 0; i < results.length; i++) {
+      const r = results[i];
+      if (r.status === "fulfilled") {
+        totalUpdated += r.value.updated ?? 0;
+        if (r.value.errors?.length) allErrors.push(...r.value.errors);
+      } else {
+        allErrors.push(r.reason?.message ?? `[${clients[i].name}] 배치 오류`);
       }
     }
 
