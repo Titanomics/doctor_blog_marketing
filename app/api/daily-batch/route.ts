@@ -2,63 +2,82 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 300;
 
-// 블로그 + 카페 + 기자단 배치 완료 후 → 일일 리포트 메일 발송
+const BATCH_TIMEOUT_MS = 4 * 60 * 1000; // 배치에 최대 4분, 나머지 1분은 메일용
+
+function timeout(ms: number): Promise<"timeout"> {
+  return new Promise((resolve) => setTimeout(() => resolve("timeout"), ms));
+}
+
+// 블로그 + 카페 + 기자단 배치 실행 → 일일 리포트 메일 발송
 export async function GET(request: NextRequest) {
   const baseUrl = new URL(request.url).origin;
 
+  // 1단계: 메일부터 발송 (이전 배치 데이터 기준, 메일 누락 방지)
+  let reportData = null;
   try {
-    // 1단계: 3개 배치를 병렬로 실행 (각각 내부에서 클라이언트별 팬아웃)
-    const [blogResult, cafeResult, reporterResult] = await Promise.allSettled([
+    const reportHeaders: Record<string, string> = {};
+    if (process.env.CRON_SECRET) {
+      reportHeaders["authorization"] = `Bearer ${process.env.CRON_SECRET}`;
+    }
+    const reportRes = await fetch(`${baseUrl}/api/cafe/daily-report`, {
+      method: "POST",
+      headers: reportHeaders,
+    });
+    reportData = reportRes.ok
+      ? await reportRes.json()
+      : { error: "리포트 발송 실패" };
+  } catch {
+    reportData = { error: "리포트 호출 오류" };
+  }
+
+  // 2단계: 3개 배치를 병렬로 실행 (4분 타임아웃, 다음 메일에 반영)
+  let blogData = null;
+  let cafeData = null;
+  let reporterData = null;
+
+  try {
+    const batchPromise = Promise.allSettled([
       fetch(`${baseUrl}/api/batch-track`, { method: "POST" }),
       fetch(`${baseUrl}/api/cafe/batch-track`, { method: "POST" }),
       fetch(`${baseUrl}/api/reporter/batch-track`, { method: "POST" }),
     ]);
 
-    const blogData =
-      blogResult.status === "fulfilled" && blogResult.value.ok
-        ? await blogResult.value.json()
-        : { error: "블로그 배치 실패" };
+    const result = await Promise.race([batchPromise, timeout(BATCH_TIMEOUT_MS)]);
 
-    const cafeData =
-      cafeResult.status === "fulfilled" && cafeResult.value.ok
-        ? await cafeResult.value.json()
-        : { error: "카페 배치 실패" };
+    if (result === "timeout") {
+      blogData = { error: "배치 타임아웃 (4분 초과)" };
+      cafeData = { error: "배치 타임아웃 (4분 초과)" };
+      reporterData = { error: "배치 타임아웃 (4분 초과)" };
+    } else {
+      const [blogResult, cafeResult, reporterResult] = result;
 
-    const reporterData =
-      reporterResult.status === "fulfilled" && reporterResult.value.ok
-        ? await reporterResult.value.json()
-        : { error: "블로그기자단 배치 실패" };
+      blogData =
+        blogResult.status === "fulfilled" && blogResult.value.ok
+          ? await blogResult.value.json()
+          : { error: "블로그 배치 실패" };
 
-    // 2단계: 배치 완료 후 일일 리포트 메일 발송
-    let reportData = null;
-    try {
-      const reportHeaders: Record<string, string> = {};
-      if (process.env.CRON_SECRET) {
-        reportHeaders["authorization"] = `Bearer ${process.env.CRON_SECRET}`;
-      }
-      const reportRes = await fetch(`${baseUrl}/api/cafe/daily-report`, {
-        method: "POST",
-        headers: reportHeaders,
-      });
-      reportData = reportRes.ok
-        ? await reportRes.json()
-        : { error: "리포트 발송 실패" };
-    } catch {
-      reportData = { error: "리포트 호출 오류" };
+      cafeData =
+        cafeResult.status === "fulfilled" && cafeResult.value.ok
+          ? await cafeResult.value.json()
+          : { error: "카페 배치 실패" };
+
+      reporterData =
+        reporterResult.status === "fulfilled" && reporterResult.value.ok
+          ? await reporterResult.value.json()
+          : { error: "블로그기자단 배치 실패" };
     }
-
-    return NextResponse.json({
-      success: true,
-      blog: blogData,
-      cafe: cafeData,
-      reporter: reporterData,
-      report: reportData,
-    });
   } catch (error) {
     console.error("daily-batch error:", error);
-    return NextResponse.json(
-      { error: "배치 처리 중 오류가 발생했습니다." },
-      { status: 500 }
-    );
+    blogData = { error: "배치 처리 중 오류" };
+    cafeData = { error: "배치 처리 중 오류" };
+    reporterData = { error: "배치 처리 중 오류" };
   }
+
+  return NextResponse.json({
+    success: true,
+    blog: blogData,
+    cafe: cafeData,
+    reporter: reporterData,
+    report: reportData,
+  });
 }

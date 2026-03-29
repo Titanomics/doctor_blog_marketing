@@ -47,7 +47,7 @@ async function processClient(client: { id: string; name: string }) {
       });
 
       if (!response.ok) {
-        errors.push(`[${client.name}] "${kw.keyword}" 검색 실패`);
+        errors.push(`[${client.name}] "${kw.keyword}" 네이버 검색 실패 (${response.status})`);
         continue;
       }
 
@@ -77,14 +77,15 @@ async function processClient(client: { id: string; name: string }) {
           .eq("id", entry.id);
 
         if (updateError) {
-          errors.push(`[${client.name}] "${kw.keyword}" DB 업데이트 실패`);
+          errors.push(`[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}`);
         } else {
           await saveReporterHistory(entry.id, newRank);
           updated++;
         }
       }
-    } catch {
-      errors.push(`[${client.name}] "${kw.keyword}" 처리 중 오류`);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      errors.push(`[${client.name}] "${kw.keyword}" 처리 중 오류: ${msg}`);
     }
   }
 

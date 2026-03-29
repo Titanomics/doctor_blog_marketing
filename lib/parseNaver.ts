@@ -182,23 +182,3 @@ export function parseReplies(html: string): ReplyResult[] {
   return results;
 }
 
-function extractViewSection(html: string): string | null {
-  const viewRootPattern = /class="[^"]*_fe_view_root[^"]*"/i;
-  const m1 = viewRootPattern.exec(html);
-  if (m1) return html.slice(m1.index, m1.index + 200000);
-
-  const dataPattern = /(<(?:section|div)[^>]+data-section="view"[^>]*>)/i;
-  const m2 = dataPattern.exec(html);
-  if (m2) return html.slice(m2.index, m2.index + 200000);
-
-  const legacyPatterns = [
-    /class="[^"]*sp_nviews[^"]*"/i,
-    /class="[^"]*section_view[^"]*"/i,
-  ];
-  for (const p of legacyPatterns) {
-    const m = p.exec(html);
-    if (m) return html.slice(m.index, m.index + 200000);
-  }
-
-  return null;
-}
