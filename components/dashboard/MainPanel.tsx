@@ -78,6 +78,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
   const [batchLoading, setBatchLoading] = useState(false);
   const [batchMessage, setBatchMessage] = useState("");
+  const [lastBatchTime, setLastBatchTime] = useState<number>(0);
   const [deletingClient, setDeletingClient] = useState(false);
   const [historyKeyword, setHistoryKeyword] = useState<{ id: string; name: string } | null>(null);
   const [exportLoading, setExportLoading] = useState(false);
@@ -248,20 +249,16 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     fetchKeywords();
   };
 
-  const batchCooldown = keywords.some((kw) => isCooldown(kw.updated_at));
+  const batchCooldown = lastBatchTime > 0 && Date.now() - lastBatchTime < COOLDOWN_MS;
   const batchCooldownLabel = (() => {
     if (!batchCooldown) return "";
-    const latest = keywords.reduce((max, kw) => {
-      const t = kw.updated_at ? new Date(kw.updated_at).getTime() : 0;
-      return t > max ? t : max;
-    }, 0);
-    if (!latest) return "";
-    const diff = COOLDOWN_MS - (Date.now() - latest);
+    const diff = COOLDOWN_MS - (Date.now() - lastBatchTime);
     return diff > 0 ? `${Math.ceil(diff / 60000)}분 후 가능` : "";
   })();
 
   const handleBatchRefresh = async () => {
     if (batchCooldown) return;
+    setLastBatchTime(Date.now());
     setBatchLoading(true);
     setBatchMessage("");
     try {
