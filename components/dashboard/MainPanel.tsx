@@ -261,10 +261,19 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     setLastBatchTime(Date.now());
     setBatchLoading(true);
     setBatchMessage("");
+    let completed = 0;
+    let failed = 0;
     try {
-      const res = await fetch(`${batchApi}?clientId=${client!.id}`, { method: "POST" });
-      const data = await res.json();
-      setBatchMessage(data.message ?? "완료");
+      for (const kw of keywords) {
+        setBatchMessage(`${completed + failed + 1}/${keywords.length} 갱신 중...`);
+        try {
+          await handleRefreshKeyword(kw);
+          completed++;
+        } catch {
+          failed++;
+        }
+      }
+      setBatchMessage(`${completed}개 완료${failed > 0 ? `, ${failed}개 실패` : ""}`);
       fetchKeywords();
     } finally {
       setBatchLoading(false);
