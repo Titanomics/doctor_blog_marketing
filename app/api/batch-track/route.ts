@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { parseViewSection, parseSmartBlocks } from "@/lib/parseNaver";
+import { parseViewSection, parseSmartBlocks, matchesBlogUrl } from "@/lib/parseNaver";
 import { saveKeywordHistory } from "@/lib/saveHistory";
 
 export const maxDuration = 300;
@@ -49,13 +49,22 @@ async function processClient(client: { id: string; name: string; blog_url: strin
       const smartBlockResults = parseSmartBlocks(html);
 
       const matched = results.find((r) =>
-        r.link.includes(client.blog_url.trim())
+        matchesBlogUrl(r.link, client.blog_url)
       );
       const matchedInSmartBlock = smartBlockResults.find((r) =>
-        r.link.includes(client.blog_url.trim())
+        matchesBlogUrl(r.link, client.blog_url)
       );
 
       const newRank = matched ? matched.rank : null;
+
+      // 진단 로그: 매칭 실패 시 원인 파악용
+      if (!matched && !matchedInSmartBlock) {
+        if (results.length === 0 && smartBlockResults.length === 0) {
+          console.warn(`[PARSE-MISS] "${kw.keyword}" | 파싱 결과 0개 (HTML길이=${html.length}) | blog_url="${client.blog_url}"`);
+        } else {
+          console.warn(`[MATCH-MISS] "${kw.keyword}" | VIEW=${results.length}개, 스마트블록=${smartBlockResults.length}개 | blog_url="${client.blog_url}" | 상위3링크: ${results.slice(0, 3).map(r => r.link).join(" | ")}`);
+        }
+      }
 
       const { error: updateError } = await supabase
         .from("keywords")
