@@ -5,8 +5,8 @@
       "schedule": "0 18 * * *"
     },
     {
-      "path": "/api/daily-batch",
-      "schedule": "30 3 * * *"
+      "path": "/api/cafe/daily-report",
+      "schedule": "0 22 * * *"
     }
   ]
 }
