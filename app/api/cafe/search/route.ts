@@ -62,14 +62,21 @@ export async function GET(request: NextRequest) {
         ? postUrl.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
         : null;
 
+      // 특정 게시글 URL(숫자 ID 포함)이 있으면 URL로만 매칭
+      const hasSpecificPostId = normalizedPostUrl && /\/\d+/.test(normalizedPostUrl);
+
       const match = (r: { link: string; title?: string }) => {
-        if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
+        const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
+        if (hasSpecificPostId) return !!urlMatch;
+        if (urlMatch) return true;
         if (postTitle && "title" in r && r.title && r.title.toLowerCase().includes(postTitle.toLowerCase())) return true;
         return false;
       };
 
       const matchReply = (r: ReplyResult) => {
-        if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
+        const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
+        if (hasSpecificPostId) return !!urlMatch;
+        if (urlMatch) return true;
         if (postTitle && r.text.toLowerCase().includes(postTitle.toLowerCase())) return true;
         return false;
       };

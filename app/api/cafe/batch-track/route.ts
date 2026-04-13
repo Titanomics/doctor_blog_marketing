@@ -56,8 +56,13 @@ async function processClient(client: { id: string; name: string }) {
         ? kw.post_url.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
         : null;
 
+      // 특정 게시글 URL(숫자 ID 포함)이 있으면 URL로만 매칭
+      const hasSpecificPostId = normalizedPostUrl && /\/\d+/.test(normalizedPostUrl);
+
       const match = (r: { link: string; title?: string }) => {
-        if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
+        const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
+        if (hasSpecificPostId) return !!urlMatch;
+        if (urlMatch) return true;
         if (kw.post_title && "title" in r && r.title && r.title.toLowerCase().includes(kw.post_title.toLowerCase())) return true;
         return false;
       };
@@ -68,7 +73,9 @@ async function processClient(client: { id: string; name: string }) {
       let foundInReply = null;
       if (!found && !foundInSmartBlock) {
         const matchReply = (r: { link: string; text: string }) => {
-          if (normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl)) return true;
+          const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
+          if (hasSpecificPostId) return !!urlMatch;
+          if (urlMatch) return true;
           if (kw.post_title && r.text.toLowerCase().includes(kw.post_title.toLowerCase())) return true;
           return false;
         };
