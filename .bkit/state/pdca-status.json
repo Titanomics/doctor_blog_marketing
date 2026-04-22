@@ -1,0 +1,317 @@
+{
+  "version": "3.0",
+  "lastUpdated": "2026-04-22T14:28:50.142Z",
+  "activeFeatures": [
+    "daily-batch",
+    "blog_keyword_rank",
+    "batch-track",
+    "dashboard",
+    "search"
+  ],
+  "primaryFeature": "daily-batch",
+  "features": {
+    "daily-batch": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-29T09:06:41.200Z",
+        "lastUpdated": "2026-04-22T14:25:02.016Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\daily-batch\\route.ts"
+    },
+    "blog_keyword_rank": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-29T09:07:00.947Z",
+        "lastUpdated": "2026-03-29T09:07:00.947Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\lib\\parseNaver.ts"
+    },
+    "batch-track": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-29T09:09:23.825Z",
+        "lastUpdated": "2026-04-22T14:24:50.298Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\reporter\\batch-track\\route.ts"
+    },
+    "dashboard": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-03-29T09:50:42.033Z",
+        "lastUpdated": "2026-04-22T14:28:50.139Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\MainPanel.tsx"
+    },
+    "search": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-13T15:03:14.756Z",
+        "lastUpdated": "2026-04-22T14:27:34.090Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\search\\route.ts"
+    }
+  },
+  "pipeline": {
+    "currentPhase": 1,
+    "level": "Dynamic",
+    "phaseHistory": []
+  },
+  "session": {
+    "startedAt": "2026-03-29T08:58:00.759Z",
+    "onboardingCompleted": false,
+    "lastActivity": "2026-04-22T14:28:50.142Z"
+  },
+  "history": [
+    {
+      "timestamp": "2026-03-29T09:06:41.218Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:07:00.950Z",
+      "feature": "blog_keyword_rank",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:09:23.829Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:09:45.828Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:10:03.617Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:10:27.669Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:10:38.685Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:10:47.903Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:10:57.775Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:18:34.348Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:18:48.785Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:42:19.715Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-03-29T09:50:42.034Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T14:37:55.556Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T14:51:25.313Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T15:03:14.758Z",
+      "feature": "search",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-13T15:03:37.980Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:19:29.892Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:19:42.492Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:20:34.455Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:20:48.965Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:21:12.354Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:21:39.263Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:21:59.000Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:22:21.784Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:22:40.969Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:24:12.197Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:24:33.418Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:24:50.302Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:25:02.018Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:27:09.922Z",
+      "feature": "search",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:27:34.094Z",
+      "feature": "search",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:27:54.110Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:28:26.357Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:28:50.141Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    }
+  ],
+  "stateMachine": {
+    "defaultWorkflow": "default",
+    "activeWorkflows": {},
+    "totalTransitions": 0
+  },
+  "automation": {
+    "globalLevel": 2,
+    "trustScore": 40,
+    "pendingApprovals": 0,
+    "lastGateResult": null
+  },
+  "team": {
+    "enabled": true,
+    "stateFile": ".bkit/runtime/agent-state.json",
+    "eventsFile": ".bkit/runtime/agent-events.jsonl"
+  }
+}

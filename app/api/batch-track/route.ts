@@ -119,7 +119,8 @@ async function handler(request: NextRequest) {
       });
     }
 
-    // clientId 없으면 팬아웃: 클라이언트별로 병렬 호출
+    // clientId 없으면 팬아웃: 클라이언트별로 fire-and-forget
+    // Hobby 플랜 대응: 각 per-client 호출은 독립 함수로 실행되어 60초 제한 내 완료
     const { data: clients, error: clientsError } = await supabase
       .from("clients")
       .select("id, name, blog_url");
@@ -130,33 +131,18 @@ async function handler(request: NextRequest) {
     }
 
     const baseUrl = request.nextUrl.origin;
-    let totalUpdated = 0;
-    const allErrors: string[] = [];
 
-    const results = await Promise.allSettled(
-      clients.map((client) =>
-        fetch(`${baseUrl}/api/batch-track?clientId=${client.id}`, { method: "POST" })
-          .then(async (res) => {
-            if (res.ok) return res.json();
-            throw new Error(`[${client.name}] 배치 호출 실패`);
-          })
-      )
-    );
-
-    for (let i = 0; i < results.length; i++) {
-      const r = results[i];
-      if (r.status === "fulfilled") {
-        totalUpdated += r.value.updated ?? 0;
-        if (r.value.errors?.length) allErrors.push(...r.value.errors);
-      } else {
-        allErrors.push(r.reason?.message ?? `[${clients[i].name}] 배치 오류`);
-      }
+    // fire-and-forget: await하지 않음, 각각 독립 서버리스 함수로 실행됨
+    for (const client of clients) {
+      fetch(`${baseUrl}/api/batch-track?clientId=${client.id}`, { method: "POST" }).catch(() => {});
     }
 
+    // HTTP 요청이 전송될 시간 확보 (함수 종료 전에 요청이 나가야 함)
+    await new Promise((r) => setTimeout(r, 2000));
+
     return NextResponse.json({
-      message: `${totalUpdated}개 키워드 순위 업데이트 완료`,
-      updated: totalUpdated,
-      errors: allErrors,
+      message: `${clients.length}개 병원 배치 시작`,
+      clients: clients.length,
     });
   } catch (error) {
     console.error("Batch track error:", error);

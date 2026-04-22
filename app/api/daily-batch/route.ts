@@ -17,6 +17,9 @@ export async function GET(request: NextRequest) {
     fetch(url, { method: "POST" }).catch(() => {});
   }
 
+  // HTTP 요청이 전송될 시간 확보 (함수 종료 전에 요청이 나가야 target 함수가 실행됨)
+  await new Promise((r) => setTimeout(r, 3000));
+
   return NextResponse.json({
     success: true,
     message: "배치 실행 시작 (블로그/카페/기자단)",

@@ -1,0 +1,200 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776867296871,
+  "projectRoot": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      },
+      {
+        "name": "Python",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "requirements.txt"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "next",
+        "version": "16.1.2",
+        "category": "fullstack"
+      },
+      {
+        "name": "react",
+        "version": "19.2.3",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.2.3",
+        "category": "frontend"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "next dev",
+      "build": "next build",
+      "start": "next start",
+      "lint": "eslint"
+    }
+  },
+  "conventions": {
+    "namingStyle": "camelCase",
+    "importStyle": "ES modules",
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "app",
+      "components",
+      "lib",
+      "public"
+    ],
+    "gitBranches": null
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "app": {
+      "path": "app",
+      "purpose": "Application code",
+      "fileCount": 4,
+      "lastAccessed": 1776867296605,
+      "keyFiles": [
+        "favicon.ico",
+        "globals.css",
+        "layout.tsx",
+        "page.tsx"
+      ]
+    },
+    "components": {
+      "path": "components",
+      "purpose": "UI components",
+      "fileCount": 2,
+      "lastAccessed": 1776867296606,
+      "keyFiles": [
+        "AuthGuard.tsx",
+        "ModeSelect.tsx"
+      ]
+    },
+    "lib": {
+      "path": "lib",
+      "purpose": "Library code",
+      "fileCount": 9,
+      "lastAccessed": 1776867296629,
+      "keyFiles": [
+        "dateUtils.ts",
+        "generateCafeReport.ts",
+        "parseNaver.ts",
+        "saveCafeHistory.ts",
+        "saveHistory.ts"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 5,
+      "lastAccessed": 1776867296658,
+      "keyFiles": [
+        "file.svg",
+        "globe.svg",
+        "next.svg",
+        "vercel.svg",
+        "window.svg"
+      ]
+    },
+    "supabase": {
+      "path": "supabase",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1776867296661,
+      "keyFiles": []
+    },
+    "app\\api": {
+      "path": "app\\api",
+      "purpose": "API routes",
+      "fileCount": 0,
+      "lastAccessed": 1776867296670,
+      "keyFiles": []
+    },
+    "supabase\\migrations": {
+      "path": "supabase\\migrations",
+      "purpose": "Database migrations",
+      "fileCount": 1,
+      "lastAccessed": 1776867296679,
+      "keyFiles": [
+        "add_smart_block_columns.sql"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "components\\dashboard\\MainPanel.tsx",
+      "accessCount": 26,
+      "lastAccessed": 1776868130431,
+      "type": "directory"
+    },
+    {
+      "path": "app\\api\\cafe\\search\\route.ts",
+      "accessCount": 4,
+      "lastAccessed": 1776868054462,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\batch-track\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776867852527,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\cafe\\batch-track\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776867873822,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\reporter\\batch-track\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776867890773,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\daily-batch\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776867902311,
+      "type": "file"
+    },
+    {
+      "path": "lib\\types.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776867538132,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}
