@@ -155,14 +155,32 @@
   "hotPaths": [
     {
       "path": "components\\dashboard\\MainPanel.tsx",
-      "accessCount": 29,
-      "lastAccessed": 1776868850002,
+      "accessCount": 42,
+      "lastAccessed": 1776869614310,
       "type": "directory"
     },
     {
+      "path": "app\\api\\cafe\\batch-track\\route.ts",
+      "accessCount": 7,
+      "lastAccessed": 1776869275529,
+      "type": "file"
+    },
+    {
       "path": "app\\api\\cafe\\search\\route.ts",
+      "accessCount": 6,
+      "lastAccessed": 1776869244556,
+      "type": "file"
+    },
+    {
+      "path": "components\\dashboard\\Sidebar.tsx",
       "accessCount": 4,
-      "lastAccessed": 1776868054462,
+      "lastAccessed": 1776869027339,
+      "type": "directory"
+    },
+    {
+      "path": "app\\api\\daily-batch\\route.ts",
+      "accessCount": 4,
+      "lastAccessed": 1776869320850,
       "type": "file"
     },
     {
@@ -172,45 +190,75 @@
       "type": "file"
     },
     {
-      "path": "components\\dashboard\\Sidebar.tsx",
-      "accessCount": 3,
-      "lastAccessed": 1776868875172,
-      "type": "directory"
-    },
-    {
       "path": "app\\api\\batch-track\\route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1776867852527,
-      "type": "file"
-    },
-    {
-      "path": "app\\api\\cafe\\batch-track\\route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1776867873822,
+      "accessCount": 3,
+      "lastAccessed": 1776869046300,
       "type": "file"
     },
     {
       "path": "app\\api\\reporter\\batch-track\\route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1776867890773,
-      "type": "file"
-    },
-    {
-      "path": "app\\api\\daily-batch\\route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1776867902311,
+      "accessCount": 3,
+      "lastAccessed": 1776869061843,
       "type": "file"
     },
     {
       "path": "app\\api\\clients\\route.ts",
-      "accessCount": 2,
-      "lastAccessed": 1776868821655,
+      "accessCount": 3,
+      "lastAccessed": 1776869063372,
       "type": "file"
+    },
+    {
+      "path": "components\\dashboard\\ReporterPanel.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776869384906,
+      "type": "directory"
+    },
+    {
+      "path": "components\\dashboard\\RankHistory.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776869398958,
+      "type": "directory"
     },
     {
       "path": "app\\api\\cafe\\clients\\route.ts",
       "accessCount": 2,
       "lastAccessed": 1776868837086,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 2,
+      "lastAccessed": 1776869057003,
+      "type": "directory"
+    },
+    {
+      "path": "app\\api\\cafe\\keywords\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776869063309,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\reporter\\keywords\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776869418238,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\reporter\\entries\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776869437857,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\keywords\\history\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776869452741,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\cafe\\keywords\\history\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776869465012,
       "type": "file"
     },
     {
@@ -220,9 +268,33 @@
       "type": "directory"
     },
     {
-      "path": "app\\api\\cafe\\keywords\\route.ts",
+      "path": "vercel.json",
       "accessCount": 1,
-      "lastAccessed": 1776868782296,
+      "lastAccessed": 1776869047540,
+      "type": "file"
+    },
+    {
+      "path": "app\\api",
+      "accessCount": 1,
+      "lastAccessed": 1776869053811,
+      "type": "directory"
+    },
+    {
+      "path": "components",
+      "accessCount": 1,
+      "lastAccessed": 1776869054923,
+      "type": "directory"
+    },
+    {
+      "path": "app\\api\\cafe\\daily-report\\route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776869061542,
+      "type": "file"
+    },
+    {
+      "path": "lib\\checkCafePostDeleted.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776869231302,
       "type": "file"
     }
   ],

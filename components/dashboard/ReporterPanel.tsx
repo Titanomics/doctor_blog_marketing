@@ -108,7 +108,7 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
     if (!client) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/reporter/keywords?clientId=${client.id}`);
+      const res = await fetch(`/api/reporter/keywords?clientId=${client.id}`, { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setKeywords(data);

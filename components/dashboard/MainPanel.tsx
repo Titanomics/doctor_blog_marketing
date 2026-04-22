@@ -96,6 +96,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [prioritySort, setPrioritySort] = useState<"none" | "asc" | "desc">("none");
   const [keywordSort, setKeywordSort] = useState<"none" | "asc" | "desc">("none");
   const [updatedSort, setUpdatedSort] = useState<"none" | "asc" | "desc">("none");
+  const [createdSort, setCreatedSort] = useState<"none" | "asc" | "desc">("none");
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -339,6 +340,18 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   }
 
   const sortedKeywords = (() => {
+    // null/undefined를 항상 끝으로 보내는 timestamp 비교
+    const compareTimestamp = (aStr: string | null, bStr: string | null, dir: "asc" | "desc") => {
+      const aNull = !aStr;
+      const bNull = !bStr;
+      if (aNull && bNull) return 0;
+      if (aNull) return 1; // null은 항상 끝으로
+      if (bNull) return -1;
+      const aT = new Date(aStr!).getTime();
+      const bT = new Date(bStr!).getTime();
+      return dir === "desc" ? bT - aT : aT - bT;
+    };
+
     if (keywordSort !== "none") {
       return [...keywords].sort((a, b) => {
         const cmp = a.keyword.localeCompare(b.keyword, "ko");
@@ -346,11 +359,10 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       });
     }
     if (updatedSort !== "none") {
-      return [...keywords].sort((a, b) => {
-        const aT = a.updated_at ? new Date(a.updated_at).getTime() : 0;
-        const bT = b.updated_at ? new Date(b.updated_at).getTime() : 0;
-        return updatedSort === "desc" ? bT - aT : aT - bT;
-      });
+      return [...keywords].sort((a, b) => compareTimestamp(a.updated_at, b.updated_at, updatedSort));
+    }
+    if (createdSort !== "none") {
+      return [...keywords].sort((a, b) => compareTimestamp(a.created_at, b.created_at, createdSort));
     }
     if (prioritySort !== "none") {
       return [...keywords].sort((a, b) => {
@@ -726,19 +738,19 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               <tr className="bg-slate-50 border-b border-slate-100">
                 <th
                   className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48 cursor-pointer select-none hover:text-emerald-600 transition-colors"
-                  onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setPrioritySort("none"); setRankSort("none"); setUpdatedSort("none"); }}
+                  onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setPrioritySort("none"); setRankSort("none"); setUpdatedSort("none"); setCreatedSort("none"); }}
                 >
                   키워드 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
                 </th>
                 <th
                   className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-28 cursor-pointer select-none hover:text-emerald-600 transition-colors"
-                  onClick={() => { setPrioritySort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); }}
+                  onClick={() => { setPrioritySort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setCreatedSort("none"); }}
                 >
                   중요도 {prioritySort === "desc" ? "▼" : prioritySort === "asc" ? "▲" : ""}
                 </th>
                 <th
                   className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24 cursor-pointer select-none hover:text-emerald-600 transition-colors"
-                  onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setKeywordSort("none"); setPrioritySort("none"); setUpdatedSort("none"); }}
+                  onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setKeywordSort("none"); setPrioritySort("none"); setUpdatedSort("none"); setCreatedSort("none"); }}
                 >
                   현재 순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
                 </th>
@@ -746,7 +758,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                 <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">매칭 포스트</th>
                 <th
                   className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-emerald-600 transition-colors"
-                  onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setPrioritySort("none"); setRankSort("none"); }}
+                  onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setPrioritySort("none"); setRankSort("none"); setCreatedSort("none"); }}
                 >
                   마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
                 </th>
@@ -809,14 +821,14 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                 <tr className="bg-slate-50 border-b border-slate-100">
                   <th
                     className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); }}
+                    onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
                   >
                     키워드 / 포스팅 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
                   </th>
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
                   <th
                     className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setKeywordSort("none"); setUpdatedSort("none"); }}
+                    onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setKeywordSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
                   >
                     순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
                   </th>
@@ -824,11 +836,16 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">노출 URL</th>
                   <th
                     className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); }}
+                    onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
                   >
                     마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32">등록일</th>
+                  <th
+                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                    onClick={() => { setCreatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); }}
+                  >
+                    등록일 {createdSort === "desc" ? "▼" : createdSort === "asc" ? "▲" : ""}
+                  </th>
                   <th className="px-5 py-3 w-20"></th>
                 </tr>
               </thead>
@@ -868,7 +885,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                 <tr className="bg-slate-50/50 border-b border-slate-100">
                   <th
                     className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); }}
+                    onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
                   >
                     키워드 / 포스팅 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
                   </th>
@@ -878,11 +895,16 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide"></th>
                   <th
                     className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); }}
+                    onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
                   >
                     마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
                   </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32">등록일</th>
+                  <th
+                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                    onClick={() => { setCreatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); }}
+                  >
+                    등록일 {createdSort === "desc" ? "▼" : createdSort === "asc" ? "▲" : ""}
+                  </th>
                   <th className="px-5 py-3 w-20"></th>
                 </tr>
               </thead>

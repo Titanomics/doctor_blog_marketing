@@ -27,7 +27,8 @@ export default function RankHistory({
       setLoading(true);
       try {
         const res = await fetch(
-          `${historyApiPath}?keywordId=${keywordId}`
+          `${historyApiPath}?keywordId=${keywordId}`,
+          { cache: "no-store" }
         );
         if (res.ok) {
           const data = await res.json();

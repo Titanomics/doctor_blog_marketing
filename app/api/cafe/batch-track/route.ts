@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { parseViewSection, parseSmartBlocks, parseReplies } from "@/lib/parseNaver";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
+import { checkCafePostDeleted } from "@/lib/checkCafePostDeleted";
 
 export const maxDuration = 300;
 
@@ -93,13 +94,20 @@ async function processClient(client: { id: string; name: string }) {
         replySince = null;
       }
 
+      // 어디에서도 못 찾고 특정 게시글 URL이 있으면 삭제 여부 확인
+      let postDeleted = false;
+      if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply && kw.post_url) {
+        postDeleted = await checkCafePostDeleted(kw.post_url);
+      }
+
       const { error: updateError } = await supabase
         .from("cafe_keywords")
         .update({
           previous_rank: kw.current_rank,
           current_rank: newRank,
-          matched_title:
-            found?.title ?? foundInSmartBlock?.title ?? null,
+          matched_title: postDeleted
+            ? "[삭제된 게시글]"
+            : (found?.title ?? foundInSmartBlock?.title ?? null),
           matched_url:
             found?.link ?? foundInSmartBlock?.link ?? null,
           smart_block_name: foundInSmartBlock?.blockName ?? null,

@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-04-22T14:41:14.648Z",
+  "lastUpdated": "2026-04-22T14:53:33.866Z",
   "activeFeatures": [
     "daily-batch",
     "blog_keyword_rank",
@@ -8,7 +8,9 @@
     "dashboard",
     "search",
     "keywords",
-    "clients"
+    "clients",
+    "entries",
+    "history"
   ],
   "primaryFeature": "daily-batch",
   "features": {
@@ -21,7 +23,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:06:41.200Z",
-        "lastUpdated": "2026-04-22T14:25:02.016Z"
+        "lastUpdated": "2026-04-22T14:48:40.493Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\daily-batch\\route.ts"
     },
@@ -34,9 +36,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:07:00.947Z",
-        "lastUpdated": "2026-03-29T09:07:00.947Z"
+        "lastUpdated": "2026-04-22T14:47:10.714Z"
       },
-      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\lib\\parseNaver.ts"
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\lib\\checkCafePostDeleted.ts"
     },
     "batch-track": {
       "phase": "do",
@@ -47,9 +49,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:09:23.825Z",
-        "lastUpdated": "2026-04-22T14:24:50.298Z"
+        "lastUpdated": "2026-04-22T14:47:55.099Z"
       },
-      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\reporter\\batch-track\\route.ts"
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\batch-track\\route.ts"
     },
     "dashboard": {
       "phase": "do",
@@ -60,9 +62,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:50:42.033Z",
-        "lastUpdated": "2026-04-22T14:41:14.645Z"
+        "lastUpdated": "2026-04-22T14:53:33.863Z"
       },
-      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\Sidebar.tsx"
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\MainPanel.tsx"
     },
     "search": {
       "phase": "do",
@@ -73,7 +75,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-13T15:03:14.756Z",
-        "lastUpdated": "2026-04-22T14:27:34.090Z"
+        "lastUpdated": "2026-04-22T14:47:24.240Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\search\\route.ts"
     },
@@ -86,9 +88,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-04-22T14:39:30.687Z",
-        "lastUpdated": "2026-04-22T14:39:41.880Z"
+        "lastUpdated": "2026-04-22T14:50:17.863Z"
       },
-      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\keywords\\route.ts"
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\reporter\\keywords\\route.ts"
     },
     "clients": {
       "phase": "do",
@@ -102,6 +104,32 @@
         "lastUpdated": "2026-04-22T14:40:36.788Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\clients\\route.ts"
+    },
+    "entries": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-22T14:50:37.568Z",
+        "lastUpdated": "2026-04-22T14:50:37.568Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\reporter\\entries\\route.ts"
+    },
+    "history": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-22T14:50:52.312Z",
+        "lastUpdated": "2026-04-22T14:51:04.609Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\keywords\\history\\route.ts"
     }
   },
   "pipeline": {
@@ -112,7 +140,7 @@
   "session": {
     "startedAt": "2026-03-29T08:58:00.759Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-04-22T14:41:14.648Z"
+    "lastActivity": "2026-04-22T14:53:33.866Z"
   },
   "history": [
     {
@@ -357,6 +385,132 @@
     },
     {
       "timestamp": "2026-04-22T14:41:14.648Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:47:10.718Z",
+      "feature": "blog_keyword_rank",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:47:24.244Z",
+      "feature": "search",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:47:33.217Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:47:55.102Z",
+      "feature": "batch-track",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:48:40.495Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:49:44.581Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:49:58.588Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:50:17.871Z",
+      "feature": "keywords",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:50:37.570Z",
+      "feature": "entries",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:50:52.314Z",
+      "feature": "history",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:51:04.611Z",
+      "feature": "history",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:51:30.263Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:51:49.181Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:52:11.862Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:52:23.403Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:52:31.208Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:52:39.967Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:52:50.126Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:52:59.484Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:53:09.606Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:53:33.865Z",
       "feature": "dashboard",
       "phase": "do",
       "action": "updated"
