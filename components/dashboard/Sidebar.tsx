@@ -47,7 +47,7 @@ export default function Sidebar({
   const fetchClients = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(apiPath);
+      const res = await fetch(apiPath, { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         setClients(data);

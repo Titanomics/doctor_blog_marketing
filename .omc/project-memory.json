@@ -155,8 +155,8 @@
   "hotPaths": [
     {
       "path": "components\\dashboard\\MainPanel.tsx",
-      "accessCount": 26,
-      "lastAccessed": 1776868130431,
+      "accessCount": 29,
+      "lastAccessed": 1776868850002,
       "type": "directory"
     },
     {
@@ -164,6 +164,18 @@
       "accessCount": 4,
       "lastAccessed": 1776868054462,
       "type": "file"
+    },
+    {
+      "path": "app\\api\\keywords\\route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776868770985,
+      "type": "file"
+    },
+    {
+      "path": "components\\dashboard\\Sidebar.tsx",
+      "accessCount": 3,
+      "lastAccessed": 1776868875172,
+      "type": "directory"
     },
     {
       "path": "app\\api\\batch-track\\route.ts",
@@ -190,10 +202,28 @@
       "type": "file"
     },
     {
+      "path": "app\\api\\clients\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776868821655,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\cafe\\clients\\route.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776868837086,
+      "type": "file"
+    },
+    {
       "path": "lib\\types.ts",
       "accessCount": 1,
       "lastAccessed": 1776867538132,
       "type": "directory"
+    },
+    {
+      "path": "app\\api\\cafe\\keywords\\route.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776868782296,
+      "type": "file"
     }
   ],
   "userDirectives": []

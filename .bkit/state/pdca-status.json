@@ -1,12 +1,14 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-04-22T14:28:50.142Z",
+  "lastUpdated": "2026-04-22T14:41:14.648Z",
   "activeFeatures": [
     "daily-batch",
     "blog_keyword_rank",
     "batch-track",
     "dashboard",
-    "search"
+    "search",
+    "keywords",
+    "clients"
   ],
   "primaryFeature": "daily-batch",
   "features": {
@@ -58,9 +60,9 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:50:42.033Z",
-        "lastUpdated": "2026-04-22T14:28:50.139Z"
+        "lastUpdated": "2026-04-22T14:41:14.645Z"
       },
-      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\MainPanel.tsx"
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\Sidebar.tsx"
     },
     "search": {
       "phase": "do",
@@ -74,6 +76,32 @@
         "lastUpdated": "2026-04-22T14:27:34.090Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\search\\route.ts"
+    },
+    "keywords": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-22T14:39:30.687Z",
+        "lastUpdated": "2026-04-22T14:39:41.880Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\keywords\\route.ts"
+    },
+    "clients": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-22T14:40:21.229Z",
+        "lastUpdated": "2026-04-22T14:40:36.788Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\clients\\route.ts"
     }
   },
   "pipeline": {
@@ -84,7 +112,7 @@
   "session": {
     "startedAt": "2026-03-29T08:58:00.759Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-04-22T14:28:50.142Z"
+    "lastActivity": "2026-04-22T14:41:14.648Z"
   },
   "history": [
     {
@@ -293,6 +321,42 @@
     },
     {
       "timestamp": "2026-04-22T14:28:50.141Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:39:30.689Z",
+      "feature": "keywords",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:39:41.882Z",
+      "feature": "keywords",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:40:21.230Z",
+      "feature": "clients",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:40:36.790Z",
+      "feature": "clients",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:40:49.610Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-22T14:41:14.648Z",
       "feature": "dashboard",
       "phase": "do",
       "action": "updated"

@@ -117,7 +117,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     if (!client) return;
     setLoading(true);
     try {
-      const res = await fetch(`${keywordsApi}?clientId=${client.id}`);
+      const res = await fetch(`${keywordsApi}?clientId=${client.id}`, { cache: "no-store" });
       if (res.ok) setKeywords(await res.json());
     } finally {
       setLoading(false);
