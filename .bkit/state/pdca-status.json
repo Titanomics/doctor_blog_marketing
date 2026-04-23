@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-04-23T01:49:37.777Z",
+  "lastUpdated": "2026-04-23T02:09:49.597Z",
   "activeFeatures": [
     "daily-batch",
     "blog_keyword_rank",
@@ -63,7 +63,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:50:42.033Z",
-        "lastUpdated": "2026-04-22T14:53:33.863Z"
+        "lastUpdated": "2026-04-23T02:09:49.595Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\MainPanel.tsx"
     },
@@ -154,7 +154,7 @@
   "session": {
     "startedAt": "2026-03-29T08:58:00.759Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-04-23T01:49:37.777Z"
+    "lastActivity": "2026-04-23T02:09:49.597Z"
   },
   "history": [
     {
@@ -538,6 +538,24 @@
     {
       "timestamp": "2026-04-23T01:49:37.777Z",
       "feature": "daily-report",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:09:28.964Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:09:40.280Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:09:49.597Z",
+      "feature": "dashboard",
       "phase": "do",
       "action": "updated"
     }

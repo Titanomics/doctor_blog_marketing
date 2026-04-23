@@ -44,7 +44,7 @@ function formatDate(dateStr: string | null) {
   });
 }
 
-const COOLDOWN_MS = 60 * 60 * 1000; // 1시간
+const COOLDOWN_MS = 5 * 60 * 1000; // 5분 (개별 새로고침 자주 가능)
 
 function isCooldown(updatedAt: string | null, createdAt?: string | null): boolean {
   if (!updatedAt) return false;
@@ -492,7 +492,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       </td>
       <td className="px-5 py-4">
         {kw.matched_title === "[삭제된 게시글]" ? (
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-50 text-red-600 text-xs font-semibold">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-yellow-50 text-red-600 text-xs font-bold border-2 border-yellow-400">
             ❌ 삭제된 게시글
           </span>
         ) : kw.matched_url ? (
@@ -639,7 +639,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         <RankChange current={kw.current_rank} previous={kw.previous_rank} />
       </div>
       {kw.matched_title === "[삭제된 게시글]" ? (
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-red-50 text-red-600 text-xs font-semibold mb-1">
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-yellow-50 text-red-600 text-xs font-bold border-2 border-yellow-400 mb-1">
           ❌ 삭제된 게시글
         </span>
       ) : kw.matched_url ? (
