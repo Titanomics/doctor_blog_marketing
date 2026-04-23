@@ -155,8 +155,8 @@
   "hotPaths": [
     {
       "path": "components\\dashboard\\MainPanel.tsx",
-      "accessCount": 48,
-      "lastAccessed": 1776910190056,
+      "accessCount": 57,
+      "lastAccessed": 1776910891575,
       "type": "directory"
     },
     {
@@ -268,6 +268,12 @@
       "type": "file"
     },
     {
+      "path": "lib\\checkCafePostDeleted.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776910940013,
+      "type": "file"
+    },
+    {
       "path": "lib\\types.ts",
       "accessCount": 1,
       "lastAccessed": 1776867538132,
@@ -290,12 +296,6 @@
       "accessCount": 1,
       "lastAccessed": 1776869054923,
       "type": "directory"
-    },
-    {
-      "path": "lib\\checkCafePostDeleted.ts",
-      "accessCount": 1,
-      "lastAccessed": 1776869231302,
-      "type": "file"
     }
   ],
   "userDirectives": []

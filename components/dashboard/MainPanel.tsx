@@ -259,6 +259,21 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     fetchKeywords();
   };
 
+  const handleToggleDeleted = async (kw: AnyKeyword) => {
+    const isDeleted = kw.matched_title === "[삭제된 게시글]";
+    const newTitle = isDeleted ? null : "[삭제된 게시글]";
+    await fetch(keywordsApi, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: kw.id,
+        matched_title: newTitle,
+        ...(isDeleted ? {} : { current_rank: null, smart_block_rank: null }),
+      }),
+    });
+    fetchKeywords();
+  };
+
   const batchCooldown = lastBatchTime > 0 && Date.now() - lastBatchTime < COOLDOWN_MS;
   const batchCooldownLabel = (() => {
     if (!batchCooldown) return "";
@@ -520,6 +535,19 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id || isCooldown(kw.updated_at, kw.created_at)} title={isCooldown(kw.updated_at, kw.created_at) ? cooldownRemaining(kw.updated_at) : "순위 새로고침"} className={`text-slate-400 ${isCooldown(kw.updated_at, kw.created_at) ? "opacity-30 cursor-not-allowed" : accentRefresh} transition-colors`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
+          {!isBlog && (
+            <button
+              onClick={() => handleToggleDeleted(kw)}
+              title={kw.matched_title === "[삭제된 게시글]" ? "삭제 표시 해제" : "삭제된 게시글로 표시"}
+              className={`text-xs px-2 py-1 rounded font-bold transition-colors ${
+                kw.matched_title === "[삭제된 게시글]"
+                  ? "bg-yellow-50 text-red-600 border-2 border-yellow-400"
+                  : "text-slate-400 hover:text-red-500 border-2 border-transparent hover:border-yellow-300"
+              }`}
+            >
+              {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
+            </button>
+          )}
           <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
             <PencilIcon />
           </button>
@@ -613,6 +641,18 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id || isCooldown(kw.updated_at, kw.created_at)} title={isCooldown(kw.updated_at, kw.created_at) ? cooldownRemaining(kw.updated_at) : "순위 새로고침"} className={`text-slate-400 ${isCooldown(kw.updated_at, kw.created_at) ? "opacity-30 cursor-not-allowed" : accentRefresh} transition-colors p-1`}>
             <RefreshIcon spinning={refreshingId === kw.id} />
           </button>
+          {!isBlog && (
+            <button
+              onClick={() => handleToggleDeleted(kw)}
+              className={`text-xs px-2 py-1 rounded font-bold transition-colors ${
+                kw.matched_title === "[삭제된 게시글]"
+                  ? "bg-yellow-50 text-red-600 border-2 border-yellow-400"
+                  : "text-slate-400 hover:text-red-500 border-2 border-transparent hover:border-yellow-300"
+              }`}
+            >
+              {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
+            </button>
+          )}
           <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
             <PencilIcon />
           </button>

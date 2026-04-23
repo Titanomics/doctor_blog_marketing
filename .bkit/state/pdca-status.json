@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-04-23T02:09:49.597Z",
+  "lastUpdated": "2026-04-23T02:22:19.650Z",
   "activeFeatures": [
     "daily-batch",
     "blog_keyword_rank",
@@ -37,7 +37,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:07:00.947Z",
-        "lastUpdated": "2026-04-22T14:47:10.714Z"
+        "lastUpdated": "2026-04-23T02:22:19.648Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\lib\\checkCafePostDeleted.ts"
     },
@@ -63,7 +63,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:50:42.033Z",
-        "lastUpdated": "2026-04-23T02:09:49.595Z"
+        "lastUpdated": "2026-04-23T02:21:31.177Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\components\\dashboard\\MainPanel.tsx"
     },
@@ -154,7 +154,7 @@
   "session": {
     "startedAt": "2026-03-29T08:58:00.759Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-04-23T02:09:49.597Z"
+    "lastActivity": "2026-04-23T02:22:19.650Z"
   },
   "history": [
     {
@@ -556,6 +556,30 @@
     {
       "timestamp": "2026-04-23T02:09:49.597Z",
       "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:20:19.431Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:20:46.362Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:21:31.179Z",
+      "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T02:22:19.650Z",
+      "feature": "blog_keyword_rank",
       "phase": "do",
       "action": "updated"
     }
