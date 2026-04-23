@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"python3 << 'EOF'\\nimport json\\nimport urllib.request\\nfrom datetime import datetime, timezone\\n\\n# Get clients list\\nreq = urllib.request.Request(\\\"https://doctor-blog-marketing.vercel.app...",
-  "error": "Exit code 1\nTotal blog clients: 20\r\nTotal keywords: 364\r\nStale (>1h old): 0\r\nTraceback (most recent call last):\r\n  File \"<stdin>\", line 38, in <module>\r\nUnicodeEncodeError: 'cp949' codec can't encode character '\\u2713' in position 35: illegal multibyte sequence",
-  "timestamp": "2026-04-22T14:37:49.182Z",
+  "tool_input_preview": "{\"command\":\"ls -la \\\"c:\\\\Users\\\\김경록\\\\Desktop\\\\test\\\\blog_keyword_rank\\\\.snapshots\\\\\\\" 2>&1\",\"description\":\"Verify snapshot file exists\"}",
+  "error": "Exit code 2\n/usr/bin/bash: eval: line 1: unexpected EOF while looking for matching `\"'",
+  "timestamp": "2026-04-23T01:43:34.671Z",
   "retry_count": 1
 }

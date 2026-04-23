@@ -1,3 +1,0 @@
-{"t":0,"agent":"system","event":"skill_invoked","skill_name":"bkit:pdca"}
-{"t":0,"agent":"a1991e7","agent_type":"bkit:gap-detector","event":"agent_start","parent_mode":"none"}
-{"t":0,"agent":"a1991e7","agent_type":"bkit:gap-detector","event":"agent_stop","success":true,"duration_ms":130913}

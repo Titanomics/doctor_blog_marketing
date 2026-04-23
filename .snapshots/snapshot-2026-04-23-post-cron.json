@@ -1,0 +1,5133 @@
+{
+  "captured_at": "2026-04-23T01:44:14.482658+00:00",
+  "blog": {
+    "365경대연합내과": [],
+    "365한결탑마취통증의학과": [],
+    "가산시그니처정형외과": [
+      {
+        "keyword": "가산동정형외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "가산동정형외과,어깨 지방종 제거, 작을 때 와야 하는 이유가 있습니다",
+        "matched_url": "https://blog.naver.com/signaturegsno1/224252979616",
+        "updated_at": "2026-04-22T14:33:48.395+00:00"
+      },
+      {
+        "keyword": "고척동정형외과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "고척동정형외과? 어깨 통증,주사 맞고 나서도 재발하는 진짜 이유",
+        "matched_url": "https://blog.naver.com/signaturegsno1/224223261226",
+        "updated_at": "2026-04-22T14:33:38.788+00:00"
+      },
+      {
+        "keyword": "대학동정형외과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "대학동정형외과, 통증 앞에서 혼자 고민하고 계신분들께 바칩니다.",
+        "matched_url": "https://blog.naver.com/signaturegsno1/224217898138",
+        "updated_at": "2026-04-22T14:33:46.229+00:00"
+      },
+      {
+        "keyword": "영등포역정형외과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "영등포역정형외과,손이 저리고 힘이 빠진다면 목 문제일 수 있습니다",
+        "matched_url": "https://blog.naver.com/signaturegsno1/224213610091",
+        "updated_at": "2026-04-22T14:33:41.856+00:00"
+      },
+      {
+        "keyword": "오류동정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:43.93+00:00"
+      }
+    ],
+    "가산시그니처피부과": [
+      {
+        "keyword": "개봉동피부과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "개봉동피부과,피부 탄력 떨어지는 건 나이 탓만이 아닙니다",
+        "matched_url": "https://blog.naver.com/signatureskin/224214855325",
+        "updated_at": "2026-04-22T14:33:56.413+00:00"
+      },
+      {
+        "keyword": "개봉역피부과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "개봉역피부과,피부 반복 트러블병원 가야 하는 시점이 있습니다",
+        "matched_url": "https://blog.naver.com/signatureskin/224228758273",
+        "updated_at": "2026-04-22T14:33:54.456+00:00"
+      },
+      {
+        "keyword": "고척동피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:40.256+00:00"
+      },
+      {
+        "keyword": "구로디지털단지역피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:48.438+00:00"
+      },
+      {
+        "keyword": "봉천동피부과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "봉천동피부과, 4월에 피부관리 시작하면 여름이 편해집니다",
+        "matched_url": "https://blog.naver.com/signatureskin/224255367737",
+        "updated_at": "2026-04-22T14:33:50.475+00:00"
+      },
+      {
+        "keyword": "신대방삼거리역피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.412+00:00"
+      },
+      {
+        "keyword": "신림역피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:46.425+00:00"
+      },
+      {
+        "keyword": "신원동피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:52.472+00:00"
+      },
+      {
+        "keyword": "역곡역피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:44.395+00:00"
+      },
+      {
+        "keyword": "오류동피부과",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "오류동역피부과, 주근깨 잡티제거 방문 전 '이것'만큼은 알아야 합니다",
+        "matched_url": "https://blog.naver.com/signatureskin/223879447015",
+        "updated_at": "2026-04-22T14:33:58.524+00:00"
+      }
+    ],
+    "경대하트연합내과": [
+      {
+        "keyword": "경산심장병원",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "경산심장병원, 큰 병원이 답일까요 의사의 솔직한 기준",
+        "matched_url": "https://blog.naver.com/kdheart1109/224119645366",
+        "updated_at": "2026-04-22T14:34:57.532+00:00"
+      },
+      {
+        "keyword": "구미순환기내과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "구미 순환기 내과, 병원 선택의 핵심 포인트",
+        "matched_url": "https://blog.naver.com/kdheart1109/223636938812",
+        "updated_at": "2026-04-22T14:33:49.954+00:00"
+      },
+      {
+        "keyword": "구미심장내과",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "구미심장내과, 거리보다 '이것'이 더 중요합니다 &lt;원장 작성&gt;",
+        "matched_url": "https://blog.naver.com/kdheart1109/224106011522",
+        "updated_at": "2026-04-22T14:34:53.427+00:00"
+      },
+      {
+        "keyword": "구미심장잘보는병원",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "구미심장잘보는병원, 가까운 곳? 거리보다 봐야 할 것",
+        "matched_url": "https://blog.naver.com/kdheart1109/224118338094",
+        "updated_at": "2026-04-22T14:34:15.046+00:00"
+      },
+      {
+        "keyword": "구미심장초음파",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "구미심장초음파, 어디서 받아야 할지 고민된다면 딱 1가지만 보세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224104524097",
+        "updated_at": "2026-04-22T14:33:47.972+00:00"
+      },
+      {
+        "keyword": "다사심장내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "다사심장내과 부정맥, 심전도 검사만으로는 부족한 이유",
+        "matched_url": "https://blog.naver.com/kdheart1109/224144641269",
+        "updated_at": "2026-04-22T14:34:10.892+00:00"
+      },
+      {
+        "keyword": "달서구심장내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구달서구심장내과, 단골 병원 찾으려면, 딱 2가지만 보세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224005042305",
+        "updated_at": "2026-04-22T14:34:26.139+00:00"
+      },
+      {
+        "keyword": "대구 ct병원",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구ct병원, 심장은 아무 곳이나 가면 안 되는 이유 2가지",
+        "matched_url": "https://blog.naver.com/kdheart1109/224196413696",
+        "updated_at": "2026-04-22T14:34:59.576+00:00"
+      },
+      {
+        "keyword": "대구 결핵검사",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구결핵검사, 증상 없어도 받아야 한다? 진실은 이렇습니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/224177036594",
+        "updated_at": "2026-04-22T14:34:12.912+00:00"
+      },
+      {
+        "keyword": "대구 교대역 심장내과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구 교대역 심장내과, 현직 의사의 병원 선택 기준 공개",
+        "matched_url": "https://blog.naver.com/kdheart1109/224156779302",
+        "updated_at": "2026-04-22T14:34:06.63+00:00"
+      },
+      {
+        "keyword": "대구 부정맥",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "대구 부정맥, 심장이 한 박자 쉬는 느낌 그냥 넘기지 마세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224251686145",
+        "updated_at": "2026-04-22T14:33:53.929+00:00"
+      },
+      {
+        "keyword": "대구 순환기내과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구순환기내과, 심장검사 한 번 받아본 적 없다면 꼭 읽어보세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224247490299",
+        "updated_at": "2026-04-22T14:33:43.4+00:00"
+      },
+      {
+        "keyword": "대구 순환기내과 잘보는 병원",
+        "current_rank": 9,
+        "previous_rank": 9,
+        "matched_title": "대구 순환기내과 잘보는 병원, 가까운 곳 선택했다가 후회하는 이유",
+        "matched_url": "https://blog.naver.com/kdheart1109/224195307914",
+        "updated_at": "2026-04-22T14:35:08.126+00:00"
+      },
+      {
+        "keyword": "대구 심장 잘보는 병원",
+        "current_rank": 12,
+        "previous_rank": 12,
+        "matched_title": "대구 심장 잘보는 병원 못 찾으셨죠?이유가 있습니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/224212746656",
+        "updated_at": "2026-04-22T14:34:02.33+00:00"
+      },
+      {
+        "keyword": "대구 심장검사",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구 심장검사 결과 정상인데, 증상 있다면 이 글 보세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224227506524",
+        "updated_at": "2026-04-22T14:34:17.8+00:00"
+      },
+      {
+        "keyword": "대구 심장내과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:45.875+00:00"
+      },
+      {
+        "keyword": "대구 혈관 전문병원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "대구 혈관 전문병원, 유명하다고 다 좋은 건 아닙니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/224178459076",
+        "updated_at": "2026-04-22T14:34:43.041+00:00"
+      },
+      {
+        "keyword": "대구고혈압",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:40.868+00:00"
+      },
+      {
+        "keyword": "대구달서구심장내과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구달서구심장내과, 단골 병원 찾으려면, 딱 2가지만 보세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224005042305",
+        "updated_at": "2026-04-22T14:34:30.406+00:00"
+      },
+      {
+        "keyword": "대구동구심장내과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "대구동구심장내과, 부모님 심장 건강이 걱정되시는 분들께 드리는 글",
+        "matched_url": "https://blog.naver.com/kdheart1109/224136077881",
+        "updated_at": "2026-04-22T14:34:21.962+00:00"
+      },
+      {
+        "keyword": "대구북구순환기내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구북구순환기내과, 현직 의사의 병원 선택 기준 2가지",
+        "matched_url": "https://blog.naver.com/kdheart1109/224021288589",
+        "updated_at": "2026-04-22T14:34:51.465+00:00"
+      },
+      {
+        "keyword": "대구북구심장내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구북구심장내과, 심장판막증 방문 전 알아야 할 것 - 의사 작성",
+        "matched_url": "https://blog.naver.com/kdheart1109/224148571527",
+        "updated_at": "2026-04-22T14:34:49.406+00:00"
+      },
+      {
+        "keyword": "대구수성구심장내과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구수성구심장내과, 심장 건강은 정확한 진단에서 시작됩니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/223853073243",
+        "updated_at": "2026-04-22T14:34:24.058+00:00"
+      },
+      {
+        "keyword": "대구순환기내과전문의",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구순환기내과전문의, 심장 증상엔 왜 순환기 전문의에게 가야 할까",
+        "matched_url": "https://blog.naver.com/kdheart1109/224228765034",
+        "updated_at": "2026-04-22T14:35:03.942+00:00"
+      },
+      {
+        "keyword": "대구심장내과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:51.952+00:00"
+      },
+      {
+        "keyword": "대구심장내과잘하는곳",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구심장내과 잘 하는 곳, 이 2가지는 꼭 확인하세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224081961524",
+        "updated_at": "2026-04-22T14:34:08.821+00:00"
+      },
+      {
+        "keyword": "대구심장내과전문의",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구심장내과전문의, 협심증·부정맥 초기 놓치는 이유",
+        "matched_url": "https://blog.naver.com/kdheart1109/224222314764",
+        "updated_at": "2026-04-22T14:35:01.795+00:00"
+      },
+      {
+        "keyword": "대구심장내과추천",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "대구심장내과추천, 이 글 하나면 더 이상 헤매지 않으셔도 됩니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/224113994213",
+        "updated_at": "2026-04-22T14:34:00.162+00:00"
+      },
+      {
+        "keyword": "대구심장병원추천",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:19.878+00:00"
+      },
+      {
+        "keyword": "대구심장잘보는병원",
+        "current_rank": 12,
+        "previous_rank": 12,
+        "matched_title": "대구 심장 잘보는 병원 못 찾으셨죠?이유가 있습니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/224212746656",
+        "updated_at": "2026-04-22T14:34:04.441+00:00"
+      },
+      {
+        "keyword": "대구심장전문병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:45.155+00:00"
+      },
+      {
+        "keyword": "대구심장정밀검진",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구심장정밀검진, 항목부터 비용까지 이 글 하나로 종결",
+        "matched_url": "https://blog.naver.com/kdheart1109/224087370229",
+        "updated_at": "2026-04-22T14:33:58.161+00:00"
+      },
+      {
+        "keyword": "대구심장질환",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:55.397+00:00"
+      },
+      {
+        "keyword": "대구심장초음파병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구심장초음파병원, 의사가 알려주는 선택 기준 2가지",
+        "matched_url": "https://blog.naver.com/kdheart1109/224049975019",
+        "updated_at": "2026-04-22T14:34:47.268+00:00"
+      },
+      {
+        "keyword": "대구중구순환기내과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구중구순환기내과, 검사잘하는곳 찾기 힘들죠? 딱 3가지만 확인하세요",
+        "matched_url": "https://blog.naver.com/kdheart1109/224022543206",
+        "updated_at": "2026-04-22T14:34:28.284+00:00"
+      },
+      {
+        "keyword": "대구중구심장내과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구중구심장내과 부정맥 진단, 가슴 두근거림 이것부터 확인",
+        "matched_url": "https://blog.naver.com/kdheart1109/224155573162",
+        "updated_at": "2026-04-22T14:33:41.361+00:00"
+      },
+      {
+        "keyword": "대구폐기능검사",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "대구폐기능검사, 의사가 알려주는 검사 전 꼭 알아야 할 2가지",
+        "matched_url": "https://blog.naver.com/kdheart1109/224187818087",
+        "updated_at": "2026-04-22T14:33:56.09+00:00"
+      },
+      {
+        "keyword": "반월당심장내과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "반월당심장내과, 가슴 통증 참고 넘기면 안 되는 이유 의사 작성",
+        "matched_url": "https://blog.naver.com/kdheart1109/224246178369",
+        "updated_at": "2026-04-22T14:34:34.574+00:00"
+      },
+      {
+        "keyword": "수성구심장내과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:35:05.957+00:00"
+      },
+      {
+        "keyword": "순환기내과전문의",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:36.672+00:00"
+      },
+      {
+        "keyword": "심장내과전문의",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:38.73+00:00"
+      },
+      {
+        "keyword": "칠곡순환기내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "칠곡순환기내과 심부전 증상, 단순 피로가 아닐 수 있습니다",
+        "matched_url": "https://blog.naver.com/kdheart1109/224154271084",
+        "updated_at": "2026-04-22T14:34:32.496+00:00"
+      }
+    ],
+    "다나음한방병원(준최5)": [
+      {
+        "keyword": "간석동한방병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:59.859+00:00"
+      },
+      {
+        "keyword": "남동구한방병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:45.204+00:00"
+      },
+      {
+        "keyword": "삼산동한방병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:51.613+00:00"
+      },
+      {
+        "keyword": "석남동한방병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "석남동한방병원, 한방·양방 협진이 왜 중요한지 모르면 손해입니다",
+        "matched_url": "https://blog.naver.com/fbirddietb40/224228835334",
+        "updated_at": "2026-04-22T14:33:43.072+00:00"
+      },
+      {
+        "keyword": "숭의동한방병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "숭의동한방병원, 암이라는 여정, 혼자 걷지 않아도 됩니다",
+        "matched_url": "https://blog.naver.com/fbirddietb40/224227553029",
+        "updated_at": "2026-04-22T14:33:47.303+00:00"
+      },
+      {
+        "keyword": "암요양병원후기",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:53.576+00:00"
+      },
+      {
+        "keyword": "옥련동한방병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:57.71+00:00"
+      },
+      {
+        "keyword": "용현동한방병원",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "용현동한방병원, 암 환자 케어'이것'만큼은 알고 가세요 &lt;한의사 작성>",
+        "matched_url": "https://blog.naver.com/fbirddietb40/224156861442",
+        "updated_at": "2026-04-22T14:33:40.932+00:00"
+      },
+      {
+        "keyword": "인천암요양병원후기",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:55.685+00:00"
+      },
+      {
+        "keyword": "학익동한방병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:49.471+00:00"
+      }
+    ],
+    "다온치과": [
+      {
+        "keyword": "대구 두류동 치과",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "대구 두류동 치과 어금니 흔들려요? 방치하지 않고 치료해야 하는 이유",
+        "matched_url": "https://blog.naver.com/whitemiso75/224156880643",
+        "updated_at": "2026-04-22T14:33:41.004+00:00"
+      },
+      {
+        "keyword": "대구남구치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:47.299+00:00"
+      },
+      {
+        "keyword": "대구남산동치과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "대구남산동치과? 잇몸치료 반드시 해야 하는 이유",
+        "matched_url": "https://blog.naver.com/whitemiso75/224204986318",
+        "updated_at": "2026-04-22T14:33:45.263+00:00"
+      },
+      {
+        "keyword": "대구대명동치과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "대구대명동치과, 신경치료 덥썩 받기 전에꼭 확인하세요",
+        "matched_url": "https://blog.naver.com/whitemiso75/224228864931",
+        "updated_at": "2026-04-22T14:34:04.108+00:00"
+      },
+      {
+        "keyword": "대구범물동치과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구범물동치과 크라운 가격보다 '이것'이 중요합니다",
+        "matched_url": "https://blog.naver.com/whitemiso75/224095331044",
+        "updated_at": "2026-04-22T14:34:14.676+00:00"
+      },
+      {
+        "keyword": "대구봉덕동치과",
+        "current_rank": 11,
+        "previous_rank": 11,
+        "matched_title": "대구봉덕동치과 레진 치료 받고 후회하는 분들 공통점",
+        "matched_url": "https://blog.naver.com/whitemiso75/224089815488",
+        "updated_at": "2026-04-22T14:34:02.033+00:00"
+      },
+      {
+        "keyword": "대구삼덕동치과",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "대구삼덕동치과 찾기 힘들죠? 이 3가지면 실력 있는 곳 찾습니다",
+        "matched_url": "https://blog.naver.com/whitemiso75/224097700360",
+        "updated_at": "2026-04-22T14:33:55.735+00:00"
+      },
+      {
+        "keyword": "대구수성동치과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구수성동치과, 잇몸 치료 미루면 안 되는이유, 의사가 직접 적습니다",
+        "matched_url": "https://blog.naver.com/whitemiso75/224231205491",
+        "updated_at": "2026-04-22T14:33:53.692+00:00"
+      },
+      {
+        "keyword": "대구이천동치과",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "대구이천동치과 충치치료, 아픈가요? 모든 곳이 똑같지는 않습니다",
+        "matched_url": "https://blog.naver.com/whitemiso75/224197729281",
+        "updated_at": "2026-04-22T14:33:49.511+00:00"
+      },
+      {
+        "keyword": "대구중동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:57.807+00:00"
+      },
+      {
+        "keyword": "대구지산동치과",
+        "current_rank": 17,
+        "previous_rank": 17,
+        "matched_title": "대구 지산동 치과 신경치료, 알면 무섭지않습니다.",
+        "matched_url": "https://blog.naver.com/whitemiso75/224099000388",
+        "updated_at": "2026-04-22T14:33:51.595+00:00"
+      },
+      {
+        "keyword": "대구틀니잘하는병원",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구틀니잘하는병원 비용만 비교하면 후회하는 이유",
+        "matched_url": "https://blog.naver.com/whitemiso75/224126403649",
+        "updated_at": "2026-04-22T14:34:06.173+00:00"
+      },
+      {
+        "keyword": "대구틀니추천",
+        "current_rank": 7,
+        "previous_rank": 5,
+        "matched_title": "대구틀니추천? 의사는 이 2가지를 봅니다",
+        "matched_url": "https://blog.naver.com/whitemiso75/224137446499",
+        "updated_at": "2026-04-22T14:34:18.787+00:00"
+      },
+      {
+        "keyword": "대구틀니치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:59.774+00:00"
+      },
+      {
+        "keyword": "대구황금동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:12.612+00:00"
+      },
+      {
+        "keyword": "대봉동 치과 추천",
+        "current_rank": 13,
+        "previous_rank": 13,
+        "matched_title": "대봉동치과추천, 통증·과잉진료걱정에 일주일 미루고 계신다면 필독",
+        "matched_url": "https://blog.naver.com/whitemiso75/224202285952",
+        "updated_at": "2026-04-22T14:34:10.529+00:00"
+      },
+      {
+        "keyword": "봉덕동치과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "대구봉덕동치과, 잇몸에서 피가 나는데 괜찮다고요?&lt;필독&gt;",
+        "matched_url": "https://blog.naver.com/whitemiso75/224230300528",
+        "updated_at": "2026-04-22T14:33:43.119+00:00"
+      },
+      {
+        "keyword": "수성동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:16.759+00:00"
+      },
+      {
+        "keyword": "이천동치과",
+        "current_rank": 9,
+        "previous_rank": 9,
+        "matched_title": "대구이천동치과, 충치 하나 때문에 신경치료까지 받게 되는 이유",
+        "matched_url": "https://blog.naver.com/whitemiso75/224236636411",
+        "updated_at": "2026-04-22T14:34:08.355+00:00"
+      }
+    ],
+    "디데이치과": [
+      {
+        "keyword": "강남 스케일링",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:59.018+00:00"
+      },
+      {
+        "keyword": "강남구청역 치과",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "강남구청역치과, 임플란트 저렴한 곳만 찾으시면 안됩니다",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224220610673",
+        "updated_at": "2026-04-22T14:34:01.086+00:00"
+      },
+      {
+        "keyword": "강남대로투명교정",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "강남대로투명교정, 잘하는 곳과 아닌 곳 구분하는 법",
+        "matched_url": "https://blog.naver.com/ddaydent/224222279126",
+        "updated_at": "2026-04-22T14:34:03.304+00:00"
+      },
+      {
+        "keyword": "강남역치아교정",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:54.955+00:00"
+      },
+      {
+        "keyword": "강남역치아미백",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:44.433+00:00"
+      },
+      {
+        "keyword": "개포동치과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "개포동치과, 임플란트 평생 쓰고싶다면 2가지만 확인하세요",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224211469498",
+        "updated_at": "2026-04-22T14:34:05.356+00:00"
+      },
+      {
+        "keyword": "논현동라미네이트",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "논현동라미네이트, 잘하는 곳은 이 1가지가 다릅니다",
+        "matched_url": "https://blog.naver.com/ddaydent/224223242953",
+        "updated_at": "2026-04-22T14:33:52.967+00:00"
+      },
+      {
+        "keyword": "대치역치과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대치역치과, 저렴한 치과를 경계해야 하는 이유",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224223247971",
+        "updated_at": "2026-04-22T14:34:07.433+00:00"
+      },
+      {
+        "keyword": "도곡동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:09.414+00:00"
+      },
+      {
+        "keyword": "삼성동 임플란트 비용",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "삼성동 임플란트, 비용 함정에 빠지지 않으려면 보세요",
+        "matched_url": "https://blog.naver.com/ddaydent/224220580410",
+        "updated_at": "2026-04-22T14:33:46.673+00:00"
+      },
+      {
+        "keyword": "삼성동치아미백",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "삼성동치아미백, 방치하면 치아변색이 더 나빠질 수 있습니다",
+        "matched_url": "https://blog.naver.com/ddaydent/224212187085",
+        "updated_at": "2026-04-22T14:34:12.265+00:00"
+      },
+      {
+        "keyword": "서초동라미네이트",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "서초동라미네이트, 잘하는 치과특징 3가지 정리했습니다",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224227459616",
+        "updated_at": "2026-04-22T14:34:18.417+00:00"
+      },
+      {
+        "keyword": "서초동치아교정",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "서초동치아교정, 교정 기간 늘어나는 진짜 이유",
+        "matched_url": "https://blog.naver.com/ddaydent/224226176192",
+        "updated_at": "2026-04-22T14:34:14.406+00:00"
+      },
+      {
+        "keyword": "선릉역치아미백",
+        "current_rank": 11,
+        "previous_rank": 11,
+        "matched_title": "선릉역치아미백, 후기보다 먼저봐야 할 것이 있습니다",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224212190066",
+        "updated_at": "2026-04-22T14:33:48.786+00:00"
+      },
+      {
+        "keyword": "신논현역 임플란트",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.308+00:00"
+      },
+      {
+        "keyword": "신사역치아교정",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "신사역치아교정, 치과마다 기간이다른 진짜 이유",
+        "matched_url": "https://blog.naver.com/ddaydent/224211466949",
+        "updated_at": "2026-04-22T14:34:16.495+00:00"
+      },
+      {
+        "keyword": "역삼동치과후기",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "역삼동치과, 후기만 믿고 갔다가 후회하는 이유",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224222286561",
+        "updated_at": "2026-04-22T14:33:57.003+00:00"
+      },
+      {
+        "keyword": "테헤란로치과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "테헤란로치과 선택 전, 이 2가지는 반드시 따져보세요",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224226177882",
+        "updated_at": "2026-04-22T14:33:50.907+00:00"
+      },
+      {
+        "keyword": "한티역치과 임플란트",
+        "current_rank": 12,
+        "previous_rank": 13,
+        "matched_title": "한티역치과 임플란트, 기저질환있어도 가능한지 의사가 답합니다",
+        "matched_url": "https://blog.naver.com/ddaydent_1/224209630226",
+        "updated_at": "2026-04-22T14:33:40.221+00:00"
+      }
+    ],
+    "디데이치과1": [
+      {
+        "keyword": "강남구청역치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:47.751+00:00"
+      },
+      {
+        "keyword": "강남역치아교정",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:51.94+00:00"
+      },
+      {
+        "keyword": "개포동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:00.106+00:00"
+      },
+      {
+        "keyword": "대치역치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:45.32+00:00"
+      },
+      {
+        "keyword": "도곡동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:54.069+00:00"
+      },
+      {
+        "keyword": "서초동라미네이트",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:49.863+00:00"
+      },
+      {
+        "keyword": "선릉역치아미백",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:58.035+00:00"
+      },
+      {
+        "keyword": "역삼동치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:41.031+00:00"
+      },
+      {
+        "keyword": "테헤란로치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:56.003+00:00"
+      },
+      {
+        "keyword": "한티역치과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:43.234+00:00"
+      }
+    ],
+    "리드엠": [
+      {
+        "keyword": "대구 prp 주사",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "대구 prp 주사, 통증 악화되기 전에 해야 하는 이유",
+        "matched_url": "https://blog.naver.com/aasre7_645/224179787129",
+        "updated_at": "2026-04-22T14:33:52.781+00:00"
+      },
+      {
+        "keyword": "대구 수성구 정형외과 추천",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구 수성구 정형외과 추천, 의사가 알려주는 병원 고르는 기준",
+        "matched_url": "https://blog.naver.com/aasre7_645/224178475027",
+        "updated_at": "2026-04-22T14:33:58.635+00:00"
+      },
+      {
+        "keyword": "대구 줄기세포 주사",
+        "current_rank": 13,
+        "previous_rank": 13,
+        "matched_title": "대구 줄기세포 주사, 관절 주사와 뭐가 다른지 궁금하다면 필독",
+        "matched_url": "https://blog.naver.com/aasre7_645/224181205552",
+        "updated_at": "2026-04-22T14:33:56.746+00:00"
+      },
+      {
+        "keyword": "대구마취통증의학과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구마취통증의학과, 다 똑같다고 생각하면 오산입니다",
+        "matched_url": "https://blog.naver.com/aasre7_645/224209729649",
+        "updated_at": "2026-04-22T14:34:01.051+00:00"
+      },
+      {
+        "keyword": "대구목디스크",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:03.034+00:00"
+      },
+      {
+        "keyword": "대구무릎통증",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:50.95+00:00"
+      },
+      {
+        "keyword": "대구수성구정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:47.032+00:00"
+      },
+      {
+        "keyword": "대구신경차단술",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구신경차단술, 통증의학과 전문의가 설명하는 치료 과정",
+        "matched_url": "https://blog.naver.com/aasre7_645/224148582575",
+        "updated_at": "2026-04-22T14:34:12.681+00:00"
+      },
+      {
+        "keyword": "대구어깨병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:04.991+00:00"
+      },
+      {
+        "keyword": "대구어깨수술",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:08.883+00:00"
+      },
+      {
+        "keyword": "대구어깨잘보는병원",
+        "current_rank": 9,
+        "previous_rank": 9,
+        "matched_title": "대구어깨잘보는병원, 통증 참으면 독이 됩니다",
+        "matched_url": "https://blog.naver.com/aasre7_645/224211478153",
+        "updated_at": "2026-04-22T14:33:48.81+00:00"
+      },
+      {
+        "keyword": "대구어깨통증병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:40.745+00:00"
+      },
+      {
+        "keyword": "대구정형외과추천",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.828+00:00"
+      },
+      {
+        "keyword": "대구통증의학과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:44.956+00:00"
+      },
+      {
+        "keyword": "대구프롤로주사",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구프롤로주사 효과와 부작용까지 정리해드립니다",
+        "matched_url": "https://blog.naver.com/aasre7_645/224173702438",
+        "updated_at": "2026-04-22T14:33:54.879+00:00"
+      },
+      {
+        "keyword": "대구허리병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:06.965+00:00"
+      },
+      {
+        "keyword": "대구허리주사",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "대구허리주사, 효과 있는 경우와 없는 경우 따로 있습니다",
+        "matched_url": "https://blog.naver.com/aasre7_645/224228806152",
+        "updated_at": "2026-04-22T14:34:10.764+00:00"
+      },
+      {
+        "keyword": "대구허리통증병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:14.563+00:00"
+      }
+    ],
+    "바른길정형외과": [
+      {
+        "keyword": "대구골반병원잘하는곳",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구골반병원 잘하는곳? 이 2가지 모르면 헛걸음합니다",
+        "matched_url": "https://blog.naver.com/bareunos79/224138935423",
+        "updated_at": "2026-04-22T14:33:59.127+00:00"
+      },
+      {
+        "keyword": "대구무릎병원추천",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구 무릎 병원 추천, 의사가 알려주는 2가지 선택 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224148586390",
+        "updated_at": "2026-04-22T14:34:34.477+00:00"
+      },
+      {
+        "keyword": "대구무릎잘보는병원",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "대구무릎잘보는병원, 무릎 통증 방치하면 안 되는 이유 3가지",
+        "matched_url": "https://blog.naver.com/bareunos79/223975488085",
+        "updated_at": "2026-04-22T14:33:40.72+00:00"
+      },
+      {
+        "keyword": "대구범물동정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:51.332+00:00"
+      },
+      {
+        "keyword": "대구신매동정형외과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구신매동정형외과, 의사가 직접 가는 곳의 특징 2가지",
+        "matched_url": "https://blog.naver.com/bareunos79/224043512821",
+        "updated_at": "2026-04-22T14:34:01.161+00:00"
+      },
+      {
+        "keyword": "대구어깨잘보는정형외과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구어깨잘보는정형외과, 의사가 직접 알려주는 2가지 선택 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224137507533",
+        "updated_at": "2026-04-22T14:34:36.249+00:00"
+      },
+      {
+        "keyword": "대구정형외과병원추천",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "대구정형외과병원 추천? 2가지 모르면 손해봅니다",
+        "matched_url": "https://blog.naver.com/bareunos79/224097694068",
+        "updated_at": "2026-04-22T14:34:14.883+00:00"
+      },
+      {
+        "keyword": "대구좌골신경통",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:53.219+00:00"
+      },
+      {
+        "keyword": "대구프롤로치료",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.762+00:00"
+      },
+      {
+        "keyword": "대구황금동정형외과",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "대구황금동정형외과, 프롤로주사 맞기 전 반드시 알아야 할 2가지",
+        "matched_url": "https://blog.naver.com/bareunos79/224219881221",
+        "updated_at": "2026-04-22T14:34:12.953+00:00"
+      },
+      {
+        "keyword": "두산동정형외과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "두산동정형외과 어깨 통증 원인부터 치료까지 총정리",
+        "matched_url": "https://blog.naver.com/bareunos79/224155591416",
+        "updated_at": "2026-04-22T14:33:55.119+00:00"
+      },
+      {
+        "keyword": "두산동정형외과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "두산동정형외과 어깨 통증 원인부터 치료까지 총정리",
+        "matched_url": "https://blog.naver.com/bareunos79/224155591416",
+        "updated_at": "2026-04-22T14:34:03.041+00:00"
+      },
+      {
+        "keyword": "범물동 신경외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "범물동신경외과, 척추관협착증 방치하면 3가지가 달라집니다",
+        "matched_url": "https://blog.naver.com/bareunos79/224193741919",
+        "updated_at": "2026-04-22T14:34:20.758+00:00"
+      },
+      {
+        "keyword": "범물동정형외과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "범물동정형외과추천, 광고 말고 진짜 잘하는 곳 구분하는 기준 2가지",
+        "matched_url": "https://blog.naver.com/bareunos79/224259589586",
+        "updated_at": "2026-04-22T14:34:22.747+00:00"
+      },
+      {
+        "keyword": "범어네거리정형외과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "범어네거리정형외과, 의사가 직접 알려주는 2가지 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224187866938",
+        "updated_at": "2026-04-22T14:33:47.275+00:00"
+      },
+      {
+        "keyword": "범어네거리정형외과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "범어네거리정형외과, 의사가 직접 알려주는 2가지 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224187866938",
+        "updated_at": "2026-04-22T14:34:16.74+00:00"
+      },
+      {
+        "keyword": "수성동정형외과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "수성동정형외과 추천, 고르는 기준 광고 말고 이것만 보세요",
+        "matched_url": "https://blog.naver.com/bareunos79/224192516778",
+        "updated_at": "2026-04-22T14:34:24.77+00:00"
+      },
+      {
+        "keyword": "수성동정형외과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "수성동정형외과 추천, 고르는 기준 광고 말고 이것만 보세요",
+        "matched_url": "https://blog.naver.com/bareunos79/224192516778",
+        "updated_at": "2026-04-22T14:34:06.816+00:00"
+      },
+      {
+        "keyword": "시지신경외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:08.996+00:00"
+      },
+      {
+        "keyword": "시지정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:18.736+00:00"
+      },
+      {
+        "keyword": "신매동신경외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "신매동신경외과 허리협착증, 현직 의사가 알려드리는 2가지 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224177105813",
+        "updated_at": "2026-04-22T14:34:30.546+00:00"
+      },
+      {
+        "keyword": "신매동신경외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "신매동신경외과 허리협착증, 현직 의사가 알려드리는 2가지 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224177105813",
+        "updated_at": "2026-04-22T14:33:44.892+00:00"
+      },
+      {
+        "keyword": "신매동신경외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "신매동신경외과 허리협착증, 현직 의사가 알려드리는 2가지 기준",
+        "matched_url": "https://blog.naver.com/bareunos79/224177105813",
+        "updated_at": "2026-04-22T14:34:26.734+00:00"
+      },
+      {
+        "keyword": "신매동정형외과",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "신매동정형외과 목디스크 증상 이 정도면 치료 받으세요",
+        "matched_url": "https://blog.naver.com/bareunos79/224152967850",
+        "updated_at": "2026-04-22T14:34:32.569+00:00"
+      },
+      {
+        "keyword": "지산동신경외과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "지산동신경외과, 두통인 줄 알았는데 목 디스크였던 사례 생각보다 많습니다",
+        "matched_url": "https://blog.naver.com/bareunos79/224251698359",
+        "updated_at": "2026-04-22T14:33:57.165+00:00"
+      },
+      {
+        "keyword": "지산동정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:11.023+00:00"
+      },
+      {
+        "keyword": "파동정형외과",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "파동정형외과, 어깨통증 버티면 안 되는 이유",
+        "matched_url": "https://blog.naver.com/bareunos79/224181315860",
+        "updated_at": "2026-04-22T14:33:49.187+00:00"
+      },
+      {
+        "keyword": "파동정형외과",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "파동정형외과, 어깨통증 버티면 안 되는 이유",
+        "matched_url": "https://blog.naver.com/bareunos79/224181315860",
+        "updated_at": "2026-04-22T14:34:04.892+00:00"
+      },
+      {
+        "keyword": "황금동 정형외과 추천",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "황금동정형외과추천 어깨 회전근개 파열 의사는 이런 곳을 갑니다",
+        "matched_url": "https://blog.naver.com/bareunos79/224178484803",
+        "updated_at": "2026-04-22T14:34:28.641+00:00"
+      }
+    ],
+    "발아정형외과": [
+      {
+        "keyword": "대구 내성발톱 수술",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구내성발톱수술, 수술이 무섭다면 반드시 읽어보세요",
+        "matched_url": "https://blog.naver.com/footdoctor/224220713214",
+        "updated_at": "2026-04-22T14:34:05.277+00:00"
+      },
+      {
+        "keyword": "대구 당뇨발",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "대구 당뇨발, 무감각해서 괜찮다고요 그게 가장 위헙합니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224105813063",
+        "updated_at": "2026-04-22T14:34:15.938+00:00"
+      },
+      {
+        "keyword": "대구 족부전문병원",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "대구족부전문병원, 발 수술 전 반드시 확인할 2가지",
+        "matched_url": "https://blog.naver.com/footdoctor/224148576924",
+        "updated_at": "2026-04-22T14:33:43.386+00:00"
+      },
+      {
+        "keyword": "대구 족부정형외과추천",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "대구족부정형외과 추천, 발가락 변형 초기에 잡아야 합니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224086320621",
+        "updated_at": "2026-04-22T14:34:03.069+00:00"
+      },
+      {
+        "keyword": "대구 족저근막염 정형외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구 족저근막염 정형외과, 아침마다 발바닥 아프다면? 이 글 필독",
+        "matched_url": "https://blog.naver.com/footdoctor/224111449706",
+        "updated_at": "2026-04-22T14:34:47.326+00:00"
+      },
+      {
+        "keyword": "대구 족저근막염 정형외과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구 족저근막염 정형외과, 아침마다 발바닥 아프다면? 이 글 필독",
+        "matched_url": "https://blog.naver.com/footdoctor/224111449706",
+        "updated_at": "2026-04-22T14:33:45.658+00:00"
+      },
+      {
+        "keyword": "대구 지간신경종",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구 지간신경종, 두려워하지 않아도 됩니다. 원인부터 치료까지 정리",
+        "matched_url": "https://blog.naver.com/footdoctor/224104527042",
+        "updated_at": "2026-04-22T14:33:41.179+00:00"
+      },
+      {
+        "keyword": "대구내성발톱치료",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구내성발톱치료, 족부전문병원에 가야하는 이유",
+        "matched_url": "https://blog.naver.com/footdoctor/223926147945",
+        "updated_at": "2026-04-22T14:34:32.761+00:00"
+      },
+      {
+        "keyword": "대구발가락병원",
+        "current_rank": 3,
+        "previous_rank": 4,
+        "matched_title": "대구발가락병원,왼쪽 엄지발가락 통증? 2가지만 알면 원인 찾습니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224040989443",
+        "updated_at": "2026-04-22T14:33:47.754+00:00"
+      },
+      {
+        "keyword": "대구발목수술",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:11.669+00:00"
+      },
+      {
+        "keyword": "대구발목전문병원",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "대구발목전문병원 고르는 법, 이 글 하나로 종결",
+        "matched_url": "https://blog.naver.com/footdoctor/224087522750",
+        "updated_at": "2026-04-22T14:34:45.238+00:00"
+      },
+      {
+        "keyword": "대구발목정형외과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구발목정형외과, 방문 전 3가지만 확인하세요",
+        "matched_url": "https://blog.naver.com/footdoctor/224043486317",
+        "updated_at": "2026-04-22T14:34:09.563+00:00"
+      },
+      {
+        "keyword": "대구발목정형외과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구발목정형외과, 방문 전 3가지만 확인하세요",
+        "matched_url": "https://blog.naver.com/footdoctor/224043486317",
+        "updated_at": "2026-04-22T14:34:28.351+00:00"
+      },
+      {
+        "keyword": "대구발병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:58.841+00:00"
+      },
+      {
+        "keyword": "대구발병원추천",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구발병원추천, 발목 염좌 '단순하다' 생각하면 큰일납니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224011551390",
+        "updated_at": "2026-04-22T14:34:07.522+00:00"
+      },
+      {
+        "keyword": "대구발전문병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구발전문병원, 통증 원인부터 치료 방법까지 A to Z 정리",
+        "matched_url": "https://blog.naver.com/footdoctor/224087525303",
+        "updated_at": "2026-04-22T14:33:54.585+00:00"
+      },
+      {
+        "keyword": "대구발전문정형외과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구발전문정형외과, 잘하는 곳 찾기 어렵죠? 딱 2가지만 확인하세요",
+        "matched_url": "https://blog.naver.com/footdoctor/223895803106",
+        "updated_at": "2026-04-22T14:34:26.52+00:00"
+      },
+      {
+        "keyword": "대구발정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:36.988+00:00"
+      },
+      {
+        "keyword": "대구발정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:40.978+00:00"
+      },
+      {
+        "keyword": "대구발정형외과대구아킬레스건염",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "대구 발 정형외과, 아킬레스건염 방치하면 발생하는 변화 3가지",
+        "matched_url": "https://blog.naver.com/footdoctor/223779958747",
+        "updated_at": "2026-04-22T14:34:22.259+00:00"
+      },
+      {
+        "keyword": "대구부주상골증후군",
+        "current_rank": 3,
+        "previous_rank": 2,
+        "matched_title": "대구부주상골증후군, 병원 가기 전 꼭 확인해야 할 3가지",
+        "matched_url": "https://blog.naver.com/footdoctor/223902264546",
+        "updated_at": "2026-04-22T14:34:39.102+00:00"
+      },
+      {
+        "keyword": "대구족부전문병원",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "대구족부전문병원, 발 수술 전 반드시 확인할 2가지",
+        "matched_url": "https://blog.naver.com/footdoctor/224148576924",
+        "updated_at": "2026-04-22T14:34:34.914+00:00"
+      },
+      {
+        "keyword": "대구족부전문의",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구족부전문의, 발목통증 정확한 진단이 우선입니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224020082202",
+        "updated_at": "2026-04-22T14:34:20.134+00:00"
+      },
+      {
+        "keyword": "대구족부정형외과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:24.388+00:00"
+      },
+      {
+        "keyword": "대구지간신경종",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "대구 지간신경종, 두려워하지 않아도 됩니다. 원인부터 치료까지 정리",
+        "matched_url": "https://blog.naver.com/footdoctor/224104527042",
+        "updated_at": "2026-04-22T14:34:30.529+00:00"
+      },
+      {
+        "keyword": "대구티눈제거병원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "대구티눈제거병원, 걸을 때마다 찌릿한 통증 참고 계신가요",
+        "matched_url": "https://blog.naver.com/footdoctor/224242517892",
+        "updated_at": "2026-04-22T14:34:43.011+00:00"
+      },
+      {
+        "keyword": "대구평발교정병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구평발교정병원, 지금 교정 안하면 무릎과 척추까지 망가집니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224228767169",
+        "updated_at": "2026-04-22T14:34:13.871+00:00"
+      },
+      {
+        "keyword": "수성구발병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:50.167+00:00"
+      },
+      {
+        "keyword": "수성구족부병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "수성구족부병원 선택, 딱 2가지만 보면 잘못된 진단 피할 수 있습니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224049726906",
+        "updated_at": "2026-04-22T14:34:18.073+00:00"
+      },
+      {
+        "keyword": "수성구족부전문의",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "수성구족부전문의, 발목 염좌 방치하면 만성 통증 됩니다",
+        "matched_url": "https://blog.naver.com/footdoctor/224056299017",
+        "updated_at": "2026-04-22T14:33:52.376+00:00"
+      },
+      {
+        "keyword": "수성구족저근막염",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "수성구족저근막염 치료, 이 1가지만 확인하면 실패하지 않습니다",
+        "matched_url": "https://blog.naver.com/footdoctor/223938484572",
+        "updated_at": "2026-04-22T14:34:00.923+00:00"
+      },
+      {
+        "keyword": "지산동 무지외반증",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "지산동정형외과 무지외반증, 통증 없어도 치료해야 하는 이유",
+        "matched_url": "https://blog.naver.com/footdoctor/224082005146",
+        "updated_at": "2026-04-22T14:33:56.701+00:00"
+      }
+    ],
+    "삼성아이웰소아청소년과": [
+      {
+        "keyword": "rsv 주사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:19.512+00:00"
+      },
+      {
+        "keyword": "구성역소아과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:17.401+00:00"
+      },
+      {
+        "keyword": "기흥구 소아과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "기흥구 소아과 선택, 후기 보다 중요한 이 1가지는 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224040899604",
+        "updated_at": "2026-04-22T14:34:40.072+00:00"
+      },
+      {
+        "keyword": "기흥구bcg접종",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:56.506+00:00"
+      },
+      {
+        "keyword": "기흥구독감예방접종",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "기흥구 독감 예방접종,접종 시기 이때가 적기입니다 (의사 설명)",
+        "matched_url": "https://blog.naver.com/samsungiwell/224050871268",
+        "updated_at": "2026-04-22T14:34:54.541+00:00"
+      },
+      {
+        "keyword": "기흥구성조숙증",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "기흥구성조숙증, 의사가 보호자에게 꼭 묻는 것을 공개합니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224193764224",
+        "updated_at": "2026-04-22T14:34:58.675+00:00"
+      },
+      {
+        "keyword": "기흥역 소아과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "용인 기흥역 소아과, 중이염 재발하는 아이들의 2가지 공통점",
+        "matched_url": "https://blog.naver.com/samsungiwell/223913702105",
+        "updated_at": "2026-04-22T14:33:59.756+00:00"
+      },
+      {
+        "keyword": "남자아이 성조숙증 검사",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "남자아이 성조숙증 검사, 소아과에서 치료 받아야 할까?",
+        "matched_url": "https://blog.naver.com/samsungiwell/223927380759",
+        "updated_at": "2026-04-22T14:33:53.401+00:00"
+      },
+      {
+        "keyword": "남자아이성조숙증검사",
+        "current_rank": 9,
+        "previous_rank": 9,
+        "matched_title": "남자아이 성조숙증 검사, 소아과에서 치료 받아야 할까?",
+        "matched_url": "https://blog.naver.com/samsungiwell/223927380759",
+        "updated_at": "2026-04-22T14:35:05.038+00:00"
+      },
+      {
+        "keyword": "데카펩딜데포",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "데카펩틸데포, 병원 고르기 전 이 글 하나만 읽으세요 &lt;의사 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224196474207",
+        "updated_at": "2026-04-22T14:35:07.117+00:00"
+      },
+      {
+        "keyword": "동탄 성장판 검사",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "동탄 성장판 검사, 소아과 의사가 직접 설명하는 A to Z",
+        "matched_url": "https://blog.naver.com/samsungiwell/223942574538",
+        "updated_at": "2026-04-22T14:33:51.446+00:00"
+      },
+      {
+        "keyword": "둔전역 소아과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "둔전역 소아과, '응급실 가야 할까' 고민 끝내는 방법 공개",
+        "matched_url": "https://blog.naver.com/samsungiwell/223934643738",
+        "updated_at": "2026-04-22T14:35:09.161+00:00"
+      },
+      {
+        "keyword": "루프린주사효능",
+        "current_rank": 7,
+        "previous_rank": 5,
+        "matched_title": "루프린 주사 효능, 아이 걱정에 인터넷만 찾고 계신다면 필독 &lt;원장 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224203593962",
+        "updated_at": "2026-04-22T14:35:57.989+00:00"
+      },
+      {
+        "keyword": "보평역소아과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "보평역소아과, 성조숙증 검사 미루면 위험한 이유",
+        "matched_url": "https://blog.naver.com/samsungiwell/224172837154",
+        "updated_at": "2026-04-22T14:36:06.317+00:00"
+      },
+      {
+        "keyword": "분당소아과 성조숙증",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "분당소아과 성조숙증 진료, 의사가 말하는 놓치면 안 되는 시기",
+        "matched_url": "https://blog.naver.com/samsungiwell/223946749667",
+        "updated_at": "2026-04-22T14:35:28.397+00:00"
+      },
+      {
+        "keyword": "삼성아이웰소아과",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "용인 삼성아이웰소아과, 아이 마음까지 보는 진료. 고시환 대표원장",
+        "matched_url": "https://blog.naver.com/samsungiwell/223901215721",
+        "updated_at": "2026-04-22T14:35:49.973+00:00"
+      },
+      {
+        "keyword": "성인 성장호르몬 주사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:35:19.611+00:00"
+      },
+      {
+        "keyword": "성장 억제 주사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:35:37.022+00:00"
+      },
+      {
+        "keyword": "성장검사 실비 적용",
+        "current_rank": 6,
+        "previous_rank": 7,
+        "matched_title": "성장검사 실비 적용 여부, 검사 전에 먼저 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224082041044",
+        "updated_at": "2026-04-22T14:33:47.343+00:00"
+      },
+      {
+        "keyword": "성장호르몬주사 종류",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:35:13.254+00:00"
+      },
+      {
+        "keyword": "성조숙증검사 실비청구",
+        "current_rank": 22,
+        "previous_rank": 20,
+        "matched_title": "성조숙증검사 실비 청구 전 반드시 알아야 할 것들",
+        "matched_url": "https://blog.naver.com/samsungiwell/224095311436",
+        "updated_at": "2026-04-22T14:36:00.231+00:00"
+      },
+      {
+        "keyword": "소아내분비내과",
+        "current_rank": 11,
+        "previous_rank": 12,
+        "matched_title": "소아내분비내과 병원? 방문 전 '이것' 안 하면 시간만 버립니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224005220337",
+        "updated_at": "2026-04-22T14:36:02.251+00:00"
+      },
+      {
+        "keyword": "수원성조숙증 소아과",
+        "current_rank": 7,
+        "previous_rank": 5,
+        "matched_title": "수원성조숙증 소아과, 키 성장만 보면 안 되는 이유 &lt;의사 작성>",
+        "matched_url": "https://blog.naver.com/samsungiwell/224115186049",
+        "updated_at": "2026-04-22T14:35:15.455+00:00"
+      },
+      {
+        "keyword": "싸이젠 성장주사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:45.142+00:00"
+      },
+      {
+        "keyword": "에버랜드주말소아과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "에버랜드주말소아과 선택 기준, 의사가 알려드립니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224162426400",
+        "updated_at": "2026-04-22T14:35:47.871+00:00"
+      },
+      {
+        "keyword": "여주 성조숙증",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "여주성조숙증, 키 크면 괜찮다는 말 믿다가 생기는일",
+        "matched_url": "https://blog.naver.com/samsungiwell/224195295593",
+        "updated_at": "2026-04-22T14:34:37.959+00:00"
+      },
+      {
+        "keyword": "여주성장검사",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "여주성장검사, 키 크는 시기는 '이때'뿐입니다 &lt;소아과 의사 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224111508578",
+        "updated_at": "2026-04-22T14:33:40.526+00:00"
+      },
+      {
+        "keyword": "여주성조숙증검사",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "여주성조숙증검사, 뼈나이 측정만으론 부족합니다 &lt;원장 작성>",
+        "matched_url": "https://blog.naver.com/samsungiwell/224114009938",
+        "updated_at": "2026-04-22T14:35:55.981+00:00"
+      },
+      {
+        "keyword": "역북동 소아과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "역북동 소아과 방문 전 '이것'만큼은 알아야합니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/223905756328",
+        "updated_at": "2026-04-22T14:34:06.878+00:00"
+      },
+      {
+        "keyword": "오산 성조숙증",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "오산성조숙증, 소아청소년과 의사가 먼저 확인하는 징후 3가지",
+        "matched_url": "https://blog.naver.com/samsungiwell/224202290000",
+        "updated_at": "2026-04-22T14:35:30.4+00:00"
+      },
+      {
+        "keyword": "오산성장검사",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "오산성장검사 고민이라면 이제 그만 찾으셔도 됩니다 &lt;원장 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224120959371",
+        "updated_at": "2026-04-22T14:34:50.307+00:00"
+      },
+      {
+        "keyword": "오산성조숙증",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "오산성조숙증, 소아청소년과 의사가 먼저 확인하는 징후 3가지",
+        "matched_url": "https://blog.naver.com/samsungiwell/224202290000",
+        "updated_at": "2026-04-22T14:36:19.198+00:00"
+      },
+      {
+        "keyword": "용인 rsv 예방접종",
+        "current_rank": 6,
+        "previous_rank": 5,
+        "matched_title": "용인 rsv 예방접종, 소아과 찾는 2가지 기준 &lt;의사 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224028560174",
+        "updated_at": "2026-04-22T14:35:43.494+00:00"
+      },
+      {
+        "keyword": "용인 성장검사",
+        "current_rank": null,
+        "previous_rank": 4,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:23.536+00:00"
+      },
+      {
+        "keyword": "용인 성장호르몬",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "용인 성장호르몬 주사, 우리 아이 적응증 해당하는지 먼저 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224096864432",
+        "updated_at": "2026-04-22T14:35:45.623+00:00"
+      },
+      {
+        "keyword": "용인 성조숙증",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "용인 성조숙증 검사, 우리 아이 2차 성징 빨라졌다면 필독",
+        "matched_url": "https://blog.naver.com/samsungiwell/224080987007",
+        "updated_at": "2026-04-22T14:34:31.373+00:00"
+      },
+      {
+        "keyword": "용인 소아과 추천",
+        "current_rank": 14,
+        "previous_rank": 14,
+        "matched_title": "용인소아과추천, 성장 시기 놓치면 돌이킬 수 없습니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224155606284",
+        "updated_at": "2026-04-22T14:34:15.26+00:00"
+      },
+      {
+        "keyword": "용인 수족구 병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "용인 수족구 병원, 아이 입 안 물집 방치하면 생기는 일?",
+        "matched_url": "https://blog.naver.com/samsungiwell/223949924848",
+        "updated_at": "2026-04-22T14:36:14.927+00:00"
+      },
+      {
+        "keyword": "용인 알레르기 소아과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "용인 알레르기 소아과 찾기 어려우시죠? 딱 2가지만 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224020258826",
+        "updated_at": "2026-04-22T14:35:52.123+00:00"
+      },
+      {
+        "keyword": "용인 일요일 소아과",
+        "current_rank": 12,
+        "previous_rank": 12,
+        "matched_title": "용인일요일소아과 , 주말에도 문 여는 이유는 단 하나입니다. &lt;필독>",
+        "matched_url": "https://blog.naver.com/samsungiwell/224222446504",
+        "updated_at": "2026-04-22T14:33:57.708+00:00"
+      },
+      {
+        "keyword": "용인 처인구 내과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:43.092+00:00"
+      },
+      {
+        "keyword": "용인bcg접종",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:25.467+00:00"
+      },
+      {
+        "keyword": "용인bcg접종",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:35:53.809+00:00"
+      },
+      {
+        "keyword": "용인고진역소아과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "용인고진역소아과, 성장판 닫히기 전 2가지 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224173727773",
+        "updated_at": "2026-04-22T14:35:39.227+00:00"
+      },
+      {
+        "keyword": "용인독감예방접종",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:27.552+00:00"
+      },
+      {
+        "keyword": "용인독감예방접종",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:29.312+00:00"
+      },
+      {
+        "keyword": "용인둔전소아과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "용인둔전소아과, 아이 데리고 갈 곳이 없어 막막했다면",
+        "matched_url": "https://blog.naver.com/samsungiwell/224230294722",
+        "updated_at": "2026-04-22T14:34:08.972+00:00"
+      },
+      {
+        "keyword": "용인마운자로처방전",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "용인마운자로, 처방 전 반드시 확인해야 할 2가지 &lt;의사 작성>",
+        "matched_url": "https://blog.naver.com/samsungiwell/224118351886",
+        "updated_at": "2026-04-22T14:35:41.392+00:00"
+      },
+      {
+        "keyword": "용인성장클리닉",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:02.011+00:00"
+      },
+      {
+        "keyword": "용인성장판검사",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "용인성장판검사, 정확한 결과 받으려면 이것 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224169743068",
+        "updated_at": "2026-04-22T14:35:32.641+00:00"
+      },
+      {
+        "keyword": "용인소아과일요일",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "용인 소아과 일요일, 응급실 가기 전 소아과 의사가 알려드립니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224066550138",
+        "updated_at": "2026-04-22T14:34:42.207+00:00"
+      },
+      {
+        "keyword": "용인소아과추천",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "용인소아과추천, 성장 시기 놓치면 돌이킬 수 없습니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224155606284",
+        "updated_at": "2026-04-22T14:34:44.156+00:00"
+      },
+      {
+        "keyword": "용인소아과추천",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "용인소아과추천, 성장 시기 놓치면 돌이킬 수 없습니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224155606284",
+        "updated_at": "2026-04-22T14:34:04.227+00:00"
+      },
+      {
+        "keyword": "용인소아청소년과",
+        "current_rank": 2,
+        "previous_rank": 4,
+        "matched_title": "용인소아과 선택 기준, 소아청소년과 전문의가 알려드립니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224159964237",
+        "updated_at": "2026-04-22T14:36:10.618+00:00"
+      },
+      {
+        "keyword": "용인영유아검진",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:46.287+00:00"
+      },
+      {
+        "keyword": "용인위고비처방",
+        "current_rank": 13,
+        "previous_rank": 18,
+        "matched_title": "용인위고비처방, 무턱대고 맞으면 안 되는 이유 3가지",
+        "matched_url": "https://blog.naver.com/samsungiwell/224112761642",
+        "updated_at": "2026-04-22T14:36:12.692+00:00"
+      },
+      {
+        "keyword": "용인주말진료소아과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "용인 주말진료 소아과, 응급실만 가야 한다는 분들 소아과 의사가 답합니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224057740929",
+        "updated_at": "2026-04-22T14:35:17.669+00:00"
+      },
+      {
+        "keyword": "용인중앙시장역소아과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "용인중앙시장역소아과, 키 성장 속도 느리다면 필독",
+        "matched_url": "https://blog.naver.com/samsungiwell/224156864978",
+        "updated_at": "2026-04-22T14:35:34.914+00:00"
+      },
+      {
+        "keyword": "용인처인구소아과",
+        "current_rank": 13,
+        "previous_rank": 12,
+        "matched_title": "용인처인구소아과, 성장 검사 받기 전 꼭 확인해야 할 2가지",
+        "matched_url": "https://blog.naver.com/samsungiwell/224154328386",
+        "updated_at": "2026-04-22T14:35:23.935+00:00"
+      },
+      {
+        "keyword": "용인포곡소아과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "용인포곡소아과, 키 고민 있다면 이 2가지 확인하세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224153010226",
+        "updated_at": "2026-04-22T14:35:26.144+00:00"
+      },
+      {
+        "keyword": "유트로핀에스",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "유트로핀에스, 성장 고민? 막연한 기대 말고 현실 보세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/223943892570",
+        "updated_at": "2026-04-22T14:33:49.313+00:00"
+      },
+      {
+        "keyword": "유트로핀주 처방",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:33.87+00:00"
+      },
+      {
+        "keyword": "이천 성장검사",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "이천 성장검사, 시기 놓치면 평생 후회합니다 &lt;의사 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224136022754",
+        "updated_at": "2026-04-22T14:34:35.933+00:00"
+      },
+      {
+        "keyword": "이천성조숙증",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "이천성조숙증, 이걸 몰라서 치료 시기 놓칩니다 &lt;원장 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224126390773",
+        "updated_at": "2026-04-22T14:35:02.868+00:00"
+      },
+      {
+        "keyword": "이천성조숙증",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "이천성조숙증, 이걸 몰라서 치료 시기 놓칩니다 &lt;원장 작성&gt;",
+        "matched_url": "https://blog.naver.com/samsungiwell/224126390773",
+        "updated_at": "2026-04-22T14:36:04.24+00:00"
+      },
+      {
+        "keyword": "이천소아과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:55.481+00:00"
+      },
+      {
+        "keyword": "졸라덱스 소아과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "졸라덱스 주사, 성조숙증이면 무조건 맞아야 한다는 건 오해입니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224204978492",
+        "updated_at": "2026-04-22T14:36:23.442+00:00"
+      },
+      {
+        "keyword": "처인구 독감",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:35:21.732+00:00"
+      },
+      {
+        "keyword": "처인구 성장검사",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "처인구 성장검사 소아과 선택, 소아청소년과 전문의 여부만 봐도 됩니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224086416144",
+        "updated_at": "2026-04-22T14:36:21.401+00:00"
+      },
+      {
+        "keyword": "처인구 성장호르몬",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "처인구 성장호르몬 주사, 저성장 진단 기준 제대로 아는 곳 찾는 법",
+        "matched_url": "https://blog.naver.com/samsungiwell/224087705695",
+        "updated_at": "2026-04-22T14:36:17.13+00:00"
+      },
+      {
+        "keyword": "처인구 성조숙증",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "처인구 성조숙증 검사 정확도는 이 2가지로 결정됩니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224078930821",
+        "updated_at": "2026-04-22T14:35:00.83+00:00"
+      },
+      {
+        "keyword": "처인구 소아과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:11.057+00:00"
+      },
+      {
+        "keyword": "처인구bcg접종",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "처인구 bcg접종, 소아과 의사가 강조하는 접종 전 확인사항 3가지",
+        "matched_url": "https://blog.naver.com/samsungiwell/224058833317",
+        "updated_at": "2026-04-22T14:34:48.265+00:00"
+      },
+      {
+        "keyword": "처인구마운자로",
+        "current_rank": 8,
+        "previous_rank": 8,
+        "matched_title": "처인구마운자로 병원 고르는 기준? 2가지면 충분합니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224123049955",
+        "updated_at": "2026-04-22T14:34:21.436+00:00"
+      },
+      {
+        "keyword": "처인구성장판검사",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "처인구성장판검사 시기, 소아과 전문의가 알려드립니다",
+        "matched_url": "https://blog.naver.com/samsungiwell/224168383784",
+        "updated_at": "2026-04-22T14:36:08.447+00:00"
+      },
+      {
+        "keyword": "처인구소아과일요일",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "처인구 소아과 일요일, 일요일엔 예방접종 불가능?",
+        "matched_url": "https://blog.naver.com/samsungiwell/224049916681",
+        "updated_at": "2026-04-22T14:34:52.477+00:00"
+      },
+      {
+        "keyword": "처인구영유아검진",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "처인구 영유아검진, 검진 항목 헷갈리시죠 3가지만 보세요",
+        "matched_url": "https://blog.naver.com/samsungiwell/224068019772",
+        "updated_at": "2026-04-22T14:35:11.335+00:00"
+      },
+      {
+        "keyword": "청소년 성장판 검사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:13.072+00:00"
+      }
+    ],
+    "아나파한방병원": [
+      {
+        "keyword": "가산디지털단지 한방병원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "가산디지털단지 한방병원, 잘하는 곳 찾는 기준 2가지 알려드립니다",
+        "matched_url": "https://blog.naver.com/anapahanbang/224223328361",
+        "updated_at": "2026-04-22T14:33:45.312+00:00"
+      },
+      {
+        "keyword": "구로 허리디스크",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:40.725+00:00"
+      },
+      {
+        "keyword": "구로구 한방병원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.786+00:00"
+      },
+      {
+        "keyword": "구로디지털단지 한방병원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "구로디지털단지 한방병원, 컴퓨터 앞에 앉아 있는 시간만큼 몸은 무너집니다",
+        "matched_url": "https://blog.naver.com/anapahanbang/224212790828",
+        "updated_at": "2026-04-22T14:33:47.321+00:00"
+      }
+    ],
+    "안녕한의원": [
+      {
+        "keyword": "가면우울증 한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:38.036+00:00"
+      },
+      {
+        "keyword": "강박장애병원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "강박장애병원, 머릿속 생각이 멈추지 않는다면 읽어보세요 필독",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224254193318",
+        "updated_at": "2026-04-22T14:34:18.754+00:00"
+      },
+      {
+        "keyword": "거식증한의약",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "경복궁역한의원, 거식증 한의약으로 치료하는 방법",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223938551079",
+        "updated_at": "2026-04-22T14:33:44.793+00:00"
+      },
+      {
+        "keyword": "공황장애전문병원",
+        "current_rank": 15,
+        "previous_rank": 15,
+        "matched_title": "공황장애전문병원,많은 사람들이 착각하는 한의약 치료 오해 5가지",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223942860729",
+        "updated_at": "2026-04-22T14:34:27.123+00:00"
+      },
+      {
+        "keyword": "광화문 한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:24.95+00:00"
+      },
+      {
+        "keyword": "광화문한의원추천",
+        "current_rank": 13,
+        "previous_rank": 13,
+        "matched_title": "광화문한의원추천, 가슴이 조여오는 느낌 더 이상 참지 않아도 됩니다.",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224230475597",
+        "updated_at": "2026-04-22T14:34:48.344+00:00"
+      },
+      {
+        "keyword": "명동한의원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "명동한의원, 런닝 후 정강이가 욱신거린다면 '이것'부터 의심해야 합니다 한의사 작성",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224259594930",
+        "updated_at": "2026-04-22T14:34:20.842+00:00"
+      },
+      {
+        "keyword": "명동한의원을지로입구역 한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:12.561+00:00"
+      },
+      {
+        "keyword": "번아웃증후군 한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:22.953+00:00"
+      },
+      {
+        "keyword": "서울불면증한의원",
+        "current_rank": 2,
+        "previous_rank": 3,
+        "matched_title": "서울불면증한의원, 매일 밤 3시간 이상 뒤척이고 계신가요?",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223859939431",
+        "updated_at": "2026-04-22T14:34:50.424+00:00"
+      },
+      {
+        "keyword": "서울불안장애한의원",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "서울불안장애한의원, 갑작스런 불안감을 약에 의지하고 있다면",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223941659526",
+        "updated_at": "2026-04-22T14:33:59.892+00:00"
+      },
+      {
+        "keyword": "서울수면장애한의원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "서울수면장애한의원,한의약 상담 받기 전 반드시 확인해야 할 3가지",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223945172311",
+        "updated_at": "2026-04-22T14:33:51.327+00:00"
+      },
+      {
+        "keyword": "서울시청역한의원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "서울시청역한의원, 공황장애한의약치료 늦으면 늦을수록 회복이 힘들어집니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224228738564",
+        "updated_at": "2026-04-22T14:33:57.831+00:00"
+      },
+      {
+        "keyword": "서울편두통한의원",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "서울편두통한의원, 두통의 실체를 낱낱이 파헤쳐드립니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223860054394",
+        "updated_at": "2026-04-22T14:34:29.189+00:00"
+      },
+      {
+        "keyword": "수험생 우울증 한의원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "수험생 우울증 한의원, 방치하면 더 큰 문제가 생깁니다.",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223867517969",
+        "updated_at": "2026-04-22T14:33:55.787+00:00"
+      },
+      {
+        "keyword": "수험생 집중력 한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:31.369+00:00"
+      },
+      {
+        "keyword": "안국역한의원",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "안국역한의원, 달리기 후 허리부터 무릎까지 아픈 사람들의 공통점",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224243584207",
+        "updated_at": "2026-04-22T14:33:40.846+00:00"
+      },
+      {
+        "keyword": "알콜중독한의원",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "알콜중독한의원, 회복을 위한 첫 걸음은 이 글로 확인하세요",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223862751774",
+        "updated_at": "2026-04-22T14:34:01.952+00:00"
+      },
+      {
+        "keyword": "우울증한약효과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:44.161+00:00"
+      },
+      {
+        "keyword": "을지로 1가 한의원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "을지로1가 한의원 추천 , 산후우울증 한의약치료 과정 알려드립니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224178433894",
+        "updated_at": "2026-04-22T14:34:33.88+00:00"
+      },
+      {
+        "keyword": "을지로1가 한의원 추천",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "을지로1가 한의원 추천 , 산후우울증 한의약치료 과정 알려드립니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224178433894",
+        "updated_at": "2026-04-22T14:34:04.128+00:00"
+      },
+      {
+        "keyword": "을지로3가한의원",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "을지로3가한의원, 마음이 무거운 날이 너무 많아졌다면",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224260866130",
+        "updated_at": "2026-04-22T14:34:08.272+00:00"
+      },
+      {
+        "keyword": "을지로입구 한의원",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "을지로입구 한의원 난임, 한약 처방 이 3가지는 알아야 합니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224193686938",
+        "updated_at": "2026-04-22T14:34:06.18+00:00"
+      },
+      {
+        "keyword": "익선동한의원",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "익선동한의원,임산부입덧한의원 찾고 계신가요",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223949721034",
+        "updated_at": "2026-04-22T14:34:10.339+00:00"
+      },
+      {
+        "keyword": "인사동 한의원",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "인사동 한의원, 한의약 치료의 핵심은 3가지에 달려있습니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223783072183",
+        "updated_at": "2026-04-22T14:34:14.63+00:00"
+      },
+      {
+        "keyword": "정신질환한의원",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "신설동역한의원 정신질환한의원? 잘하는곳 찾는 2가지 기준",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223893259077",
+        "updated_at": "2026-04-22T14:34:16.756+00:00"
+      },
+      {
+        "keyword": "조현병전문병원",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "조현병전문병원, 종로한의원에서 알려드리는 한의약치료",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223950892555",
+        "updated_at": "2026-04-22T14:34:42.085+00:00"
+      },
+      {
+        "keyword": "조현병한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.823+00:00"
+      },
+      {
+        "keyword": "종각역한의원",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "종각역한의원, 런닝 중 발바닥이 찌릿하다면 멈춰야 할 타이밍입니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224255410853",
+        "updated_at": "2026-04-22T14:33:53.684+00:00"
+      },
+      {
+        "keyword": "종로 광화문 한의원",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:49.153+00:00"
+      },
+      {
+        "keyword": "종로3가역 한의원",
+        "current_rank": 9,
+        "previous_rank": 9,
+        "matched_title": "종로3가역한의원, 자꾸 불안한 게 성격 문제가 아닐 수 있습니다 한의사 작성",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/224250529246",
+        "updated_at": "2026-04-22T14:34:46.265+00:00"
+      },
+      {
+        "keyword": "종로3가역한의원청소년조현병",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:47.075+00:00"
+      },
+      {
+        "keyword": "종로난임한의원",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "종로난임한의원, 임신 준비 전 확인해야 할 3가지 체크리스트",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223866214127",
+        "updated_at": "2026-04-22T14:34:36.003+00:00"
+      },
+      {
+        "keyword": "청소년adhd한의원",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "청소년adhd한의원, 단 1가지로 선택의 기준이 달라집니다",
+        "matched_url": "https://blog.naver.com/hellogoodhealth/223855039093",
+        "updated_at": "2026-04-22T14:34:40.051+00:00"
+      }
+    ],
+    "용인샘이비인후과": [],
+    "잘보는속내과": [],
+    "청춘내과": [
+      {
+        "keyword": "대구고지혈증",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "대구고지혈증, 증상 없다고 방치하면 생기는 일",
+        "matched_url": "https://blog.naver.com/ccim2013/224211472677",
+        "updated_at": "2026-04-22T14:33:57.542+00:00"
+      },
+      {
+        "keyword": "대구복부초음파",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "대구복부초음파 검사 주기, 나이와증상에 따라 달라집니다",
+        "matched_url": "https://blog.naver.com/ccim2013/224227496701",
+        "updated_at": "2026-04-22T14:33:55.464+00:00"
+      },
+      {
+        "keyword": "대구소화기내과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:45.479+00:00"
+      },
+      {
+        "keyword": "대구초음파",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:49.436+00:00"
+      },
+      {
+        "keyword": "대구환절기질환",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "대구환절기질환, 환절기만 되면 아픈 이유 의사가 알려드립니다",
+        "matched_url": "https://blog.naver.com/ccim2013/224011480982",
+        "updated_at": "2026-04-22T14:33:40.858+00:00"
+      },
+      {
+        "keyword": "만촌역내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "만촌역내과, 40대 이후 달라지는 건강 수치 체크리스트",
+        "matched_url": "https://blog.naver.com/ccim2013/224223264445",
+        "updated_at": "2026-04-22T14:33:47.48+00:00"
+      },
+      {
+        "keyword": "범어역내과",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "범어역내과, 환절기마다 반복되는 기침 원인이 따로 있습니다",
+        "matched_url": "https://blog.naver.com/ccim2013/224222303337",
+        "updated_at": "2026-04-22T14:33:43.426+00:00"
+      },
+      {
+        "keyword": "시지건강검진",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:51.455+00:00"
+      },
+      {
+        "keyword": "월배내과",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "월배내과, 잦은 소화불량이 위장만의 문제가 아닐 수 있습니다",
+        "matched_url": "https://blog.naver.com/ccim2013/224228762569",
+        "updated_at": "2026-04-22T14:33:59.482+00:00"
+      },
+      {
+        "keyword": "파동내과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "파동내과, 고혈압·당뇨 가족력 있다면 이 나이부터 시작하세요",
+        "matched_url": "https://blog.naver.com/ccim2013/224219888864",
+        "updated_at": "2026-04-22T14:33:53.43+00:00"
+      }
+    ],
+    "포항휴먼피부과": [
+      {
+        "keyword": "경주 검버섯",
+        "current_rank": 2,
+        "previous_rank": 1,
+        "matched_title": "경주 검버섯 흑자, 잘못 알고 있는 상식? 이 글로 정리해 드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224148996724",
+        "updated_at": "2026-04-22T14:34:54.786+00:00"
+      },
+      {
+        "keyword": "경주 리프팅",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:42.628+00:00"
+      },
+      {
+        "keyword": "경주 울쎄라",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "경주 울쎄라 써마지 병원 선택, 광고 거르는 방법 &lt;의사 작성&gt;",
+        "matched_url": "https://blog.naver.com/artys05717/224125279658",
+        "updated_at": "2026-04-22T14:33:58.14+00:00"
+      },
+      {
+        "keyword": "경주 텐써마",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "경주 텐써마, 피부 탄력 놓치는 시기 알려드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224126813793",
+        "updated_at": "2026-04-22T14:34:22.6+00:00"
+      },
+      {
+        "keyword": "경주 피부과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "경주 피부과 전문의와 공장형 차이점을 찾고 계시다면",
+        "matched_url": "https://blog.naver.com/artys05717/224118965390",
+        "updated_at": "2026-04-22T14:34:56.883+00:00"
+      },
+      {
+        "keyword": "경주써마지",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "경주리프팅,  써마지 효과 못 봤다는 분들  3가지 중 하나는 빠져있었습니다",
+        "matched_url": "https://blog.naver.com/artys05717/224182867752",
+        "updated_at": "2026-04-22T14:35:02.265+00:00"
+      },
+      {
+        "keyword": "경주한관종",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "경주 한관종 제거, 이 1가지는 꼭 확인하세요",
+        "matched_url": "https://blog.naver.com/artys05717/224157050447",
+        "updated_at": "2026-04-22T14:34:41.929+00:00"
+      },
+      {
+        "keyword": "양덕피부과",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "포항양덕피부과, 한 번이면 끝이라고요? 튠페이스에 대해 잘못 알고 있는 3가지",
+        "matched_url": "https://blog.naver.com/artys05717/224182871361",
+        "updated_at": "2026-04-22T14:34:18.939+00:00"
+      },
+      {
+        "keyword": "영덕 피부과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:40.107+00:00"
+      },
+      {
+        "keyword": "탄력복원술",
+        "current_rank": 15,
+        "previous_rank": 15,
+        "matched_title": "포항리프팅, 가격 비교만 하다가 놓치는 핵심 1가지",
+        "matched_url": "https://blog.naver.com/artys05717/224215162134",
+        "updated_at": "2026-04-22T14:34:31.721+00:00"
+      },
+      {
+        "keyword": "포항 기미",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:05.704+00:00"
+      },
+      {
+        "keyword": "포항 레디어스",
+        "current_rank": 4,
+        "previous_rank": 2,
+        "matched_title": "포항 피부 관리,피부과 원장이 레디어스 스킨바이브병행을 권하는 이유",
+        "matched_url": "https://blog.naver.com/artys05717/224193760458",
+        "updated_at": "2026-04-22T14:34:36.253+00:00"
+      },
+      {
+        "keyword": "포항 레블라이트",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 레블라이트, 피부과 의사가 알려주는 시술 전 확인해야 할 2가지",
+        "matched_url": "https://blog.naver.com/artys05717/224122986211",
+        "updated_at": "2026-04-22T14:33:56.291+00:00"
+      },
+      {
+        "keyword": "포항 리쥬란",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "포항 리쥬란, 가격보다 '이것'이 중요합니다",
+        "matched_url": "https://blog.naver.com/artys05717/224142984665",
+        "updated_at": "2026-04-22T14:34:27.927+00:00"
+      },
+      {
+        "keyword": "포항 리프팅",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:34:01.829+00:00"
+      },
+      {
+        "keyword": "포항 마운자로",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "포항마운자로, 효과 제대로 보려면 2가지는 꼭 확인하세요",
+        "matched_url": "https://blog.naver.com/artys05717/224212736363",
+        "updated_at": "2026-04-22T14:33:46.551+00:00"
+      },
+      {
+        "keyword": "포항 문신제거",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 문신제거, 아무 데서나 받으면 안 되는 이유",
+        "matched_url": "https://blog.naver.com/artys05717/224255405589",
+        "updated_at": "2026-04-22T14:34:49.324+00:00"
+      },
+      {
+        "keyword": "포항 물광주사",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "포항 물광주사 모든 곳이 똑같지는 않습니다. 제품 차이 알려드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224110152434",
+        "updated_at": "2026-04-22T14:34:20.775+00:00"
+      },
+      {
+        "keyword": "포항 백반증",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 백반증치료, 방치하면 안 되는 이유 알려드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224129003180",
+        "updated_at": "2026-04-22T14:34:34.249+00:00"
+      },
+      {
+        "keyword": "포항 백반증치료",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "포항 백반증치료, 방치하면 안 되는 이유 알려드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224129003180",
+        "updated_at": "2026-04-22T14:33:44.59+00:00"
+      },
+      {
+        "keyword": "포항 색소치료",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 색소치료, 가격보다 '이것'이 중요합니다",
+        "matched_url": "https://blog.naver.com/artys05717/224127836133",
+        "updated_at": "2026-04-22T14:33:54.312+00:00"
+      },
+      {
+        "keyword": "포항 스컬트라",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "포항 스컬트라? 시술 미루고 계신다면 이 2가지는 확인하세요",
+        "matched_url": "https://blog.naver.com/artys05717/224058837966",
+        "updated_at": "2026-04-22T14:34:26.103+00:00"
+      },
+      {
+        "keyword": "포항 스킨바이브",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 스킨바이브, A to Z 전문의가 알려드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224088051358",
+        "updated_at": "2026-04-22T14:34:11.376+00:00"
+      },
+      {
+        "keyword": "포항 스킨보톡스",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "포항스킨보톡스, 병원 선택할 때 가격보다 중요한 1가지",
+        "matched_url": "https://blog.naver.com/artys05717/224217939127",
+        "updated_at": "2026-04-22T14:34:03.713+00:00"
+      },
+      {
+        "keyword": "포항 써마지 피부과",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 써마지 피부과, 가격만 보면 안되는 이유 &lt;전문의 작성>",
+        "matched_url": "https://blog.naver.com/artys05717/224039764611",
+        "updated_at": "2026-04-22T14:34:45.574+00:00"
+      },
+      {
+        "keyword": "포항 안면홍조",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "포항안면홍조, 연고만 바르고 있다면 절대 낫지 않습니다 피부과전문의 작성",
+        "matched_url": "https://blog.naver.com/artys05717/224218531680",
+        "updated_at": "2026-04-22T14:34:43.69+00:00"
+      },
+      {
+        "keyword": "포항 양덕 피부과",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "포항양덕피부과, 한 번이면 끝이라고요? 튠페이스에 대해 잘못 알고 있는 3가지",
+        "matched_url": "https://blog.naver.com/artys05717/224182871361",
+        "updated_at": "2026-04-22T14:34:07.72+00:00"
+      },
+      {
+        "keyword": "포항 울쎄라피",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "포항 울쎄라피 프라임? '이것' 모르면 돈만 날립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224075631063",
+        "updated_at": "2026-04-22T14:34:13.295+00:00"
+      },
+      {
+        "keyword": "포항 줄기세포",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 줄기세포, 콜라겐 전공 의학박사가 직접 설명합니다 &lt;필독&gt;",
+        "matched_url": "https://blog.naver.com/artys05717/224221175830",
+        "updated_at": "2026-04-22T14:34:51.138+00:00"
+      },
+      {
+        "keyword": "포항 텐써마",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "포항 텐써마, 제대로 알고 싶다면 알아야 할 3가지",
+        "matched_url": "https://blog.naver.com/artys05717/224091011817",
+        "updated_at": "2026-04-22T14:34:24.379+00:00"
+      },
+      {
+        "keyword": "포항 토닝",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "updated_at": "2026-04-22T14:33:50.496+00:00"
+      },
+      {
+        "keyword": "포항 팔자주름",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "포항 팔자주름 관리법, 일반인은 모르는 진실 정리해 드립니다",
+        "matched_url": "https://blog.naver.com/artys05717/224146019140",
+        "updated_at": "2026-04-22T14:34:38.029+00:00"
+      },
+      {
+        "keyword": "포항 피부과 추천",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "포항피부과추천,볼륨과 탄력 동시에 잡는 레디어스 스컬트라 병행 핵심 2가지",
+        "matched_url": "https://blog.naver.com/artys05717/224187970279",
+        "updated_at": "2026-04-22T14:33:52.45+00:00"
+      },
+      {
+        "keyword": "포항 피부염",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "포항 피부염, 스테로이드 무조건 나쁘다? 오해입니다",
+        "matched_url": "https://blog.naver.com/artys05717/224155612834",
+        "updated_at": "2026-04-22T14:34:15.111+00:00"
+      },
+      {
+        "keyword": "포항 피코슈어",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 피코슈어, 잡티,기미,흉터 없이 맑은 피부 되고 싶다면?",
+        "matched_url": "https://blog.naver.com/artys05717/224089733011",
+        "updated_at": "2026-04-22T14:34:16.882+00:00"
+      },
+      {
+        "keyword": "포항 한관종",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 한관종, 이 글로 끝내시면 됩니다",
+        "matched_url": "https://blog.naver.com/artys05717/224057465113",
+        "updated_at": "2026-04-22T14:33:59.866+00:00"
+      },
+      {
+        "keyword": "포항 흑자",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "포항 흑자? 검버섯? 구분하지 않고 레이저만 쏘면 안되는 이유",
+        "matched_url": "https://blog.naver.com/artys05717/224113099380",
+        "updated_at": "2026-04-22T14:33:48.738+00:00"
+      },
+      {
+        "keyword": "포항남구피부과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "포항 남구피부과,환자가 오래 다니는 이유가 있습니다",
+        "matched_url": "https://blog.naver.com/artys05717/224260850432",
+        "updated_at": "2026-04-22T14:33:40.551+00:00"
+      },
+      {
+        "keyword": "포항스킨부스터",
+        "current_rank": 9,
+        "previous_rank": 9,
+        "matched_title": "포항 피부과 스킨부스터 효과? 3가지만 확인하면 됩니다",
+        "matched_url": "https://blog.naver.com/artys05717/224164174165",
+        "updated_at": "2026-04-22T14:34:09.625+00:00"
+      },
+      {
+        "keyword": "포항써마지",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "포항 써마지, 한 번 처진 피부가 혼자 돌아오는 경우는 없습니다",
+        "matched_url": "https://blog.naver.com/artys05717/224258318253",
+        "updated_at": "2026-04-22T14:35:00.506+00:00"
+      },
+      {
+        "keyword": "포항울써마지",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "포항 웨딩 관리, 결혼식 전 울써마지 받으려면 이 2가지 타이밍을 꼭 지키세요&lt;원장 작성&gt;",
+        "matched_url": "https://blog.naver.com/artys05717/224195361754",
+        "updated_at": "2026-04-22T14:34:52.924+00:00"
+      },
+      {
+        "keyword": "포항피부과의원",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "포항피부과의원, 젊은 사람은 필요 없다고요? 줄기세포 30대부터 알아야 합니다",
+        "matched_url": "https://blog.naver.com/artys05717/224182909752",
+        "updated_at": "2026-04-22T14:34:29.942+00:00"
+      },
+      {
+        "keyword": "포항필러",
+        "current_rank": 7,
+        "previous_rank": 7,
+        "matched_title": "포항 필러, 탄력 고민이라면 이것만큼은 알아야 합니다",
+        "matched_url": "https://blog.naver.com/artys05717/224162816383",
+        "updated_at": "2026-04-22T14:34:47.559+00:00"
+      },
+      {
+        "keyword": "포항휴먼피부과",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "과하지 않게, 그러나 분명하게 당신다운 아름다움을 찾아드립니다 [포항휴먼피부과 황규홍 원장]",
+        "matched_url": "https://blog.naver.com/artys05717/224223309263",
+        "updated_at": "2026-04-22T14:34:58.734+00:00"
+      }
+    ],
+    "한결비뇨기과의원": []
+  },
+  "cafe": {
+    "솔직한알": [
+      {
+        "keyword": "고덱스캡슐",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1426780",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:33.067+00:00"
+      },
+      {
+        "keyword": "고려은단 비타민d 2000",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/GNJjUzl1",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:12.986+00:00"
+      },
+      {
+        "keyword": "고함량알부민",
+        "current_rank": 5,
+        "previous_rank": 3,
+        "matched_title": "고함량 알부민 실제 효과?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1413389?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MTMzODksImlzc3VlZEF0IjoxNzc2ODY4NTM5MTc4fQ.eSAZThAzb6vtDvZScJsYYuVII1wh_8hln6mWitlmsyE",
+        "post_url": "https://cafe.naver.com/pusanmommy/1413389",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:39.619+00:00"
+      },
+      {
+        "keyword": "공복혈당 101",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "공복혈당 101인데 위험한가요?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1456137?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTYxMzcsImlzc3VlZEF0IjoxNzc2ODY4NTQxNDMyfQ.RpEwn06qEBftDWuu6ghZZ1TXt0l0dXpOUEbD3cUJjEQ",
+        "post_url": "https://cafe.naver.com/pusanmommy/1456137",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:41.673+00:00"
+      },
+      {
+        "keyword": "공복혈당 102",
+        "current_rank": 2,
+        "previous_rank": 7,
+        "matched_title": "공복혈당 102인데 위험한가요?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1456161?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTYxNjEsImlzc3VlZEF0IjoxNzc2ODY4NTQzNTExfQ.uGHtqrwSChxKqPw_SkX6LxavcCSUKaFmQyeMc57QvdQ",
+        "post_url": "https://cafe.naver.com/pusanmommy/1456161",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:43.842+00:00"
+      },
+      {
+        "keyword": "공복혈당 103",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1456210",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:13.38+00:00"
+      },
+      {
+        "keyword": "공복혈당 104",
+        "current_rank": 4,
+        "previous_rank": 2,
+        "matched_title": "공복혈당 104인데 위험한가요?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1456252?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTYyNTIsImlzc3VlZEF0IjoxNzc2ODY4NTQ1NjQyfQ.0VFZcoEO13nl9d61ojZJjeYFgFMW0J6Gafko0CoquA8",
+        "post_url": "https://cafe.naver.com/pusanmommy/1456252",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:46.063+00:00"
+      },
+      {
+        "keyword": "공복혈당 106",
+        "current_rank": 1,
+        "previous_rank": 2,
+        "matched_title": "공복혈당 106 위험한가요?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1456275?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTYyNzUsImlzc3VlZEF0IjoxNzc2ODY4NDEwNzQ2fQ.6ts_Wbd9dMtBoNNI8n6ajtG9GhYr-r_q3GcF1z2sDwM",
+        "post_url": "https://cafe.naver.com/pusanmommy/1456275",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:31.104+00:00"
+      },
+      {
+        "keyword": "공복혈당 107",
+        "current_rank": 1,
+        "previous_rank": 2,
+        "matched_title": "공복혈당 107인데 이러다 당뇨오는거 아닌지..",
+        "matched_url": "https://cafe.naver.com/cantsb/3263458?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzI2MzQ1OCwiaXNzdWVkQXQiOjE3NzY4Njg1NDc5OTV9.Hx0kPzo41RhwCfgoQnPm_Acpz3tBk8MO3_HSc7UwCpg",
+        "post_url": "https://naver.me/G0pYvW77",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:48.337+00:00"
+      },
+      {
+        "keyword": "공복혈당 108",
+        "current_rank": 6,
+        "previous_rank": 4,
+        "matched_title": "공복혈당 108인데 위험한가요?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1456307?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTYzMDcsImlzc3VlZEF0IjoxNzc2ODY4NDc5MDM2fQ.I21ohkIbRp_HlInOf7nc6qNpwdkNPhyqVlyMa_Ya-BI",
+        "post_url": "https://cafe.naver.com/pusanmommy/1456307",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:39.413+00:00"
+      },
+      {
+        "keyword": "공복혈당 109",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "공복혈당 109 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1456296?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTYyOTYsImlzc3VlZEF0IjoxNzc2ODY4NTUwMjM1fQ.NJDS9DBANiucwM_BIHwhS8gzC7pQNk-MaVnR22HBJe4",
+        "post_url": "https://cafe.naver.com/pusanmommy/1456296",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:50.492+00:00"
+      },
+      {
+        "keyword": "공복혈당 98",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "공복혈당 98 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1455621?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTU2MjEsImlzc3VlZEF0IjoxNzc2ODY4NTUyMzQ3fQ.oBo_0OEJ7lsmWVBpB4CC61XgJVxG7ZyAb3a4qfqBmD0",
+        "post_url": "https://cafe.naver.com/pusanmommy/1455621",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:52.785+00:00"
+      },
+      {
+        "keyword": "공복혈당 99",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "공복혈당 99 위험한가요?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1455624?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTU2MjQsImlzc3VlZEF0IjoxNzc2ODY4NTU0NjA0fQ.jybtGlLNqe9rSgdvuT1Vha5KJYmQpTFMRtVHujZ0DFE",
+        "post_url": "https://naver.me/xaTJ2Vhh",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:55.06+00:00"
+      },
+      {
+        "keyword": "광동제약 알부민",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "광동제약 알부민 마셔봤는데...",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1450170?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTAxNzAsImlzc3VlZEF0IjoxNzc2ODY4NTE2MTA4fQ.NjoieX1qCuFbPgYt494phORcSKMRlWszuYT5J_xqAV0",
+        "post_url": "https://cafe.naver.com/pusanmommy/1450170",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:16.484+00:00"
+      },
+      {
+        "keyword": "김소형알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "김소형 알부민 효과가 잘…",
+        "matched_url": "https://cafe.naver.com/cantsb/3194680?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzE5NDY4MCwiaXNzdWVkQXQiOjE3NzY4Njg1NTY4NTl9.Zqstk0R_UUnBEooPzK5xj52uMcSdWKutShHlCcvaBVE",
+        "post_url": "https://cafe.naver.com/cantsb/3194680",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:57.188+00:00"
+      },
+      {
+        "keyword": "김오곤 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1405964",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:25.591+00:00"
+      },
+      {
+        "keyword": "김오곤 알부민 골드",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1405964",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:33.131+00:00"
+      },
+      {
+        "keyword": "김오곤 알부민 프리미엄",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3256902",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:49.942+00:00"
+      },
+      {
+        "keyword": "김오곤 흑염소",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/IIDxfVLF",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:35.129+00:00"
+      },
+      {
+        "keyword": "다이아벡스",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/Fns6T6Og",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:31.12+00:00"
+      },
+      {
+        "keyword": "당뇨양파즙",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1446227",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:54.251+00:00"
+      },
+      {
+        "keyword": "대원제약 알부민킹",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1409949",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:32.053+00:00"
+      },
+      {
+        "keyword": "레가론캡슐140(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1430299",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:02.963+00:00"
+      },
+      {
+        "keyword": "로얄 알부민 골드",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "로얄 알부민 골드 6갤 후기ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1408773?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDg3NzMsImlzc3VlZEF0IjoxNzc2ODY4NDMwODgwfQ.sbGhcqNVCUzCiOyzqWL5V1DKSXvb3uuGNGkqEACUg3s",
+        "post_url": "https://cafe.naver.com/pusanmommy/1408773",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:51.381+00:00"
+      },
+      {
+        "keyword": "리포좀 알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "리포좀 알부민 효과 어때요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1455613?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTU2MTMsImlzc3VlZEF0IjoxNzc2ODY4MzM2NDM5fQ.RqNoJ8d4ArjVzN8QMP8yAcoK5TeqbS5lqjSS01xQbNY",
+        "post_url": "https://cafe.naver.com/pusanmommy/1455613",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:16.848+00:00"
+      },
+      {
+        "keyword": "매포 흑염소",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "매포 흑염소 효과?",
+        "matched_url": "https://cafe.naver.com/peopledisc/1284178?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InBlb3BsZWRpc2MiLCJhcnRpY2xlSWQiOjEyODQxNzgsImlzc3VlZEF0IjoxNzc2ODY4NDI4NzUyfQ.Fi3DkcAxluPS59Altf3OGRQ7eRltiPuP6W21QRbaPOs",
+        "post_url": "https://naver.me/FORidCof",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:49.165+00:00"
+      },
+      {
+        "keyword": "메트포르민서방정",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1436240",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:51.995+00:00"
+      },
+      {
+        "keyword": "무릎연골주사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1409788",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:27.64+00:00"
+      },
+      {
+        "keyword": "무릎연골주사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1405931",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:05+00:00"
+      },
+      {
+        "keyword": "무릎연골주사 통증",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "무릎연골주사 2개월차 통증ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1405931?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDU5MzEsImlzc3VlZEF0IjoxNzc2ODY4NDU5NjgxfQ.NBSS1vQGFDZI6oD1b5266M8j8tbdIcD9b3MPtLf2NrU",
+        "post_url": "https://cafe.naver.com/pusanmommy/1405931",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:19.974+00:00"
+      },
+      {
+        "keyword": "미국 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/54KQb1nB",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:43.622+00:00"
+      },
+      {
+        "keyword": "밀크씨슬 복용시간",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1433108",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:34:04.64+00:00"
+      },
+      {
+        "keyword": "바나바잎 코로솔산",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1446305",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:26.775+00:00"
+      },
+      {
+        "keyword": "배한호 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1405908",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:33:04.812+00:00"
+      },
+      {
+        "keyword": "백세 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/F7FS8iPe",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:24.56+00:00"
+      },
+      {
+        "keyword": "백세알부민(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1412154",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:47.492+00:00"
+      },
+      {
+        "keyword": "비타민d 결핍",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3218027",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:00.234+00:00"
+      },
+      {
+        "keyword": "비타민d 결핍 영양제",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "비타민d 결핍 영양제 효과있는지…?",
+        "matched_url": "https://cafe.naver.com/cantsb/3218027?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIxODAyNywiaXNzdWVkQXQiOjE3NzY4Njg0MjAyNDF9.2cp-pgYsncZDqcvxky4T2x-f5PQsNYe95ynb7HVU47g",
+        "post_url": "https://cafe.naver.com/cantsb/3218027",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:40.739+00:00"
+      },
+      {
+        "keyword": "비터멜론",
+        "current_rank": 4,
+        "previous_rank": 4,
+        "matched_title": "비터멜론 혈당 효과 어떤가요?",
+        "matched_url": "https://cafe.naver.com/peopledisc/1292304?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InBlb3BsZWRpc2MiLCJhcnRpY2xlSWQiOjEyOTIzMDQsImlzc3VlZEF0IjoxNzc2ODY4NDMzMDg0fQ.iZGJAo1ABoQETBTiYsDWu28I5OoX5T-47A1byJ41YV0",
+        "post_url": "https://cafe.naver.com/peopledisc/12",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:53.576+00:00"
+      },
+      {
+        "keyword": "산화 마그네슘 변비(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1413333",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:56.413+00:00"
+      },
+      {
+        "keyword": "삼성제약 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/5fdJaHaR",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:54.322+00:00"
+      },
+      {
+        "keyword": "삼성제약 알부민(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1407643",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:29.809+00:00"
+      },
+      {
+        "keyword": "서울대 알부민",
+        "current_rank": 2,
+        "previous_rank": 1,
+        "matched_title": "서울대 알부민 효과 어떤가요?",
+        "matched_url": "https://cafe.naver.com/cantsb/3262219?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzI2MjIxOSwiaXNzdWVkQXQiOjE3NzY4NjgzMjc0MDl9.x67XMAoaCanoM0IBZsDE29GtqV_tcbbGcOZV5yMarSA",
+        "post_url": "https://cafe.naver.com/cantsb/3262219",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:07.713+00:00"
+      },
+      {
+        "keyword": "셀레늄영양제",
+        "current_rank": 4,
+        "previous_rank": 1,
+        "matched_title": "셀레늄영양제 약국에서?",
+        "matched_url": "https://cafe.naver.com/peopledisc/1292286?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InBlb3BsZWRpc2MiLCJhcnRpY2xlSWQiOjEyOTIyODYsImlzc3VlZEF0IjoxNzc2ODY4NTExNzEyfQ.qA7p8rUX1LYz_C9iCM0hDphp-3r_CW9EFixE-fWRsqE",
+        "post_url": "https://naver.me/xYN00snL",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:12.181+00:00"
+      },
+      {
+        "keyword": "술 빨리 깨는법",
+        "current_rank": 9,
+        "previous_rank": 8,
+        "matched_title": "술 빨리 깨는법?",
+        "matched_url": "https://cafe.naver.com/cantsb/3224729?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIyNDcyOSwiaXNzdWVkQXQiOjE3NzY4Njg0MTUwNzJ9.-V1kF2SpwVQf7EPcISIb3ZxsNKWt4lj6hfN4QiWWysg",
+        "post_url": "https://cafe.naver.com/cantsb/3224729",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:35.518+00:00"
+      },
+      {
+        "keyword": "씨앤유캡슐",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "씨앤유캡슐 먹으면서 혈당관리?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1430333?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MzAzMzMsImlzc3VlZEF0IjoxNzc2ODY4Mzc4MjA5fQ.oWRKgMERVXNCnYkUJAmbVhq4NoPs7D8sltQioplZaDg",
+        "post_url": "https://cafe.naver.com/pusanmommy/1430333",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:58.443+00:00"
+      },
+      {
+        "keyword": "알부민 골드",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1406939",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:56.513+00:00"
+      },
+      {
+        "keyword": "알부민 많은 음식",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/FdqNvhoo",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:20.192+00:00"
+      },
+      {
+        "keyword": "알부민 맥스",
+        "current_rank": 3,
+        "previous_rank": 4,
+        "matched_title": "알부민 맥스 부작용?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1455611?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTU2MTEsImlzc3VlZEF0IjoxNzc2ODY4NTIyNjk0fQ.tM83dSYkg1UFAfolZ39sl6IzibZTAqw_aUyph6iHPCA",
+        "post_url": "https://cafe.naver.com/pusanmommy/1455611",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:23.072+00:00"
+      },
+      {
+        "keyword": "알부민 메가골드",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "알부민 메가골드 석달째 효과?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1413302?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MTMzMDIsImlzc3VlZEF0IjoxNzc2ODY4Mzk3NTEzfQ.6eR3dB2V7hWejq6qEzlhkz4lJq4ACoS9nny6DN-kpGg",
+        "post_url": "https://cafe.naver.com/pusanmommy/1413302",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:17.873+00:00"
+      },
+      {
+        "keyword": "알부민 메가밸런스",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1407613",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:33:22.377+00:00"
+      },
+      {
+        "keyword": "알부민 밀크씨슬",
+        "current_rank": 11,
+        "previous_rank": 10,
+        "matched_title": "알부민밀크씨슬 두달 같이 먹였는데",
+        "matched_url": "https://cafe.naver.com/cantsb/3216884?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIxNjg4NCwiaXNzdWVkQXQiOjE3NzY4Njg1MzY5NTd9.0tax03-uLQHI9F174nYTq9vfsPZsj-HPBy1zIuTAVjE",
+        "post_url": "https://cafe.naver.com/cantsb/3216884",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:37.328+00:00"
+      },
+      {
+        "keyword": "알부민 복용시간",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3220732",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:55.761+00:00"
+      },
+      {
+        "keyword": "알부민 액상",
+        "current_rank": 9,
+        "previous_rank": 2,
+        "matched_title": "알부민 액상 먹고나면",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1409814?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDk4MTQsImlzc3VlZEF0IjoxNzc2ODY4MzcxNTA3fQ.a3El0ZoBoeJX3g8q5qRFJrIC8L-nQTSmfPXBp7jt4P4",
+        "post_url": "https://cafe.naver.com/pusanmommy/1409814",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:51.97+00:00"
+      },
+      {
+        "keyword": "알부민 액티브 플러스",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "알부민 액티브 플러스 먹다가..ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1408838?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDg4MzgsImlzc3VlZEF0IjoxNzc2ODY4NTU5MDIyfQ.u3VrM6XLaCE8f5ynGSwxDEjl5R-7FVXYzKmpOVbwgow",
+        "post_url": "https://cafe.naver.com/pusanmommy/1408838",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:59.405+00:00"
+      },
+      {
+        "keyword": "알부민 영양제",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1406150",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:00.854+00:00"
+      },
+      {
+        "keyword": "알부민 영양제",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1439295",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:34.25+00:00"
+      },
+      {
+        "keyword": "알부민 추천",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1405227",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:44.712+00:00"
+      },
+      {
+        "keyword": "알부민 추천",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1439303",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:02.671+00:00"
+      },
+      {
+        "keyword": "알부민 추천",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/GUTzVINS",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:12.075+00:00"
+      },
+      {
+        "keyword": "알부민 추천",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3197328",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:19.391+00:00"
+      },
+      {
+        "keyword": "알부민 프리미엄 효과(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1407625",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:28.677+00:00"
+      },
+      {
+        "keyword": "알부민 프리미엄 후기(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1407625",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:24.25+00:00"
+      },
+      {
+        "keyword": "알부민 프리미엄(삭제)",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1407625",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:00.627+00:00"
+      },
+      {
+        "keyword": "알부민 항암",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "오한진알부민 항암 끝나고 먹어도",
+        "matched_url": "https://cafe.naver.com/cantsb/3170021?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzE3MDAyMSwiaXNzdWVkQXQiOjE3NzY4NjgzOTA4ODJ9.KDGg_t3g3TObLnkO847qSeQP3DiNunVIE8lL1k1F0Zs",
+        "post_url": "https://naver.me/Fri4aoBa",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:11.159+00:00"
+      },
+      {
+        "keyword": "알부민골드",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1406939",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:18.758+00:00"
+      },
+      {
+        "keyword": "알부민골드",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1408773",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:09.454+00:00"
+      },
+      {
+        "keyword": "알부민추천순위",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1412324",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:33:15.663+00:00"
+      },
+      {
+        "keyword": "알부민효능부작용",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1409046",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:30.868+00:00"
+      },
+      {
+        "keyword": "알부민효능효과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1408028",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:37.193+00:00"
+      },
+      {
+        "keyword": "약국 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1414361",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:36:01.533+00:00"
+      },
+      {
+        "keyword": "여에스더 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1450185",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:34:41.311+00:00"
+      },
+      {
+        "keyword": "여에스더 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1407687",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:34.865+00:00"
+      },
+      {
+        "keyword": "여에스더 알부민",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "여에스더 알부민 진짜?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1439377?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MzkzNzcsImlzc3VlZEF0IjoxNzc2ODY4NDA4NTkyfQ.9I7fVA19TEMA-rCAmfk-e6NqN1Og8EpVhSfXwwysZFc",
+        "post_url": "https://cafe.naver.com/pusanmommy/1439377",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:28.888+00:00"
+      },
+      {
+        "keyword": "연세 알부민 골드",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1406939",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:58.868+00:00"
+      },
+      {
+        "keyword": "영진약품 알부민",
+        "current_rank": 1,
+        "previous_rank": 2,
+        "matched_title": "영진약품 알부민 복합물이라는데...",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1451107?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTExMDcsImlzc3VlZEF0IjoxNzc2ODY3OTc1MDgwfQ.QfzEGGrGg_F7bXZU6TFDfif8-I0xYKwtimKd1Q0EDkw",
+        "post_url": "https://cafe.naver.com/pusanmommy/1451107",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:06.512+00:00"
+      },
+      {
+        "keyword": "오한진 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3243280",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:09.062+00:00"
+      },
+      {
+        "keyword": "오한진 알부민",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "오한진 알부민 드셔보신분",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1451078?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTEwNzgsImlzc3VlZEF0IjoxNzc2ODY4Mzg2Njc0fQ.N3gyiChl8Z_Zg_ss_9tZ_JBPQCoFtrgVo2mHn9BhTCc",
+        "post_url": "https://cafe.naver.com/pusanmommy/1451078",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:07.081+00:00"
+      },
+      {
+        "keyword": "오한진 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1404571",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:14.933+00:00"
+      },
+      {
+        "keyword": "오한진 알부민 효능",
+        "current_rank": 7,
+        "previous_rank": 3,
+        "matched_title": "오한진 알부민 효능 어떤지요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1404571?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDQ1NzEsImlzc3VlZEF0IjoxNzc2ODY4MzU2MDgzfQ.FBhotJMOCyPEdfV42T4Fol2izr4DM2wdRL8Nl0PN32U",
+        "post_url": "https://cafe.naver.com/pusanmommy/1404571",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:36.422+00:00"
+      },
+      {
+        "keyword": "우루사 100mg",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/GhwtBaPH",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:23.437+00:00"
+      },
+      {
+        "keyword": "우루사100mg",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/GM3E54e9",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:02.361+00:00"
+      },
+      {
+        "keyword": "이경제 흑염소",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/FP8aeZST",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:05.076+00:00"
+      },
+      {
+        "keyword": "이선민 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1412175",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:38.489+00:00"
+      },
+      {
+        "keyword": "이선민 알부민",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "이선민알부민골드..",
+        "matched_url": "https://cafe.naver.com/cantsb/3206521?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIwNjUyMSwiaXNzdWVkQXQiOjE3NzY4NjgzNTgyNDJ9.2yS20CfhB-o9jsaUPtc3n9-WpYK9aEbmbEMeAuPDSrE",
+        "post_url": "https://cafe.naver.com/cantsb/3206521",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:47.696+00:00"
+      },
+      {
+        "keyword": "이선민 알부민 골드",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1404929",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:34:22.052+00:00"
+      },
+      {
+        "keyword": "이선민 알부민 영양제",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "이선민알부민골드..",
+        "matched_url": "https://cafe.naver.com/cantsb/3206521?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIwNjUyMSwiaXNzdWVkQXQiOjE3NzY4Njg1MTQwMTh9.RCpMnervlbrdVRbHScExYEvIo0IsNGXbcI_qaEUXRTc",
+        "post_url": "https://cafe.naver.com/cantsb/3206521",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:14.235+00:00"
+      },
+      {
+        "keyword": "이선민알부민",
+        "current_rank": 3,
+        "previous_rank": 3,
+        "matched_title": "이선민알부민골드..",
+        "matched_url": "https://cafe.naver.com/cantsb/3206521?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIwNjUyMSwiaXNzdWVkQXQiOjE3NzY4NjgzNjAyODV9.V1avyLS1lPOw4NTBcOFOmYzFQN8DjrEjuwNlysf5yHE",
+        "post_url": "https://cafe.naver.com/cantsb/3206521",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:40.54+00:00"
+      },
+      {
+        "keyword": "이선민알부민 함량",
+        "current_rank": 5,
+        "previous_rank": 5,
+        "matched_title": "이선민 알부민 추천 ?ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1412175?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MTIxNzUsImlzc3VlZEF0IjoxNzc2ODY4NTA2OTI1fQ.qbBrl2_PLn7j26DWD7sbzbxX5tjZXd-LCwDngs7oN40",
+        "post_url": "https://cafe.naver.com/pusanmommy/1412175",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:07.147+00:00"
+      },
+      {
+        "keyword": "이선민알부민 효과",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1412175",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:29.291+00:00"
+      },
+      {
+        "keyword": "이선민알부민가격",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3206521",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:21.475+00:00"
+      },
+      {
+        "keyword": "이선민알부민골드",
+        "current_rank": 1,
+        "previous_rank": 3,
+        "matched_title": "이선민알부민골드..",
+        "matched_url": "https://cafe.naver.com/cantsb/3206521?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzIwNjUyMSwiaXNzdWVkQXQiOjE3NzY4Njg0NzI2Mzl9.bz6V31WAz8Wsn2XXZhe_dUQU4I2WXLjMtTPS-ZICse4",
+        "post_url": "https://cafe.naver.com/cantsb/3206521",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:32.902+00:00"
+      },
+      {
+        "keyword": "이승남 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1419533",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:20.863+00:00"
+      },
+      {
+        "keyword": "이시형 박사 알부민",
+        "current_rank": 4,
+        "previous_rank": 2,
+        "matched_title": "이시형 박사 알부민 어때요...?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1409863?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDk4NjMsImlzc3VlZEF0IjoxNzc2ODY4MzI5NTgwfQ.jP9xUNPIEHw0TCTuwSZqOvbCn6zXUOWmIIumkJhOE6Y",
+        "post_url": "https://cafe.naver.com/pusanmommy/1409863",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:09.885+00:00"
+      },
+      {
+        "keyword": "이시형 알부민",
+        "current_rank": null,
+        "previous_rank": 2,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1404591",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:36:03.684+00:00"
+      },
+      {
+        "keyword": "이시형 알부민 프리미엄",
+        "current_rank": 2,
+        "previous_rank": 1,
+        "matched_title": "이시형 박사 알부민 어때요...?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1409863?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDk4NjMsImlzc3VlZEF0IjoxNzc2ODY4NTY1NTM4fQ.71f8ACuAR-Fp4P4zDi1b9SFW2iHEuubhOV-uPypz_RE",
+        "post_url": "https://cafe.naver.com/pusanmommy/1409863",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:36:05.902+00:00"
+      },
+      {
+        "keyword": "이시형 알부민 플래티넘",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1409863",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:36:08.137+00:00"
+      },
+      {
+        "keyword": "이시형알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1409863",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:27.213+00:00"
+      },
+      {
+        "keyword": "이찬원 콘드로이친",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3216892",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:34:08.561+00:00"
+      },
+      {
+        "keyword": "일양약품 알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "일양약품 알부민 효과 잇나요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1450224?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTAyMjQsImlzc3VlZEF0IjoxNzc2ODY4NDI2NzExfQ.mWKuyrZUcgiHqJlOTINOdQANyE_vgb5OEFAR0EvfXac",
+        "post_url": "https://cafe.naver.com/pusanmommy/1450224",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:47.053+00:00"
+      },
+      {
+        "keyword": "자궁경부암 검사 방법",
+        "current_rank": 6,
+        "previous_rank": 6,
+        "matched_title": "자궁경부암 검사 방법 5년 미룬 후기 조직검사까지",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1420490?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MjA0OTAsImlzc3VlZEF0IjoxNzc2ODY4NTY5NzQ0fQ.1NIQ8N3JoXfpD3nIJcPuw9bxtVWubwCmFDuyN3gLq0w",
+        "post_url": "https://cafe.naver.com/pusanmommy/1420490",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:36:10.142+00:00"
+      },
+      {
+        "keyword": "자누메트정",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1446057",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:32:14.153+00:00"
+      },
+      {
+        "keyword": "자디앙정",
+        "current_rank": 10,
+        "previous_rank": 10,
+        "matched_title": "자디앙정 10mg 체중변화 ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1446186?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDYxODYsImlzc3VlZEF0IjoxNzc2ODY4MzYyNDU5fQ.uVPWPC_q1Ovrnvc2Ix34pHCQQbujQ9FvfAKw-wSQMYo",
+        "post_url": "https://cafe.naver.com/pusanmommy/1446186",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:42.691+00:00"
+      },
+      {
+        "keyword": "접골목",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1412214",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:49.663+00:00"
+      },
+      {
+        "keyword": "종근당 알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "종근당 알부민 효과 어떤가요?",
+        "matched_url": "https://cafe.naver.com/cantsb/3256881?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6ImNhbnRzYiIsImFydGljbGVJZCI6MzI1Njg4MSwiaXNzdWVkQXQiOjE3NzY4Njg0MjI1ODd9.OsrffSDcytaMXeAXpIdfl77_9VhPM4jf50cVGEBQdQ0",
+        "post_url": "https://naver.me/xD8KVpvc",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:42.981+00:00"
+      },
+      {
+        "keyword": "중입자 암치료 비용",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1420482",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:34:17.816+00:00"
+      },
+      {
+        "keyword": "캐나다 알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "캐나다 알부민 먹어도 되나요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1451091?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTEwOTEsImlzc3VlZEF0IjoxNzc2ODY4NDE3NDMxfQ.pkIBvjbLP1yleWxJYewJtGOG2htraej6HWKX4pVTyaA",
+        "post_url": "https://cafe.naver.com/pusanmommy/1451091",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:37.69+00:00"
+      },
+      {
+        "keyword": "코스트코 알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "코스트코 알부민 이 가격에 진짜?",
+        "matched_url": "https://cafe.naver.com/peopledisc/1294918?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InBlb3BsZWRpc2MiLCJhcnRpY2xlSWQiOjEyOTQ5MTgsImlzc3VlZEF0IjoxNzc2ODY4NTc2NDQwfQ.QkH1dP90xh-drv1K4h0zW_qrwOWQS5c0hJGnkxiokk0",
+        "post_url": "https://naver.me/Ge7Weg4j",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:36:16.898+00:00"
+      },
+      {
+        "keyword": "코오롱제약 알부민",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "코오롱제약 알부민 드시는분?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1409804?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MDk4MDQsImlzc3VlZEF0IjoxNzc2ODY4NTcyMDIzfQ.cu-UKWdU9zEK4Bn5DJim_Yej0GK86sfuJnWVq0zLIk8",
+        "post_url": "https://cafe.naver.com/pusanmommy/1409804",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:36:12.42+00:00"
+      },
+      {
+        "keyword": "트라젠타듀오정",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/56XliO8X",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:44.848+00:00"
+      },
+      {
+        "keyword": "혈당스파이크 음식",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1281576",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:33:57.943+00:00"
+      },
+      {
+        "keyword": "혈당유산균HACO1",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "혈당유산균HACO1 아버지 당뇨에",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1440339?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDAzMzksImlzc3VlZEF0IjoxNzc2ODY4NDg1NTEwfQ.hO3iP3okkBvYoc0puKP9OZU8YfDebTSXhabYEFHY8w4",
+        "post_url": "https://cafe.naver.com/pusanmommy/1440339",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:45.823+00:00"
+      },
+      {
+        "keyword": "혈당컷",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/cantsb/3244431",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:34:26.509+00:00"
+      },
+      {
+        "keyword": "홈쇼핑 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1281579",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:34:10.792+00:00"
+      },
+      {
+        "keyword": "홈쇼핑 알부민",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://naver.me/GCJMs6xu",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:35:25.087+00:00"
+      },
+      {
+        "keyword": "활력 알부민",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "활력 알부민 부작용…?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1455616?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NTU2MTYsImlzc3VlZEF0IjoxNzc2ODY4NTc0MzExfQ.omZtvp21EN25IjjYdwQfH12tYNKvImElB5l6hikxJYU",
+        "post_url": "https://cafe.naver.com/pusanmommy/1455616",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:36:14.718+00:00"
+      }
+    ],
+    "솔직한알 암": [
+      {
+        "keyword": "gnc 밀크씨슬",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1282028",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:19.762+00:00"
+      },
+      {
+        "keyword": "간수치200",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1282033",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:26.658+00:00"
+      },
+      {
+        "keyword": "간암 수술후 식사",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "간암 수술후 식사 어떻게 해야되나요 퇴원했는데 막막해요",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1429598?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0Mjk1OTgsImlzc3VlZEF0IjoxNzc2ODY4MzUxMDgxfQ.yu2SV3YbVUqylj43pSRzUJIexwkbESoeXxeh68b65qk",
+        "post_url": "https://cafe.naver.com/pusanmommy/1429598",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:31.443+00:00"
+      },
+      {
+        "keyword": "간암수술후회복기간",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1429651",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:17.031+00:00"
+      },
+      {
+        "keyword": "간암에 좋은 음식",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1429531",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:14.757+00:00"
+      },
+      {
+        "keyword": "갑상선암수술",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1445075",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:12.445+00:00"
+      },
+      {
+        "keyword": "고덱스캡슐",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1284188",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:33.567+00:00"
+      },
+      {
+        "keyword": "대장암초기증상 방귀",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1423639",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:46.378+00:00"
+      },
+      {
+        "keyword": "복강경수술",
+        "current_rank": 3,
+        "previous_rank": null,
+        "matched_title": "난소암 복강경 수술 해본분…?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445015?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDUwMTUsImlzc3VlZEF0IjoxNzc2ODY4MzI2NTczfQ.FGxZF1f8JUPpGyla5OEgefbrli2Inzrds1QZ34B4u3w",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445015",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:06.962+00:00"
+      },
+      {
+        "keyword": "설암 초기증상",
+        "current_rank": 5,
+        "previous_rank": 4,
+        "matched_title": "설암 초기증상 백반증에서 1기 발견 수술 후기",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1423515?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MjM1MTUsImlzc3VlZEF0IjoxNzc2ODY4MzcyODE4fQ.K9JEiZCUpy7DWJr4PJCSKPi1f-W1n5wg--IKmP0wwBU",
+        "post_url": "https://cafe.naver.com/pusanmommy/1423515",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:53.058+00:00"
+      },
+      {
+        "keyword": "위암수술비용",
+        "current_rank": 2,
+        "previous_rank": 2,
+        "matched_title": "위암수술비용 복강경 얼마나 나오나요?ㅠ 수술 후 관리는요",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1423647?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MjM2NDcsImlzc3VlZEF0IjoxNzc2ODY4MzY4MTkxfQ.OSktd_eziQsU-I77ltDjes35Lu4kPTFrP1qxnsdR4f8",
+        "post_url": "https://cafe.naver.com/pusanmommy/1423647",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:48.555+00:00"
+      },
+      {
+        "keyword": "유방암수술",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1445133",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:22.054+00:00"
+      },
+      {
+        "keyword": "임핀지주",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1444964",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:57.299+00:00"
+      },
+      {
+        "keyword": "자궁경부암 검사",
+        "current_rank": null,
+        "previous_rank": 8,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1420490",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:32:35.759+00:00"
+      },
+      {
+        "keyword": "자궁경부암 검사 방법",
+        "current_rank": null,
+        "previous_rank": 7,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1423487",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:04.187+00:00"
+      },
+      {
+        "keyword": "지방간 식단",
+        "current_rank": 1,
+        "previous_rank": 1,
+        "matched_title": "지방간 식단 3개월째인데 간수치가 안떨어져요ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1429714?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0Mjk3MTQsImlzc3VlZEF0IjoxNzc2ODY4MzYzODIwfQ.0K21Lwqvm_loEkcqlyahehgiJTc5i84obl5CmLPY1SE",
+        "post_url": "https://cafe.naver.com/pusanmommy/1429714",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:44.285+00:00"
+      },
+      {
+        "keyword": "지방간 약",
+        "current_rank": 11,
+        "previous_rank": 4,
+        "matched_title": "지방간 약 뭐 드세요? UDCA 6개월째 효과없는데..",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1429917?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0Mjk5MTcsImlzc3VlZEF0IjoxNzc2ODY4MzQzOTQ0fQ.95-9UwIVvynnjk49J7c5z4Uj_aRjsN4UcTFJoxXeyLQ",
+        "post_url": "https://cafe.naver.com/pusanmommy/1429917",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:24.44+00:00"
+      },
+      {
+        "keyword": "지방간에 좋은 영양제",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1429687",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:29.133+00:00"
+      },
+      {
+        "keyword": "지방간에좋은음식",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1281591",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:51.01+00:00"
+      },
+      {
+        "keyword": "췌장암 피검사",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1429546",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:09.622+00:00"
+      },
+      {
+        "keyword": "췌장암음식",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1423542",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:37.963+00:00"
+      },
+      {
+        "keyword": "코엔자임Q10 복용시간",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/peopledisc/1282031",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:55.367+00:00"
+      },
+      {
+        "keyword": "타그리소",
+        "current_rank": 8,
+        "previous_rank": null,
+        "matched_title": "타그리소vs렉라자 비소세포폐암 항암…ㅠ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445142?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDUxNDIsImlzc3VlZEF0IjoxNzc2ODY4MzYxODkyfQ.E2igVaS52GFuUv65jRqKQxBzgNUu4wxsrzf_jLRIyyk",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445142",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:42.12+00:00"
+      },
+      {
+        "keyword": "항암중 식단",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1423542",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:40.132+00:00"
+      }
+    ],
+    "솔직한알 질병": [
+      {
+        "keyword": "공복혈당 100",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1447517",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:08.14+00:00"
+      },
+      {
+        "keyword": "공복혈당 105",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "공복혈당 105인데 이러다 당뇨오는거 아닌지..",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1447557?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDc1NTcsImlzc3VlZEF0IjoxNzc2ODY4MzMwMDAxfQ.XsLgyLkz716vYxdWGqplGhL5bX-ypBjqligH0Rs7BW4",
+        "post_url": "https://cafe.naver.com/pusanmommy/1447557",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:10.481+00:00"
+      },
+      {
+        "keyword": "공복혈당 110",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1447568",
+        "is_reply": true,
+        "updated_at": "2026-04-22T14:32:12.7+00:00"
+      },
+      {
+        "keyword": "공복혈당 120",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1447579",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:14.915+00:00"
+      },
+      {
+        "keyword": "공복혈당 125",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "공복혈당 125인데 126 넘으면 당뇨래요ㅜㅜ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1447589?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDc1ODksImlzc3VlZEF0IjoxNzc2ODY4MzM2NzcwfQ.fdEa8i4AcGYtQ0_vvTJ8J40gbSaD5cEQEsfxMYmnfpw",
+        "post_url": "https://cafe.naver.com/pusanmommy/1447589",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:17.14+00:00"
+      },
+      {
+        "keyword": "공복혈당 130",
+        "current_rank": 3,
+        "previous_rank": null,
+        "matched_title": "공복혈당 130 어떡하죠...?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1440639?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDA2MzksImlzc3VlZEF0IjoxNzc2ODY4MzIyMjU2fQ.u02Mlvt0jWCIxvKa90Jz8Npi6-n-YGb1k6vYxmot68M",
+        "post_url": "https://cafe.naver.com/pusanmommy/1440639",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:02.972+00:00"
+      },
+      {
+        "keyword": "공복혈당 140",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1440645",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:05.385+00:00"
+      },
+      {
+        "keyword": "공복혈당 150",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1442061",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:27.766+00:00"
+      },
+      {
+        "keyword": "공복혈당 160",
+        "current_rank": 1,
+        "previous_rank": null,
+        "matched_title": "공복혈당 160 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1442615?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDI2MTUsImlzc3VlZEF0IjoxNzc2ODY4MzcyODk1fQ.tX9ks_IX-X_URol2WVW8vqSc3seTIEZO6ErkWiGYt_w",
+        "post_url": "https://cafe.naver.com/pusanmommy/1442615",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:53.324+00:00"
+      },
+      {
+        "keyword": "공복혈당 170",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "공복혈당 170 약 효과가…",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1442633?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDI2MzMsImlzc3VlZEF0IjoxNzc2ODY4Mzc1MTUzfQ.sDd0pZBsO4d3qRfLLatGn9oWJNvQsfFVpEUryEG6tLw",
+        "post_url": "https://cafe.naver.com/pusanmommy/1442633",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:55.447+00:00"
+      },
+      {
+        "keyword": "공복혈당 180",
+        "current_rank": 1,
+        "previous_rank": null,
+        "matched_title": "공복혈당 180합병증…",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1442667?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDI2NjcsImlzc3VlZEF0IjoxNzc2ODY4Mzc3MjcwfQ.PtZ8YW9oLTRxpFSvm4fa3go16wVcJJJVZLV9j17EY6E",
+        "post_url": "https://cafe.naver.com/pusanmommy/1442667",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:57.609+00:00"
+      },
+      {
+        "keyword": "공복혈당 190",
+        "current_rank": 1,
+        "previous_rank": null,
+        "matched_title": "공복혈당 190 인슐린 주사?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1442677?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDI2NzcsImlzc3VlZEF0IjoxNzc2ODY4MzgxNTEyfQ.PRBhZvEGDIDlneKuy2lpUk-xVAGyG8TH2AFkZuDKFOY",
+        "post_url": "https://cafe.naver.com/pusanmommy/1442677",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:01.826+00:00"
+      },
+      {
+        "keyword": "공복혈당200",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "공복혈당 200 끝난건가요…?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1442714?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDI3MTQsImlzc3VlZEF0IjoxNzc2ODY4MzgzNjYwfQ.dRVt5B675Fx_uuXa3oVrbLSqGbfM3bhXyi5htylwHG4",
+        "post_url": "https://cafe.naver.com/pusanmommy/1442714",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:33:04.017+00:00"
+      },
+      {
+        "keyword": "당화혈 색소 6",
+        "current_rank": 3,
+        "previous_rank": null,
+        "matched_title": "남편 당화혈색소 6인데 거의 당뇨래요ㅜㅜ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445768?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDU3NjgsImlzc3VlZEF0IjoxNzc2ODY4MzYyMDg5fQ.zVzyZhjfhKY97p0BzLOyR_bQ7Ts3r47niQPPn6BmFeY",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445768",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:42.457+00:00"
+      },
+      {
+        "keyword": "당화혈 색소 6.0",
+        "current_rank": 3,
+        "previous_rank": null,
+        "matched_title": "어떡하죠..당화혈색소 6.0",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445764?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDU3NjQsImlzc3VlZEF0IjoxNzc2ODY4MzUzNzc3fQ.OqkcOv-vaAkIkcXFkLEzvOYaQUqEidLFYTbkoqcyuPY",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445764",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:34.075+00:00"
+      },
+      {
+        "keyword": "당화혈 색소 6.1",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1422768",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:19.215+00:00"
+      },
+      {
+        "keyword": "당화혈 색소 6.4",
+        "current_rank": 1,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 6.4 어떡하죠...?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1443259?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDMyNTksImlzc3VlZEF0IjoxNzc2ODY4MzQ1MjY3fQ.aSK1WjM6KJMWGNoBeUbXUagP-jw7jPZBWOiqB4s4LaI",
+        "post_url": "https://cafe.naver.com/pusanmommy/1443259",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:25.497+00:00"
+      },
+      {
+        "keyword": "당화혈 색소 6.5",
+        "current_rank": 4,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 6.5 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1443311?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDMzMTEsImlzc3VlZEF0IjoxNzc2ODY4MzU1OTI5fQ.i91tCCt6XbG7A30SKcdUrI0-3x8juGjiQNheWwvEGAw",
+        "post_url": "https://cafe.naver.com/pusanmommy/1443311",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:36.179+00:00"
+      },
+      {
+        "keyword": "당화혈 색소 6.6",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 6.6 많이 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1443345?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDMzNDUsImlzc3VlZEF0IjoxNzc2ODY4MzU4MDE5fQ.oMp7TKpuizuixJjfarcbqwVwvwJkjS3545soEwAQjbQ",
+        "post_url": "https://cafe.naver.com/pusanmommy/1443345",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:38.235+00:00"
+      },
+      {
+        "keyword": "당화혈색소 6.9",
+        "current_rank": 3,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 6.9 약 먹어야한대요ㅜ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445737?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDU3MzcsImlzc3VlZEF0IjoxNzc2ODY4MzUxNjYyfQ.zRb8N0DqJIW3D3t9b-SqrSY4oekfsviW24l6gFnr4fc",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445737",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:31.941+00:00"
+      },
+      {
+        "keyword": "당화혈색소 7",
+        "current_rank": 6,
+        "previous_rank": null,
+        "matched_title": "남편 당화혈색소 7 약 먹는데도 안떨어져요ㅜㅜ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445804?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDU4MDQsImlzc3VlZEF0IjoxNzc2ODY4MzY4NDcyfQ.UNb0J_slbRIKxU-pIVufxNr6myo7ALp9aeqTX6TbUWo",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445804",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:48.896+00:00"
+      },
+      {
+        "keyword": "당화혈색소5.5",
+        "current_rank": null,
+        "previous_rank": 6,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1427814",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:29.874+00:00"
+      },
+      {
+        "keyword": "당화혈색소5.6",
+        "current_rank": null,
+        "previous_rank": 10,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1427831",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:40.268+00:00"
+      },
+      {
+        "keyword": "당화혈색소5.7",
+        "current_rank": null,
+        "previous_rank": null,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1422083",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:21.282+00:00"
+      },
+      {
+        "keyword": "당화혈색소5.8",
+        "current_rank": null,
+        "previous_rank": 4,
+        "matched_title": null,
+        "matched_url": null,
+        "post_url": "https://cafe.naver.com/pusanmommy/1427837",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:23.405+00:00"
+      },
+      {
+        "keyword": "당화혈색소5.9",
+        "current_rank": 6,
+        "previous_rank": 5,
+        "matched_title": "당화혈색소 5.9 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1420707?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0MjA3MDcsImlzc3VlZEF0IjoxNzc2ODY4Mzc5NDI3fQ.iDOrh-K3Xa8-TVLd769z8Zs_13xjlIpEkYuiRSAdGio",
+        "post_url": "https://cafe.naver.com/pusanmommy/1420707",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:59.674+00:00"
+      },
+      {
+        "keyword": "당화혈색소6.7",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 6.7 위험한가요?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1443394?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDMzOTQsImlzc3VlZEF0IjoxNzc2ODY4MzY0MjM0fQ.pSZwVD8gocNBt1kAhQEYeLLgZA_ujwdu9WovyVzNmHI",
+        "post_url": "https://cafe.naver.com/pusanmommy/1443394",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:44.547+00:00"
+      },
+      {
+        "keyword": "당화혈색소6.8",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 6.8 합병증?",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1443406?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDM0MDYsImlzc3VlZEF0IjoxNzc2ODY4MzY2NDQ2fQ.7fUYJ3AYe1gVJUpbF98AvKeTPwDa1rAMO8TyJpOtZzI",
+        "post_url": "https://cafe.naver.com/pusanmommy/1443406",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:46.712+00:00"
+      },
+      {
+        "keyword": "당화혈색소7.0",
+        "current_rank": 2,
+        "previous_rank": null,
+        "matched_title": "당화혈색소 7.0 약 먹어도 안떨어져요ㅜㅜ",
+        "matched_url": "https://cafe.naver.com/pusanmommy/1445840?art=ZXh0ZXJuYWwtc2VydmljZS1uYXZlci1zZWFyY2gtY2FmZS1wcg.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjYWZlVHlwZSI6IkNBRkVfVVJMIiwiY2FmZVVybCI6InB1c2FubW9tbXkiLCJhcnRpY2xlSWQiOjE0NDU4NDAsImlzc3VlZEF0IjoxNzc2ODY4MzcwNjk2fQ.s3fmyje2rmq1rPWArUtnHosQkif6cMv41T79nwERoEs",
+        "post_url": "https://cafe.naver.com/pusanmommy/1445840",
+        "is_reply": false,
+        "updated_at": "2026-04-22T14:32:51.018+00:00"
+      }
+    ]
+  },
+  "reporter": {
+    "솔직한알": [
+      {
+        "keyword": "알부민환",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/rlpmood/224181709192",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:04.581+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/poextend/224181710775",
+            "current_rank": 8,
+            "previous_rank": 7,
+            "matched_title": "알부민환 성분비교 원물vs복합물 차이 정리",
+            "matched_url": "https://blog.naver.com/poextend/224181710775",
+            "updated_at": "2026-04-22T14:32:06.354+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/ftough/224181712439",
+            "current_rank": 10,
+            "previous_rank": 10,
+            "matched_title": "알부민환 시어머니 선물 후기",
+            "matched_url": "https://blog.naver.com/ftough/224181712439",
+            "updated_at": "2026-04-22T14:32:06.914+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/ulocation/224181723703",
+            "current_rank": 13,
+            "previous_rank": 13,
+            "matched_title": "알부민환 효과없음?",
+            "matched_url": "https://blog.naver.com/ulocation/224181723703",
+            "updated_at": "2026-04-22T14:32:07.438+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/examinem/224181715562",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:07.971+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/stepabg/224181719240",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:09.664+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/oenough/224181717584",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:08.564+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/lwascreen/224181707580",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:09.102+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/nhtforth/224181721327",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:04.008+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/nuannual/224181722549",
+            "current_rank": 7,
+            "previous_rank": 6,
+            "matched_title": "약국에서 추천받은 알부민환 내돈내산 후기",
+            "matched_url": "https://blog.naver.com/nuannual/224181722549",
+            "updated_at": "2026-04-22T14:32:05.153+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "알부민 원물",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/somsail/224195724526",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:12.651+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/ohlcrisis/224195722171",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:13.218+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/diseasegl/224195728887",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:13.753+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/hejdesert/224195720273",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:14.276+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/celebrateno/224244085625",
+            "current_rank": 8,
+            "previous_rank": null,
+            "matched_title": "알부민원물 위암수술 후 직접 알아보고 정리한 후기",
+            "matched_url": "https://blog.naver.com/celebrateno/224244085625",
+            "updated_at": "2026-04-22T14:32:14.831+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/cybcriticize/224244100980",
+            "current_rank": 13,
+            "previous_rank": null,
+            "matched_title": "알부민원물 시아버지 폐렴 입원시 필수템",
+            "matched_url": "https://blog.naver.com/cybcriticize/224244100980",
+            "updated_at": "2026-04-22T14:32:17.067+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/diseasegl/224195728887",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:12.085+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/rdthole/224244089467",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:15.414+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/psfcentral/224244092932",
+            "current_rank": 9,
+            "previous_rank": null,
+            "matched_title": "알부민원물 영양제 가격대비 솔직하게 느낀점",
+            "matched_url": "https://blog.naver.com/psfcentral/224244092932",
+            "updated_at": "2026-04-22T14:32:15.991+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/lprocess/224244096752",
+            "current_rank": 12,
+            "previous_rank": null,
+            "matched_title": "알부민원물 영양제 추천받은 후기",
+            "matched_url": "https://blog.naver.com/lprocess/224244096752",
+            "updated_at": "2026-04-22T14:32:16.524+00:00"
+          }
+        ]
+      }
+    ],
+    "솔직한알 암": [
+      {
+        "keyword": "면역항암제비용",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/yourswfr/224221327520",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:05.44+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/uqmvolume/224221339011",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:04.887+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/relatedxcp/224221334113",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:05.985+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/lmcustom/224221343089",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:06.531+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/capitallie/224221347841",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:07.085+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "위암증상초기통증",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/supplyrnk/224221362081",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:09.627+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/yxjinternet/224221352226",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:10.173+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/etgnasty/224221357718",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:10.693+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "위암초기증상속쓰림",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/peanyway/224221377235",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:13.183+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/ykybody/224221367165",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:13.729+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/predictyhd/224221372412",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:14.281+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "위암초기증상입냄새",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/southqzd/224221386405",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:17.867+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/rqodownstairs/224221391041",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:16.766+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/ukjretirement/224221381665",
+            "current_rank": null,
+            "previous_rank": 14,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:17.32+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "위암초기증상진단",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/externalyg/224221466401",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:20.929+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/restgrb/224221395922",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:21.508+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/grassn/224221400535",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:20.371+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "유방암초기증상5가지",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/auitself/224221481895",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:24.038+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/xiindividual/224221490155",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:24.565+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/speechno/224221471395",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:25.102+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "자궁경부암증상분비물",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/vaguefs/224221503833",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:28.131+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/jqmassist/224221513392",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:28.699+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/armeddgb/224221498191",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:27.603+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "자궁경부암증상초기",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/constantlyptz/224221527848",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:31.299+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/grandwsq/224221538185",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:36.427+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/lhaaverage/224221548229",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:37.349+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "자궁경부암증상출혈",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/jmpsubsequent/224221559415",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:41.171+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/fridgen/224221566820",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:41.769+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/ceasedxj/224221581986",
+            "current_rank": null,
+            "previous_rank": null,
+            "matched_title": null,
+            "matched_url": null,
+            "updated_at": "2026-04-22T14:32:42.493+00:00"
+          }
+        ]
+      },
+      {
+        "keyword": "자궁경부암증상출혈색깔",
+        "entries": [
+          {
+            "blog_url": "https://blog.naver.com/yanvary/224221587317",
+            "current_rank": 8,
+            "previous_rank": 8,
+            "matched_title": "자궁경부암 증상 출혈 색깔이 이상해서 병원 갔어요",
+            "matched_url": "https://blog.naver.com/yanvary/224221587317",
+            "updated_at": "2026-04-22T14:32:45.527+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/hleourselves/224221590978",
+            "current_rank": 11,
+            "previous_rank": 9,
+            "matched_title": "자궁경부암 증상 출혈 색깔 아내가 이상하다고 했어요",
+            "matched_url": "https://blog.naver.com/hleourselves/224221590978",
+            "updated_at": "2026-04-22T14:32:46.061+00:00"
+          },
+          {
+            "blog_url": "https://blog.naver.com/extente/224221593666",
+            "current_rank": 12,
+            "previous_rank": 12,
+            "matched_title": "자궁경부암 증상 출혈 색깔 엄마가 갱년기인줄 아셨어요",
+            "matched_url": "https://blog.naver.com/extente/224221593666",
+            "updated_at": "2026-04-22T14:32:46.597+00:00"
+          }
+        ]
+      }
+    ],
+    "솔직한알 질병": []
+  }
+}

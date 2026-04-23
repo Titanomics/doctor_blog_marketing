@@ -155,14 +155,20 @@
   "hotPaths": [
     {
       "path": "components\\dashboard\\MainPanel.tsx",
-      "accessCount": 42,
-      "lastAccessed": 1776869614310,
+      "accessCount": 43,
+      "lastAccessed": 1776869911561,
       "type": "directory"
     },
     {
       "path": "app\\api\\cafe\\batch-track\\route.ts",
+      "accessCount": 8,
+      "lastAccessed": 1776869913188,
+      "type": "file"
+    },
+    {
+      "path": "app\\api\\daily-batch\\route.ts",
       "accessCount": 7,
-      "lastAccessed": 1776869275529,
+      "lastAccessed": 1776908956277,
       "type": "file"
     },
     {
@@ -176,12 +182,6 @@
       "accessCount": 4,
       "lastAccessed": 1776869027339,
       "type": "directory"
-    },
-    {
-      "path": "app\\api\\daily-batch\\route.ts",
-      "accessCount": 4,
-      "lastAccessed": 1776869320850,
-      "type": "file"
     },
     {
       "path": "app\\api\\keywords\\route.ts",
@@ -218,6 +218,12 @@
       "accessCount": 3,
       "lastAccessed": 1776869398958,
       "type": "directory"
+    },
+    {
+      "path": "app\\api\\cafe\\daily-report\\route.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776908978110,
+      "type": "file"
     },
     {
       "path": "app\\api\\cafe\\clients\\route.ts",
@@ -284,12 +290,6 @@
       "accessCount": 1,
       "lastAccessed": 1776869054923,
       "type": "directory"
-    },
-    {
-      "path": "app\\api\\cafe\\daily-report\\route.ts",
-      "accessCount": 1,
-      "lastAccessed": 1776869061542,
-      "type": "file"
     },
     {
       "path": "lib\\checkCafePostDeleted.ts",

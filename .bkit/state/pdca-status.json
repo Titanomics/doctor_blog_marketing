@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "lastUpdated": "2026-04-22T14:53:33.866Z",
+  "lastUpdated": "2026-04-23T01:49:37.777Z",
   "activeFeatures": [
     "daily-batch",
     "blog_keyword_rank",
@@ -10,7 +10,8 @@
     "keywords",
     "clients",
     "entries",
-    "history"
+    "history",
+    "daily-report"
   ],
   "primaryFeature": "daily-batch",
   "features": {
@@ -23,7 +24,7 @@
       "documents": {},
       "timestamps": {
         "started": "2026-03-29T09:06:41.200Z",
-        "lastUpdated": "2026-04-22T14:48:40.493Z"
+        "lastUpdated": "2026-04-23T01:48:53.180Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\daily-batch\\route.ts"
     },
@@ -130,6 +131,19 @@
         "lastUpdated": "2026-04-22T14:51:04.609Z"
       },
       "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\keywords\\history\\route.ts"
+    },
+    "daily-report": {
+      "phase": "do",
+      "phaseNumber": 3,
+      "matchRate": null,
+      "iterationCount": 0,
+      "requirements": [],
+      "documents": {},
+      "timestamps": {
+        "started": "2026-04-23T01:49:37.775Z",
+        "lastUpdated": "2026-04-23T01:49:37.775Z"
+      },
+      "lastFile": "c:\\Users\\김경록\\Desktop\\test\\blog_keyword_rank\\app\\api\\cafe\\daily-report\\route.ts"
     }
   },
   "pipeline": {
@@ -140,7 +154,7 @@
   "session": {
     "startedAt": "2026-03-29T08:58:00.759Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-04-22T14:53:33.866Z"
+    "lastActivity": "2026-04-23T01:49:37.777Z"
   },
   "history": [
     {
@@ -512,6 +526,18 @@
     {
       "timestamp": "2026-04-22T14:53:33.865Z",
       "feature": "dashboard",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T01:48:53.182Z",
+      "feature": "daily-batch",
+      "phase": "do",
+      "action": "updated"
+    },
+    {
+      "timestamp": "2026-04-23T01:49:37.777Z",
+      "feature": "daily-report",
       "phase": "do",
       "action": "updated"
     }

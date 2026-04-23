@@ -6,10 +6,15 @@ export const dynamic = "force-dynamic";
 // 배치만 실행 (메일은 별도 크론으로 분리)
 // Hobby 플랜 대응: batch-track 부모는 fire-and-forget 자식 후 ~3초 내 응답하므로 await 안전
 export async function GET(request: NextRequest) {
-  // CRON_SECRET 체크 (Vercel Cron은 자동으로 이 헤더를 보냄)
+  // 인증: Vercel Cron(user-agent에 vercel-cron 포함) 또는 CRON_SECRET Bearer 토큰 통과
+  // CRON_SECRET 환경변수가 미설정이면 외부 호출도 허용 (개발/테스트용)
+  const userAgent = request.headers.get("user-agent") || "";
   const auth = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret && auth !== `Bearer ${cronSecret}`) {
+  const isVercelCron = userAgent.includes("vercel-cron");
+  const hasValidSecret = cronSecret && auth === `Bearer ${cronSecret}`;
+  const authorized = isVercelCron || !cronSecret || hasValidSecret;
+  if (!authorized) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

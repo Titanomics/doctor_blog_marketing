@@ -132,10 +132,13 @@ export async function POST(request: NextRequest) {
 }
 
 async function handler(request: NextRequest) {
-  // Vercel Cron 또는 Bearer 토큰 인증
+  // 인증: Vercel Cron(user-agent) 또는 Bearer 토큰. CRON_SECRET 미설정이면 통과
+  const userAgent = request.headers.get("user-agent") || "";
   const auth = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret && auth !== `Bearer ${cronSecret}`) {
+  const isVercelCron = userAgent.includes("vercel-cron");
+  const hasValidSecret = cronSecret && auth === `Bearer ${cronSecret}`;
+  if (!isVercelCron && cronSecret && !hasValidSecret) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
