@@ -13,21 +13,26 @@ import { test, expect } from "@playwright/test";
 
 const CRON_SECRET = process.env.TEST_CRON_SECRET ?? "test-secret";
 
+// 파괴적 테스트 가드:
+// daily-batch GET 200 응답은 실제 배치를 트리거 (네이버 크롤링 + DB 갱신).
+// Vercel 프로덕션 URL 대상 시 운영 데이터에 영향 → 격리 환경에서만 실행
+// 활성화: E2E_ALLOW_DESTRUCTIVE=1
+const ALLOW_DESTRUCTIVE = process.env.E2E_ALLOW_DESTRUCTIVE === "1";
+
 test.describe("/api/daily-batch — 인증 정책", () => {
-  test("Vercel Cron user-agent → 200", async ({ request }) => {
+  test("Vercel Cron user-agent → 200 (DESTRUCTIVE)", async ({ request }) => {
+    test.skip(!ALLOW_DESTRUCTIVE, "실제 배치 트리거. E2E_ALLOW_DESTRUCTIVE=1 + 격리 환경에서만 실행");
     const res = await request.get("/api/daily-batch", {
       headers: { "user-agent": "vercel-cron/1.0" },
     });
-    // 200 또는 (인증은 통과했지만 부모 호출 실패 시) 200 with batches
     expect([200]).toContain(res.status());
     const body = await res.json();
     expect(body).toHaveProperty("success");
     expect(body).toHaveProperty("batches");
   });
 
-  test("Bearer CRON_SECRET → 200 또는 401 (TEST_CRON_SECRET 매칭 시 200)", async ({ request }) => {
-    // 서버 .env.local의 CRON_SECRET과 테스트 환경 TEST_CRON_SECRET이 동일해야 200
-    // 그 외에는 401이 정상
+  test("Bearer CRON_SECRET → 200/401 (TEST_CRON_SECRET 매칭+DESTRUCTIVE 시 실배치)", async ({ request }) => {
+    test.skip(!ALLOW_DESTRUCTIVE, "TEST_CRON_SECRET이 실제 시크릿과 매칭되면 실배치 트리거");
     const res = await request.get("/api/daily-batch", {
       headers: { authorization: `Bearer ${CRON_SECRET}` },
     });
