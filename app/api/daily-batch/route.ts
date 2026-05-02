@@ -6,15 +6,34 @@ export const dynamic = "force-dynamic";
 // 배치만 실행 (메일은 별도 크론으로 분리)
 // Hobby 플랜 대응: batch-track 부모는 fire-and-forget 자식 후 ~3초 내 응답하므로 await 안전
 export async function GET(request: NextRequest) {
-  // 인증: Vercel Cron(user-agent에 vercel-cron 포함) 또는 CRON_SECRET Bearer 토큰 통과
-  // CRON_SECRET 환경변수가 미설정이면 외부 호출도 허용 (개발/테스트용)
+  // 인증 정책 (프로덕션 강화):
+  // 1) Vercel Cron이 호출 (user-agent에 'vercel-cron' 포함) → 통과
+  // 2) Authorization: Bearer <CRON_SECRET> → 통과
+  // 3) NODE_ENV=development 이고 CRON_SECRET 미설정 → 통과 (개발 편의)
+  // 그 외 (프로덕션에서 CRON_SECRET 미설정 포함) → 401 거부 + 로깅
   const userAgent = request.headers.get("user-agent") || "";
   const auth = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
+  const isDev = process.env.NODE_ENV === "development";
+
   const isVercelCron = userAgent.includes("vercel-cron");
-  const hasValidSecret = cronSecret && auth === `Bearer ${cronSecret}`;
-  const authorized = isVercelCron || !cronSecret || hasValidSecret;
+  const hasValidSecret = !!cronSecret && auth === `Bearer ${cronSecret}`;
+  const devFallback = isDev && !cronSecret;
+
+  const authorized = isVercelCron || hasValidSecret || devFallback;
+
   if (!authorized) {
+    if (!cronSecret && !isDev) {
+      console.error(
+        "[daily-batch] AUTH-FAIL: CRON_SECRET이 프로덕션에 미설정. 외부 호출 거부 (DoS 방지).",
+        { ua: userAgent.slice(0, 80) }
+      );
+    } else {
+      console.warn(
+        "[daily-batch] AUTH-FAIL: 인증 실패",
+        { ua: userAgent.slice(0, 80), hasAuthHeader: !!auth }
+      );
+    }
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

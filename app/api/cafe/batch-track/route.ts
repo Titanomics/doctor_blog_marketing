@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { parseViewSection, parseSmartBlocks, parseReplies } from "@/lib/parseNaver";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
-import { checkCafePostDeleted } from "@/lib/checkCafePostDeleted";
+import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
 
 export const maxDuration = 300;
 
@@ -19,7 +19,7 @@ async function processClient(client: { id: string; name: string }) {
 
   const { data: keywords, error: kwError } = await supabase
     .from("cafe_keywords")
-    .select("id, keyword, current_rank, post_url, post_title, is_reply, reply_since")
+    .select("id, keyword, current_rank, post_url, post_title, is_reply, reply_since, matched_title")
     .eq("client_id", client.id);
 
   if (kwError || !keywords) return { updated, errors };
@@ -87,25 +87,39 @@ async function processClient(client: { id: string; name: string }) {
       const isReply = !!foundInReply && !found && !foundInSmartBlock;
 
       // 꼬리글 상태 전환 로직
+      // - 새로 꼬리글 진입: reply_since를 현재 시각으로 기록
+      // - 꼬리글 유지: 기존 reply_since 보존
+      // - 꼬리글에서 빠져나오거나 처음부터 일반: reply_since를 null로 리셋
       let replySince = kw.reply_since;
       if (isReply && !kw.is_reply) {
         replySince = new Date().toISOString();
-      } else if (!isReply && !kw.is_reply) {
+      } else if (!isReply) {
         replySince = null;
       }
 
-      // 어디에서도 못 찾고 특정 게시글 URL이 있으면 삭제 여부 확인
-      let postDeleted = false;
-      if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply && kw.post_url) {
-        postDeleted = await checkCafePostDeleted(kw.post_url);
+      // 어디에서도 못 찾고 특정 게시글 URL이 있으면 게시글 상태 확인 (정규화된 URL)
+      let postStatus: CafePostStatus | null = null;
+      if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply && normalizedPostUrl) {
+        postStatus = await getCafePostStatus(normalizedPostUrl);
       }
+
+      // 삭제표시 유지 조건 (3-state 기반):
+      // - 'deleted' 명시 확인  → 항상 표시 (자동/수동 무관)
+      // - 'alive' 명시 확인    → 명시적 갱신 (보존하지 않음)
+      // - 'unknown' or 검사 안함 + 매칭 실패 + 기존 표시 → 보존
+      //   ('unknown'은 일시적 API 장애 가능성, 수동 토글 가능성 모두 흡수)
+      const wasMarkedDeleted = kw.matched_title === "[삭제된 게시글]";
+      const noMatchFound = !found && !foundInSmartBlock && !foundInReply;
+      const keepDeletedMark =
+        postStatus === "deleted" ||
+        (postStatus !== "alive" && noMatchFound && wasMarkedDeleted);
 
       const { error: updateError } = await supabase
         .from("cafe_keywords")
         .update({
           previous_rank: kw.current_rank,
           current_rank: newRank,
-          matched_title: postDeleted
+          matched_title: keepDeletedMark
             ? "[삭제된 게시글]"
             : (found?.title ?? foundInSmartBlock?.title ?? null),
           matched_url:

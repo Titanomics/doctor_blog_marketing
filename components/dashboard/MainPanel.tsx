@@ -190,19 +190,31 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
 
       const isReply = !!data.foundInReply && !data.found && !data.foundInSmartBlock;
       const cafeKw = kw as CafeKeyword;
+      // 꼬리글 진입 시 시각 기록, 빠져나오면 null 리셋, 유지 중에는 보존
       let replySince = cafeKw.reply_since ?? null;
       if (isReply && !cafeKw.is_reply) {
         replySince = new Date().toISOString();
-      } else if (!isReply && !cafeKw.is_reply) {
+      } else if (!isReply) {
         replySince = null;
       }
 
-      const isDeleted = !isBlog && data.postDeleted === true;
+      // 삭제 표시 유지 조건 (cafe/batch-track과 동일):
+      // - 'deleted' 명시 확인 → 표시
+      // - 'alive' 명시 확인 → 명시적 갱신
+      // - 'unknown' / 검사 안함 + 매칭 실패 + 기존 표시 → 보존 (수동 토글/일시 API 장애 흡수)
+      const postStatus: "deleted" | "alive" | "unknown" | null = data.postStatus ?? null;
+      const wasMarkedDeleted = !isBlog && kw.matched_title === "[삭제된 게시글]";
+      const noMatchFound = !data.found && !data.foundInSmartBlock && !data.foundInReply;
+      const keepDeletedMark =
+        !isBlog &&
+        (postStatus === "deleted" ||
+          (postStatus !== "alive" && noMatchFound && wasMarkedDeleted));
+
       const patchBody: Record<string, unknown> = {
         id: kw.id,
         previous_rank: kw.current_rank,
         current_rank: data.foundRank ?? null,
-        matched_title: isDeleted
+        matched_title: keepDeletedMark
           ? "[삭제된 게시글]"
           : (data.found?.title ?? data.foundInSmartBlock?.title ?? null),
         matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,

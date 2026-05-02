@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseViewSection, parseSmartBlocks, parseReplies } from "@/lib/parseNaver";
 import type { ViewResult, SmartBlockResult, ReplyResult } from "@/lib/parseNaver";
-import { checkCafePostDeleted } from "@/lib/checkCafePostDeleted";
+import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
 
 interface CafeSearchApiResponse {
   results: ViewResult[];
@@ -11,7 +11,8 @@ interface CafeSearchApiResponse {
   foundInSmartBlock: SmartBlockResult | null;
   replyResults: ReplyResult[];
   foundInReply: ReplyResult | null;
-  postDeleted: boolean;
+  postDeleted: boolean; // 하위 호환: 'deleted' 상태일 때만 true
+  postStatus: CafePostStatus | null; // null = 검사 미수행
 }
 
 export async function GET(request: NextRequest) {
@@ -57,15 +58,16 @@ export async function GET(request: NextRequest) {
     let foundInSmartBlock: SmartBlockResult | null = null;
     let foundInReply: ReplyResult | null = null;
 
+    // 정규화된 postUrl: 모바일 도메인을 데스크톱으로 통일
+    const normalizedPostUrl = postUrl
+      ? postUrl.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
+      : null;
+    // 특정 게시글 URL(숫자 ID 포함) 판정은 정규화된 값으로
+    const hasSpecificPostId = !!(normalizedPostUrl && /\/\d+/.test(normalizedPostUrl));
+
     if (postUrl || postTitle) {
       const normalize = (link: string) =>
         link.replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com");
-      const normalizedPostUrl = postUrl
-        ? postUrl.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
-        : null;
-
-      // 특정 게시글 URL(숫자 ID 포함)이 있으면 URL로만 매칭
-      const hasSpecificPostId = normalizedPostUrl && /\/\d+/.test(normalizedPostUrl);
 
       const match = (r: { link: string; title?: string }) => {
         const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
@@ -92,12 +94,12 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // 특정 게시글 URL이 있고, 어디에서도 못 찾은 경우 → 삭제 여부 확인
-    let postDeleted = false;
-    const hasSpecificPostId = postUrl && /\/\d+/.test(postUrl);
-    if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply) {
-      postDeleted = await checkCafePostDeleted(postUrl);
+    // 특정 게시글 URL이 있고, 어디에서도 못 찾은 경우 → 게시글 상태 확인
+    let postStatus: CafePostStatus | null = null;
+    if (hasSpecificPostId && normalizedPostUrl && !found && !foundInSmartBlock && !foundInReply) {
+      postStatus = await getCafePostStatus(normalizedPostUrl);
     }
+    const postDeleted = postStatus === "deleted";
 
     const responseData: CafeSearchApiResponse = {
       results,
@@ -108,6 +110,7 @@ export async function GET(request: NextRequest) {
       replyResults,
       foundInReply,
       postDeleted,
+      postStatus,
     };
 
     return NextResponse.json(responseData);
