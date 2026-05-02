@@ -8,6 +8,7 @@ export const maxDuration = 300;
 
 const CONCURRENCY = 3;
 const GROUP_DELAY_MS = 200;
+const CHUNK_SIZE = 40;
 // (legacy DELAY_MS는 sleep 호출에서 GROUP_DELAY_MS로 대체됨)
 
 function sleep(ms: number) {
@@ -80,14 +81,26 @@ async function processKeyword(
 }
 
 // 단일 클라이언트 키워드 처리 — concurrency CONCURRENCY 그룹 병렬
-async function processClient(client: { id: string; name: string; blog_url: string }) {
+// offset/limit이 주어지면 해당 chunk만 처리 (chunk fan-out 모드)
+async function processClient(
+  client: { id: string; name: string; blog_url: string },
+  offset = 0,
+  limit?: number
+) {
   let updated = 0;
   const errors: string[] = [];
 
-  const { data: keywords, error: kwError } = await supabase
+  let query = supabase
     .from("keywords")
     .select("id, keyword, current_rank")
-    .eq("client_id", client.id);
+    .eq("client_id", client.id)
+    .order("id", { ascending: true });
+
+  if (limit !== undefined && limit > 0) {
+    query = query.range(offset, offset + limit - 1);
+  }
+
+  const { data: keywords, error: kwError } = await query;
 
   if (kwError || !keywords) return { updated, errors };
 
@@ -105,10 +118,33 @@ async function processClient(client: { id: string; name: string; blog_url: strin
 }
 
 async function handler(request: NextRequest) {
-  const clientId = request.nextUrl.searchParams.get("clientId");
+  const sp = request.nextUrl.searchParams;
+  const clientId = sp.get("clientId");
+  const offsetParam = sp.get("offset");
+  const limitParam = sp.get("limit");
 
   try {
-    // clientId가 있으면 해당 클라이언트만 처리 (수동 새로고침 / 팬아웃)
+    // chunk 모드
+    if (clientId && offsetParam !== null && limitParam !== null) {
+      const offset = parseInt(offsetParam, 10);
+      const limit = parseInt(limitParam, 10);
+      const { data: client } = await supabase
+        .from("clients")
+        .select("id, name, blog_url")
+        .eq("id", clientId)
+        .single();
+      if (!client) {
+        return NextResponse.json({ error: "병원을 찾을 수 없습니다." }, { status: 404 });
+      }
+      const result = await processClient(client, offset, limit);
+      return NextResponse.json({
+        message: `[${client.name}] chunk(offset=${offset}, limit=${limit}) ${result.updated}개 갱신`,
+        updated: result.updated,
+        errors: result.errors,
+      });
+    }
+
+    // per-client 모드 (수동 새로고침 / 팬아웃) — 큰 client는 chunk fan-out 자동 분할
     if (clientId) {
       const { data: client } = await supabase
         .from("clients")
@@ -120,11 +156,41 @@ async function handler(request: NextRequest) {
         return NextResponse.json({ error: "병원을 찾을 수 없습니다." }, { status: 404 });
       }
 
-      const result = await processClient(client);
+      const { count } = await supabase
+        .from("keywords")
+        .select("*", { count: "exact", head: true })
+        .eq("client_id", clientId);
+      const total = count ?? 0;
+
+      if (total <= CHUNK_SIZE) {
+        const result = await processClient(client);
+        return NextResponse.json({
+          message: `${result.updated}개 키워드 순위 업데이트 완료`,
+          updated: result.updated,
+          errors: result.errors,
+        });
+      }
+
+      const baseUrl = request.nextUrl.origin;
+      const numChunks = Math.ceil(total / CHUNK_SIZE);
+
+      after(async () => {
+        for (let off = 0; off < total; off += CHUNK_SIZE) {
+          try {
+            await fetch(
+              `${baseUrl}/api/batch-track?clientId=${clientId}&offset=${off}&limit=${CHUNK_SIZE}`,
+              { method: "POST" }
+            );
+          } catch (err) {
+            console.error(`[batch-track] chunk fan-out 실패 offset=${off}:`, err);
+          }
+        }
+      });
+
       return NextResponse.json({
-        message: `${result.updated}개 키워드 순위 업데이트 완료`,
-        updated: result.updated,
-        errors: result.errors,
+        message: `[${client.name}] ${total}개 키워드 ${numChunks}개 chunk 분할 처리 시작 (after fan-out)`,
+        total,
+        chunks: numChunks,
       });
     }
 
