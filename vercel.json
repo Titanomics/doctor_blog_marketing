@@ -1,4 +1,1 @@
-{
-  "_comment_crons": "Hobby 플랜의 cron은 best-effort라 누락 발생(4/29 이후 4일 연속 미실행). 외부 cron(cron-job.org)으로 전환. docs/cron-setup.md 참조.",
-  "crons": []
-}
+{}
