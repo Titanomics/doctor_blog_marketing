@@ -7,13 +7,12 @@ import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDelet
 
 export const maxDuration = 300;
 
-// per-client 키워드 처리 동시성 (네이버 차단 회피용으로 보수적)
-const CONCURRENCY = 3;
-// 동시 그룹 간 인터벌 (단일 키워드는 stagger됨)
-const GROUP_DELAY_MS = 200;
-// chunk 임계: 키워드 수가 이보다 크면 chunk fan-out으로 분할 (maxDuration 안전 마진)
-const CHUNK_SIZE = 40;
-// chunk fan-out 동시 발사 제한 (네이버 차단 회피 + 자식 콜드스타트 분산)
+// 키워드당 10초 간격 (B안: chunk 3창구 동시 × 창구 안은 1개씩 10초)
+// 네이버 입장 0.3 req/s = 사람 검색과 동일 수준 → 차단 거의 0%
+const KEYWORD_DELAY_MS = 10000;
+// chunk 자식 maxDuration(300s) 보호: 20 키워드 × 10초 = 200s
+const CHUNK_SIZE = 20;
+// chunk fan-out 동시 발사 (창구 3개)
 const CHUNK_PARALLEL = 3;
 
 function sleep(ms: number) {
@@ -164,14 +163,12 @@ async function processClient(
 
   if (kwError || !keywords) return { updated, errors };
 
-  for (let i = 0; i < keywords.length; i += CONCURRENCY) {
-    const chunk = keywords.slice(i, i + CONCURRENCY);
-    const results = await Promise.all(chunk.map((kw) => processKeyword(client, kw)));
-    for (const r of results) {
-      if (r.ok) updated++;
-      else if (r.error) errors.push(r.error);
-    }
-    if (i + CONCURRENCY < keywords.length) await sleep(GROUP_DELAY_MS);
+  // 키워드당 10초 간격 — 네이버 차단 회피
+  for (let i = 0; i < keywords.length; i++) {
+    const r = await processKeyword(client, keywords[i]);
+    if (r.ok) updated++;
+    else if (r.error) errors.push(r.error);
+    if (i < keywords.length - 1) await sleep(KEYWORD_DELAY_MS);
   }
 
   return { updated, errors };

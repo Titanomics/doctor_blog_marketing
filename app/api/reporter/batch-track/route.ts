@@ -6,9 +6,9 @@ import { saveReporterHistory } from "@/lib/saveReporterHistory";
 
 export const maxDuration = 300;
 
-const CONCURRENCY = 3;
-const GROUP_DELAY_MS = 200;
-const CHUNK_SIZE = 40;
+// 키워드당 10초 간격 (B안)
+const KEYWORD_DELAY_MS = 10000;
+const CHUNK_SIZE = 20;
 const CHUNK_PARALLEL = 3;
 
 function sleep(ms: number) {
@@ -111,14 +111,12 @@ async function processClient(
 
   if (kwError || !keywords) return { updated, errors };
 
-  for (let i = 0; i < keywords.length; i += CONCURRENCY) {
-    const chunk = keywords.slice(i, i + CONCURRENCY);
-    const results = await Promise.all(chunk.map((kw) => processKeyword(client, kw)));
-    for (const r of results) {
-      updated += r.updated;
-      errors.push(...r.errors);
-    }
-    if (i + CONCURRENCY < keywords.length) await sleep(GROUP_DELAY_MS);
+  // 키워드당 10초 간격
+  for (let i = 0; i < keywords.length; i++) {
+    const r = await processKeyword(client, keywords[i]);
+    updated += r.updated;
+    errors.push(...r.errors);
+    if (i < keywords.length - 1) await sleep(KEYWORD_DELAY_MS);
   }
 
   return { updated, errors };
