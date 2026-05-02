@@ -31,8 +31,9 @@ export async function getCafePostStatus(postUrl: string): Promise<CafePostStatus
         // 404인데 4003이 아닌 다른 errorCode → 보수적으로 unknown
         return "unknown";
       } catch {
-        // 404 + JSON 파싱 실패 → 게시글 없음 강한 신호로 deleted
-        return "deleted";
+        // 404 + JSON 파싱 실패 → WAF/Cloudflare 빈 응답 등 모호한 케이스 → unknown
+        // (이전엔 'deleted' 단정했으나 false-positive 누적 위험으로 변경)
+        return "unknown";
       }
     }
 

@@ -132,21 +132,16 @@ export async function POST(request: NextRequest) {
 }
 
 async function handler(request: NextRequest) {
-  // 인증 정책 (daily-batch와 동일):
-  // 1) Vercel Cron user-agent 통과
-  // 2) Bearer CRON_SECRET 통과
-  // 3) NODE_ENV=development AND CRON_SECRET 미설정 → 통과
-  // 그 외 (production + CRON_SECRET 미설정 포함) → 401 + 로깅
+  // 인증 정책 (Bearer 단일화 — UA 위조 우회 차단, daily-batch와 동일):
   const userAgent = request.headers.get("user-agent") || "";
   const auth = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
   const isDev = process.env.NODE_ENV === "development";
 
-  const isVercelCron = userAgent.includes("vercel-cron");
   const hasValidSecret = !!cronSecret && auth === `Bearer ${cronSecret}`;
   const devFallback = isDev && !cronSecret;
 
-  const authorized = isVercelCron || hasValidSecret || devFallback;
+  const authorized = hasValidSecret || devFallback;
 
   if (!authorized) {
     if (!cronSecret && !isDev) {

@@ -293,11 +293,41 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     return diff > 0 ? `${Math.ceil(diff / 60000)}분 후 가능` : "";
   })();
 
+  // 키워드 수가 임계 이상이면 서버 batch-track으로 위임 (브라우저 잠금 방지)
+  const SERVER_DELEGATE_THRESHOLD = 20;
+
   const handleBatchRefresh = async () => {
-    if (batchCooldown) return;
+    if (!client || batchCooldown) return;
     setLastBatchTime(Date.now());
     setBatchLoading(true);
     setBatchMessage("");
+
+    // 큰 client: 서버 위임 (chunk fan-out 자동)
+    if (keywords.length > SERVER_DELEGATE_THRESHOLD) {
+      const batchEndpoint = isBlog ? "/api/batch-track" : "/api/cafe/batch-track";
+      try {
+        setBatchMessage(`서버에 갱신 요청 중 (${keywords.length}개)...`);
+        const res = await fetch(`${batchEndpoint}?clientId=${client.id}`, { method: "POST" });
+        if (res.ok) {
+          const data = await res.json();
+          setBatchMessage(`${data.message ?? "서버 갱신 시작"} — 1~3분 후 자동 새로고침`);
+          // 백엔드가 비동기로 처리하므로 충분한 대기 후 새로고침
+          setTimeout(() => {
+            fetchKeywords();
+            setBatchMessage(`${keywords.length}개 갱신 완료 (서버 처리)`);
+          }, 90_000);
+        } else {
+          setBatchMessage(`서버 위임 실패: HTTP ${res.status}`);
+        }
+      } catch (err) {
+        setBatchMessage(`서버 위임 오류: ${err instanceof Error ? err.message : String(err)}`);
+      } finally {
+        setBatchLoading(false);
+      }
+      return;
+    }
+
+    // 작은 client: 기존 직렬 패턴 (UI 진행 표시 유리)
     let completed = 0;
     let failed = 0;
     try {

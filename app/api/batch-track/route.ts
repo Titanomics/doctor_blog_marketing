@@ -9,6 +9,7 @@ export const maxDuration = 300;
 const CONCURRENCY = 3;
 const GROUP_DELAY_MS = 200;
 const CHUNK_SIZE = 40;
+const CHUNK_PARALLEL = 3;
 // (legacy DELAY_MS는 sleep 호출에서 GROUP_DELAY_MS로 대체됨)
 
 function sleep(ms: number) {
@@ -187,17 +188,40 @@ async function handler(request: NextRequest) {
       for (let off = 0; off < total; off += CHUNK_SIZE) chunkOffsets.push(off);
 
       after(async () => {
-        await Promise.allSettled(
-          chunkOffsets.map(async (off) => {
-            try {
-              await fetch(
+        let succeeded = 0;
+        let failed = 0;
+        const failedDetails: string[] = [];
+
+        for (let i = 0; i < chunkOffsets.length; i += CHUNK_PARALLEL) {
+          const group = chunkOffsets.slice(i, i + CHUNK_PARALLEL);
+          const results = await Promise.allSettled(
+            group.map((off) =>
+              fetch(
                 `${baseUrl}/api/batch-track?clientId=${clientId}&offset=${off}&limit=${CHUNK_SIZE}`,
                 { method: "POST" }
-              );
-            } catch (err) {
-              console.error(`[batch-track] chunk fan-out 실패 offset=${off}:`, err);
+              ).then(async (res) => {
+                if (!res.ok) throw new Error(`chunk offset=${off} → HTTP ${res.status}`);
+                return res.json();
+              })
+            )
+          );
+          results.forEach((r) => {
+            if (r.status === "fulfilled") succeeded++;
+            else {
+              failed++;
+              failedDetails.push(String(r.reason));
             }
-          })
+          });
+        }
+
+        if (failed > 0) {
+          console.error(
+            `[batch-track] chunk fan-out: ${failed}/${chunkOffsets.length} 실패`,
+            failedDetails
+          );
+        }
+        console.log(
+          `[batch-track] chunk fan-out 완료: ${succeeded}/${chunkOffsets.length} client=${clientId}`
         );
       });
 

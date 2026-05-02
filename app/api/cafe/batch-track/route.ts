@@ -13,6 +13,8 @@ const CONCURRENCY = 3;
 const GROUP_DELAY_MS = 200;
 // chunk 임계: 키워드 수가 이보다 크면 chunk fan-out으로 분할 (maxDuration 안전 마진)
 const CHUNK_SIZE = 40;
+// chunk fan-out 동시 발사 제한 (네이버 차단 회피 + 자식 콜드스타트 분산)
+const CHUNK_PARALLEL = 3;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -245,22 +247,45 @@ async function handler(request: NextRequest) {
       const baseUrl = request.nextUrl.origin;
       const numChunks = Math.ceil(total / CHUNK_SIZE);
 
-      // chunk fan-out 병렬 처리 (각 fetch는 즉시 응답, 자식은 별도 함수로 백그라운드 실행)
+      // chunk fan-out: CHUNK_PARALLEL 동시성 제한 + 결과 검사 + 실패 로깅
       const chunkOffsets: number[] = [];
       for (let off = 0; off < total; off += CHUNK_SIZE) chunkOffsets.push(off);
 
       after(async () => {
-        await Promise.allSettled(
-          chunkOffsets.map(async (off) => {
-            try {
-              await fetch(
+        let succeeded = 0;
+        let failed = 0;
+        const failedDetails: string[] = [];
+
+        for (let i = 0; i < chunkOffsets.length; i += CHUNK_PARALLEL) {
+          const group = chunkOffsets.slice(i, i + CHUNK_PARALLEL);
+          const results = await Promise.allSettled(
+            group.map((off) =>
+              fetch(
                 `${baseUrl}/api/cafe/batch-track?clientId=${clientId}&offset=${off}&limit=${CHUNK_SIZE}`,
                 { method: "POST" }
-              );
-            } catch (err) {
-              console.error(`[cafe/batch-track] chunk fan-out 실패 offset=${off}:`, err);
+              ).then(async (res) => {
+                if (!res.ok) throw new Error(`chunk offset=${off} → HTTP ${res.status}`);
+                return res.json();
+              })
+            )
+          );
+          results.forEach((r) => {
+            if (r.status === "fulfilled") succeeded++;
+            else {
+              failed++;
+              failedDetails.push(String(r.reason));
             }
-          })
+          });
+        }
+
+        if (failed > 0) {
+          console.error(
+            `[cafe/batch-track] chunk fan-out: ${failed}/${chunkOffsets.length} 실패`,
+            failedDetails
+          );
+        }
+        console.log(
+          `[cafe/batch-track] chunk fan-out 완료: ${succeeded}/${chunkOffsets.length} client=${clientId}`
         );
       });
 
