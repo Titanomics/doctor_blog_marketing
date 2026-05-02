@@ -6,10 +6,11 @@ import { saveReporterHistory } from "@/lib/saveReporterHistory";
 
 export const maxDuration = 300;
 
-// 키워드당 10초 간격 (B안)
+// 키워드당 10초 간격 (체인 패턴)
 const KEYWORD_DELAY_MS = 10000;
 const CHUNK_SIZE = 20;
-const CHUNK_PARALLEL = 3;
+const SYNC_THRESHOLD = 10;
+const FETCH_TIMEOUT_MS = 8000;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -33,14 +34,22 @@ async function processKeyword(
     const encodedKeyword = encodeURIComponent(kw.keyword);
     const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
 
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "Accept-Language": "ko-KR,ko;q=0.9",
-      },
-      cache: "no-store",
-    });
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
+    let response: Response;
+    try {
+      response = await fetch(url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+          "Accept-Language": "ko-KR,ko;q=0.9",
+        },
+        cache: "no-store",
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeoutId);
+    }
 
     if (!response.ok) {
       errors.push(`[${client.name}] "${kw.keyword}" 네이버 검색 실패 (${response.status})`);
@@ -129,15 +138,23 @@ async function handler(request: NextRequest) {
   const limitParam = sp.get("limit");
 
   try {
-    // chunk 모드
+    // chunk 모드 (체인): clientId + offset + limit + total
     if (clientId && offsetParam !== null && limitParam !== null) {
       const offset = parseInt(offsetParam, 10);
       const limit = parseInt(limitParam, 10);
+      const totalParam = sp.get("total");
+      const totalForChain = totalParam !== null ? parseInt(totalParam, 10) : 0;
 
-      // NaN/음수/과대값 가드 (m2)
-      if (!Number.isFinite(offset) || !Number.isFinite(limit) || offset < 0 || limit <= 0 || limit > 1000) {
+      // NN2: limit > CHUNK_SIZE 차단
+      if (
+        !Number.isFinite(offset) ||
+        !Number.isFinite(limit) ||
+        offset < 0 ||
+        limit <= 0 ||
+        limit > CHUNK_SIZE
+      ) {
         return NextResponse.json(
-          { error: "offset(>=0) / limit(>0, <=1000) 정수 필수" },
+          { error: `offset(>=0) / limit(>0, <=${CHUNK_SIZE}) 정수 필수` },
           { status: 400 }
         );
       }
@@ -151,14 +168,32 @@ async function handler(request: NextRequest) {
         return NextResponse.json({ error: "브랜드를 찾을 수 없습니다." }, { status: 404 });
       }
       const result = await processClient(client, offset, limit);
+
+      // 체인: 다음 chunk trigger
+      const nextOffset = offset + limit;
+      const baseUrl = request.nextUrl.origin;
+      if (totalForChain > 0 && nextOffset < totalForChain) {
+        after(async () => {
+          try {
+            await fetch(
+              `${baseUrl}/api/reporter/batch-track?clientId=${clientId}&offset=${nextOffset}&limit=${limit}&total=${totalForChain}`,
+              { method: "POST" }
+            );
+          } catch (err) {
+            console.error(`[reporter/batch-track] 체인 trigger 실패 nextOffset=${nextOffset}:`, err);
+          }
+        });
+      }
+
       return NextResponse.json({
-        message: `[${client.name}] chunk(offset=${offset}, limit=${limit}) ${result.updated}개 갱신`,
+        message: `[${client.name}] chunk(offset=${offset}, limit=${limit}) ${result.updated}개 갱신, next=${nextOffset < totalForChain ? nextOffset : "done"}`,
         updated: result.updated,
         errors: result.errors,
+        nextOffset: nextOffset < totalForChain ? nextOffset : null,
       });
     }
 
-    // per-client 모드 — 키워드 수가 임계 이상이면 chunk fan-out
+    // per-client 모드: 작은 client 동기, 큰 client는 chunk 체인 시작
     if (clientId) {
       const { data: client } = await supabase
         .from("cafe_clients")
@@ -176,7 +211,7 @@ async function handler(request: NextRequest) {
         .eq("client_id", clientId);
       const total = count ?? 0;
 
-      if (total <= CHUNK_SIZE) {
+      if (total <= SYNC_THRESHOLD) {
         const result = await processClient(client);
         return NextResponse.json({
           message: `${result.updated}개 블로그기자단 순위 업데이트 완료`,
@@ -188,49 +223,19 @@ async function handler(request: NextRequest) {
       const baseUrl = request.nextUrl.origin;
       const numChunks = Math.ceil(total / CHUNK_SIZE);
 
-      const chunkOffsets: number[] = [];
-      for (let off = 0; off < total; off += CHUNK_SIZE) chunkOffsets.push(off);
-
       after(async () => {
-        let succeeded = 0;
-        let failed = 0;
-        const failedDetails: string[] = [];
-
-        for (let i = 0; i < chunkOffsets.length; i += CHUNK_PARALLEL) {
-          const group = chunkOffsets.slice(i, i + CHUNK_PARALLEL);
-          const results = await Promise.allSettled(
-            group.map((off) =>
-              fetch(
-                `${baseUrl}/api/reporter/batch-track?clientId=${clientId}&offset=${off}&limit=${CHUNK_SIZE}`,
-                { method: "POST" }
-              ).then(async (res) => {
-                if (!res.ok) throw new Error(`chunk offset=${off} → HTTP ${res.status}`);
-                return res.json();
-              })
-            )
+        try {
+          await fetch(
+            `${baseUrl}/api/reporter/batch-track?clientId=${clientId}&offset=0&limit=${CHUNK_SIZE}&total=${total}`,
+            { method: "POST" }
           );
-          results.forEach((r) => {
-            if (r.status === "fulfilled") succeeded++;
-            else {
-              failed++;
-              failedDetails.push(String(r.reason));
-            }
-          });
+        } catch (err) {
+          console.error(`[reporter/batch-track] 체인 시작 실패 client=${clientId}:`, err);
         }
-
-        if (failed > 0) {
-          console.error(
-            `[reporter/batch-track] chunk fan-out: ${failed}/${chunkOffsets.length} 실패`,
-            failedDetails
-          );
-        }
-        console.log(
-          `[reporter/batch-track] chunk fan-out 완료: ${succeeded}/${chunkOffsets.length} client=${clientId}`
-        );
       });
 
       return NextResponse.json({
-        message: `[${client.name}] ${total}개 키워드 ${numChunks}개 chunk 분할 처리 시작 (after fan-out)`,
+        message: `[${client.name}] ${total}개 키워드 ${numChunks}개 chunk 체인 시작`,
         total,
         chunks: numChunks,
       });

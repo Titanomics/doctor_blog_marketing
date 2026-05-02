@@ -295,6 +295,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
 
   // 키워드 수가 임계 이상이면 서버 batch-track으로 위임 (브라우저 잠금 방지)
   const SERVER_DELEGATE_THRESHOLD = 20;
+  // 서버측 KEYWORD_DELAY_MS와 일치 (예상 처리 시간 추정용)
+  const KEYWORD_DELAY_MS_UI = 11_000;
 
   const handleBatchRefresh = async () => {
     if (!client || batchCooldown) return;
@@ -302,26 +304,56 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     setBatchLoading(true);
     setBatchMessage("");
 
-    // 큰 client: 서버 위임 (chunk fan-out 자동)
+    // 큰 client: 서버 위임 (chunk 체인 처리, 30~83분 소요 가능)
     if (keywords.length > SERVER_DELEGATE_THRESHOLD) {
       const batchEndpoint = isBlog ? "/api/batch-track" : "/api/cafe/batch-track";
       try {
         setBatchMessage(`서버에 갱신 요청 중 (${keywords.length}개)...`);
         const res = await fetch(`${batchEndpoint}?clientId=${client.id}`, { method: "POST" });
-        if (res.ok) {
-          const data = await res.json();
-          setBatchMessage(`${data.message ?? "서버 갱신 시작"} — 1~3분 후 자동 새로고침`);
-          // 백엔드가 비동기로 처리하므로 충분한 대기 후 새로고침
-          setTimeout(() => {
-            fetchKeywords();
-            setBatchMessage(`${keywords.length}개 갱신 완료 (서버 처리)`);
-          }, 90_000);
-        } else {
+        if (!res.ok) {
           setBatchMessage(`서버 위임 실패: HTTP ${res.status}`);
+          setBatchLoading(false);
+          return;
         }
+        const data = await res.json();
+        const estMin = Math.ceil((keywords.length * KEYWORD_DELAY_MS_UI) / 60_000);
+        setBatchMessage(`${data.message ?? "서버 갱신 시작"} — 약 ${estMin}분 소요. 30초마다 진행 확인 중...`);
+
+        // 폴링: 30초마다 fetchKeywords 후 갱신 진행률 측정
+        // 키워드의 updated_at이 위임 시작 시각 이후로 바뀐 비율 계산
+        const startedAt = Date.now();
+        const maxPollMs = (keywords.length * KEYWORD_DELAY_MS_UI) + 5 * 60_000; // 예상 + 5분 여유
+        const pollIntervalMs = 30_000;
+        const pollStart = startedAt;
+
+        const poll = async () => {
+          if (Date.now() - pollStart > maxPollMs) {
+            setBatchMessage(`갱신 시간 초과 (${Math.ceil(maxPollMs / 60_000)}분). 화면 새로고침 후 직접 확인하세요.`);
+            setBatchLoading(false);
+            return;
+          }
+          try {
+            const r = await fetch(`${keywordsApi}?clientId=${client.id}`, { cache: "no-store" });
+            if (r.ok) {
+              const fresh = (await r.json()) as AnyKeyword[];
+              setKeywords(fresh);
+              const updatedCount = fresh.filter((k) => k.updated_at && new Date(k.updated_at).getTime() >= startedAt).length;
+              const pct = Math.floor((updatedCount / fresh.length) * 100);
+              setBatchMessage(`갱신 진행 중: ${updatedCount}/${fresh.length} (${pct}%)`);
+              if (updatedCount >= fresh.length) {
+                setBatchMessage(`${fresh.length}개 갱신 완료`);
+                setBatchLoading(false);
+                return;
+              }
+            }
+          } catch {
+            // 폴링 에러는 조용히 다시 시도
+          }
+          setTimeout(poll, pollIntervalMs);
+        };
+        setTimeout(poll, pollIntervalMs);
       } catch (err) {
         setBatchMessage(`서버 위임 오류: ${err instanceof Error ? err.message : String(err)}`);
-      } finally {
         setBatchLoading(false);
       }
       return;
