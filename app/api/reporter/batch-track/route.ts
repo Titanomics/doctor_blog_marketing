@@ -134,6 +134,15 @@ async function handler(request: NextRequest) {
     if (clientId && offsetParam !== null && limitParam !== null) {
       const offset = parseInt(offsetParam, 10);
       const limit = parseInt(limitParam, 10);
+
+      // NaN/음수/과대값 가드 (m2)
+      if (!Number.isFinite(offset) || !Number.isFinite(limit) || offset < 0 || limit <= 0 || limit > 1000) {
+        return NextResponse.json(
+          { error: "offset(>=0) / limit(>0, <=1000) 정수 필수" },
+          { status: 400 }
+        );
+      }
+
       const { data: client } = await supabase
         .from("cafe_clients")
         .select("id, name")
@@ -180,17 +189,22 @@ async function handler(request: NextRequest) {
       const baseUrl = request.nextUrl.origin;
       const numChunks = Math.ceil(total / CHUNK_SIZE);
 
+      const chunkOffsets: number[] = [];
+      for (let off = 0; off < total; off += CHUNK_SIZE) chunkOffsets.push(off);
+
       after(async () => {
-        for (let off = 0; off < total; off += CHUNK_SIZE) {
-          try {
-            await fetch(
-              `${baseUrl}/api/reporter/batch-track?clientId=${clientId}&offset=${off}&limit=${CHUNK_SIZE}`,
-              { method: "POST" }
-            );
-          } catch (err) {
-            console.error(`[reporter/batch-track] chunk fan-out 실패 offset=${off}:`, err);
-          }
-        }
+        await Promise.allSettled(
+          chunkOffsets.map(async (off) => {
+            try {
+              await fetch(
+                `${baseUrl}/api/reporter/batch-track?clientId=${clientId}&offset=${off}&limit=${CHUNK_SIZE}`,
+                { method: "POST" }
+              );
+            } catch (err) {
+              console.error(`[reporter/batch-track] chunk fan-out 실패 offset=${off}:`, err);
+            }
+          })
+        );
       });
 
       return NextResponse.json({
