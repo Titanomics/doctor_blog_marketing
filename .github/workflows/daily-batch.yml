@@ -1,0 +1,34 @@
+name: Daily Batch (KST 03:00)
+
+on:
+  schedule:
+    # UTC 18:00 = KST 03:00
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    name: Trigger /api/daily-batch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Call daily-batch endpoint
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -e
+          echo "::group::Trigger daily-batch"
+          RESPONSE=$(curl -fsSL --max-time 60 -X GET \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "\n---HTTP=%{http_code} TIME=%{time_total}s" \
+            "https://doctor-blog-marketing.vercel.app/api/daily-batch")
+          echo "$RESPONSE"
+          echo "::endgroup::"
+
+          # HTTP 200이 아니면 fail
+          STATUS=$(echo "$RESPONSE" | grep -oE 'HTTP=[0-9]+' | tail -1 | cut -d= -f2)
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::daily-batch returned HTTP $STATUS"
+            exit 1
+          fi
+          echo "::notice::daily-batch triggered successfully"

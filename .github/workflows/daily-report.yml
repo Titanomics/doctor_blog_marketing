@@ -1,0 +1,33 @@
+name: Daily Report (KST 07:00)
+
+on:
+  schedule:
+    # UTC 22:00 = KST 07:00 (daily-batch 완료 후 4시간 뒤 메일 발송)
+    - cron: "0 22 * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    name: Trigger /api/cafe/daily-report
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call daily-report endpoint
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -e
+          echo "::group::Trigger daily-report"
+          RESPONSE=$(curl -fsSL --max-time 60 -X GET \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            -w "\n---HTTP=%{http_code} TIME=%{time_total}s" \
+            "https://doctor-blog-marketing.vercel.app/api/cafe/daily-report")
+          echo "$RESPONSE"
+          echo "::endgroup::"
+
+          STATUS=$(echo "$RESPONSE" | grep -oE 'HTTP=[0-9]+' | tail -1 | cut -d= -f2)
+          if [ "$STATUS" != "200" ]; then
+            echo "::error::daily-report returned HTTP $STATUS"
+            exit 1
+          fi
+          echo "::notice::daily-report triggered successfully"
