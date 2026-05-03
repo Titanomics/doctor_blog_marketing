@@ -1,34 +1,144 @@
-name: Daily Batch (KST 03:00)
+name: Daily Batch (KST 03:00) — chunks 직접 호출
+
+# 체인 의존 0: GitHub Actions이 모든 client × chunks를 직렬로 직접 호출
+# 체인 끊김 위험 없음. 각 chunk는 독립 호출이라 한 chunk가 실패해도 다음은 진행.
 
 on:
   schedule:
     # UTC 18:00 = KST 03:00
     - cron: "0 18 * * *"
   workflow_dispatch:
+    inputs:
+      domain:
+        description: "처리할 도메인 (all/blog/cafe/reporter)"
+        required: false
+        default: "all"
+
+env:
+  BASE_URL: https://doctor-blog-marketing.vercel.app
+  # chunk 사이 sleep (자식 처리 + 여유). 자식 200s + 30s 여유
+  CHUNK_INTERVAL_S: 230
+  # chunk 크기 (서버 코드 CHUNK_SIZE와 일치)
+  CHUNK_SIZE: 20
 
 jobs:
-  trigger:
-    name: Trigger /api/daily-batch
+  blog-batch:
+    name: 블로그 batch (clients × chunks 직렬)
+    if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'blog' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 350  # 5시간 50분 (안전 마진)
     steps:
-      - name: Call daily-batch endpoint
+      - name: 블로그 clients × chunks 호출
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          set -e
-          echo "::group::Trigger daily-batch"
-          RESPONSE=$(curl -fsSL --max-time 60 -X GET \
-            -H "Authorization: Bearer $CRON_SECRET" \
-            -w "\n---HTTP=%{http_code} TIME=%{time_total}s" \
-            "https://doctor-blog-marketing.vercel.app/api/daily-batch")
-          echo "$RESPONSE"
+          set -euo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+
+          echo "::group::블로그 client 목록"
+          CLIENTS_JSON=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/clients")
+          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
+          echo "$CLIENT_IDS"
           echo "::endgroup::"
 
-          # HTTP 200이 아니면 fail
-          STATUS=$(echo "$RESPONSE" | grep -oE 'HTTP=[0-9]+' | tail -1 | cut -d= -f2)
-          if [ "$STATUS" != "200" ]; then
-            echo "::error::daily-batch returned HTTP $STATUS"
-            exit 1
-          fi
-          echo "::notice::daily-batch triggered successfully"
+          for CLIENT_ID in $CLIENT_IDS; do
+            echo "::group::Client $CLIENT_ID"
+            # 키워드 수
+            COUNT=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))")
+            echo "키워드: $COUNT개"
+
+            if [ "$COUNT" -le 0 ]; then echo "skip (키워드 없음)"; echo "::endgroup::"; continue; fi
+            if [ "$COUNT" -le 10 ]; then
+              # 작은 client: 동기 처리 라우트
+              echo "동기 처리 호출"
+              curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::client $CLIENT_ID 동기 호출 실패"
+              echo "::endgroup::"
+              continue
+            fi
+
+            # 큰 client: chunks 직접 호출
+            OFFSET=0
+            while [ "$OFFSET" -lt "$COUNT" ]; do
+              echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
+              curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
+                "$BASE_URL/api/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE&total=$COUNT" \
+                -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
+                || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
+              OFFSET=$((OFFSET + CHUNK_SIZE))
+              if [ "$OFFSET" -lt "$COUNT" ]; then sleep $CHUNK_INTERVAL_S; fi
+            done
+            echo "::endgroup::"
+          done
+
+  cafe-batch:
+    name: 카페 batch (clients × chunks 직렬)
+    if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: 카페 clients × chunks 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+
+          echo "::group::카페 client 목록"
+          CLIENTS_JSON=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
+          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
+          echo "$CLIENT_IDS"
+          echo "::endgroup::"
+
+          for CLIENT_ID in $CLIENT_IDS; do
+            echo "::group::Client $CLIENT_ID"
+            COUNT=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/cafe/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))")
+            echo "키워드: $COUNT개"
+
+            if [ "$COUNT" -le 0 ]; then echo "skip"; echo "::endgroup::"; continue; fi
+            if [ "$COUNT" -le 10 ]; then
+              curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::client $CLIENT_ID 동기 호출 실패"
+              echo "::endgroup::"
+              continue
+            fi
+
+            OFFSET=0
+            while [ "$OFFSET" -lt "$COUNT" ]; do
+              echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
+              curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
+                "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE&total=$COUNT" \
+                -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
+                || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
+              OFFSET=$((OFFSET + CHUNK_SIZE))
+              if [ "$OFFSET" -lt "$COUNT" ]; then sleep $CHUNK_INTERVAL_S; fi
+            done
+            echo "::endgroup::"
+          done
+
+  reporter-batch:
+    name: 기자단 batch (clients × chunks 직렬)
+    if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'reporter' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: 기자단 clients × chunks 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+
+          echo "::group::기자단 client 목록 (cafe_clients 공유)"
+          CLIENTS_JSON=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
+          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
+          echo "$CLIENT_IDS"
+          echo "::endgroup::"
+
+          for CLIENT_ID in $CLIENT_IDS; do
+            echo "::group::Client $CLIENT_ID"
+            # 기자단은 keyword count API가 없어 batch-track의 응답으로 chunk 분기
+            curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/reporter/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::reporter client $CLIENT_ID 호출 실패"
+            # 작은 client는 동기 응답, 큰 client는 chunk 체인 시작 응답
+            # 큰 client의 chunks는 서버 체인이 처리하지만 끊길 수 있음 → 추후 별도 워크플로우 권장
+            echo "::endgroup::"
+            sleep 60  # client 사이 1분 간격
+          done
