@@ -7,6 +7,8 @@ import { saveReporterHistory } from "@/lib/saveReporterHistory";
 export const maxDuration = 300;
 
 // 키워드당 10초 간격 (체인 패턴)
+// NOTE: 기자단(reporter)은 cafe_clients 테이블을 공유함 (별도 reporter_clients 없음).
+//        의도된 모델 — 카페 브랜드와 기자단 client는 동일 비즈니스 단위.
 const KEYWORD_DELAY_MS = 10000;
 const CHUNK_SIZE = 20;
 const SYNC_THRESHOLD = 10;

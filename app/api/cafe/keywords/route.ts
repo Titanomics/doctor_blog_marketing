@@ -63,6 +63,8 @@ export async function POST(request: NextRequest) {
 
 // PATCH로 변경 가능한 필드 화이트리스트
 // (id/client_id/created_at은 변경 금지, 그 외 임의 컬럼 주입 차단)
+// NOTE: priority 필드 부재는 의도적 — 카페는 별점 UI를 노출하지 않음 (블로그 모드만).
+//        UI MainPanel.tsx에서 priority 변경은 isBlog 분기 안에서만 호출.
 const ALLOWED_PATCH_FIELDS = new Set<string>([
   "keyword",
   "post_url",
