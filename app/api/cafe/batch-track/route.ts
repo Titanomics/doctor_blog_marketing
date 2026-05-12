@@ -71,10 +71,14 @@ async function processKeyword(
     const normalizedPostUrl = kw.post_url
       ? kw.post_url.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
       : null;
+    // 카페 매칭은 cafe.naver.com URL만 (블로그/외부 사이트 잘못 매칭 차단)
+    const isCafeUrl = (link: string) =>
+      /^https?:\/\/(m\.)?cafe\.naver\.com\//.test(link);
 
     const hasSpecificPostId = normalizedPostUrl && /\/\d+/.test(normalizedPostUrl);
 
     const match = (r: { link: string; title?: string }) => {
+      if (!isCafeUrl(r.link)) return false;
       const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
       if (hasSpecificPostId) return !!urlMatch;
       if (urlMatch) return true;
@@ -88,6 +92,7 @@ async function processKeyword(
     let foundInReply = null;
     if (!found && !foundInSmartBlock) {
       const matchReply = (r: { link: string; text: string }) => {
+        if (!isCafeUrl(r.link)) return false;
         const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
         if (hasSpecificPostId) return !!urlMatch;
         if (urlMatch) return true;

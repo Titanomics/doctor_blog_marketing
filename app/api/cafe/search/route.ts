@@ -68,8 +68,12 @@ export async function GET(request: NextRequest) {
     if (postUrl || postTitle) {
       const normalize = (link: string) =>
         link.replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com");
+      // 카페 매칭은 cafe.naver.com URL만 (블로그/외부 사이트가 잘못 매칭되는 것 차단)
+      const isCafeUrl = (link: string) =>
+        /^https?:\/\/(m\.)?cafe\.naver\.com\//.test(link);
 
       const match = (r: { link: string; title?: string }) => {
+        if (!isCafeUrl(r.link)) return false;
         const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
         if (hasSpecificPostId) return !!urlMatch;
         if (urlMatch) return true;
@@ -78,6 +82,7 @@ export async function GET(request: NextRequest) {
       };
 
       const matchReply = (r: ReplyResult) => {
+        if (!isCafeUrl(r.link)) return false;
         const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
         if (hasSpecificPostId) return !!urlMatch;
         if (urlMatch) return true;
