@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { client_id, keyword, post_url, post_title, author_name } = body;
+  const { client_id, keyword, post_url, post_title, author_name, cafe_name } = body;
 
   if (!client_id || !keyword) {
     return NextResponse.json(
@@ -50,7 +50,14 @@ export async function POST(request: NextRequest) {
 
   const { data, error } = await supabase
     .from("cafe_keywords")
-    .insert({ client_id, keyword, post_url: post_url ?? null, post_title: post_title ?? null, author_name: author_name ?? null })
+    .insert({
+      client_id,
+      keyword,
+      post_url: post_url ?? null,
+      post_title: post_title ?? null,
+      author_name: author_name ?? null,
+      cafe_name: cafe_name?.trim() || null,
+    })
     .select()
     .single();
 
@@ -70,6 +77,7 @@ const ALLOWED_PATCH_FIELDS = new Set<string>([
   "post_url",
   "post_title",
   "author_name",
+  "cafe_name",
   "current_rank",
   "previous_rank",
   "matched_title",

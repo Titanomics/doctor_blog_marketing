@@ -6,6 +6,7 @@ import { Client, CafeClient, Keyword, CafeKeyword } from "@/lib/types";
 import RankBadge from "@/components/dashboard/RankBadge";
 import RankChange from "@/components/dashboard/RankChange";
 import RankHistory from "@/components/dashboard/RankHistory";
+import CafeStatsPanel from "@/components/dashboard/CafeStatsPanel";
 
 type AnyClient = Client | CafeClient;
 type AnyKeyword = Keyword | CafeKeyword;
@@ -78,6 +79,8 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [newPostUrl, setNewPostUrl] = useState("");
   const [newPostTitle, setNewPostTitle] = useState("");
   const [newAuthorName, setNewAuthorName] = useState("");
+  const [newCafeName, setNewCafeName] = useState("");
+  const [activeView, setActiveView] = useState<"keywords" | "stats">("keywords");
   const [addError, setAddError] = useState("");
   const [addingKeyword, setAddingKeyword] = useState(false);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
@@ -148,6 +151,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         if (newPostUrl.trim()) body.post_url = newPostUrl.trim();
         if (newPostTitle.trim()) body.post_title = newPostTitle.trim();
         if (newAuthorName.trim()) body.author_name = newAuthorName.trim();
+        if (newCafeName.trim()) body.cafe_name = newCafeName.trim();
       }
 
       const res = await fetch(keywordsApi, {
@@ -161,6 +165,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         setNewPostUrl("");
         setNewPostTitle("");
         setNewAuthorName("");
+        setNewCafeName("");
         fetchKeywords();
       } else {
         const data = await res.json();
@@ -426,6 +431,11 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         </div>
       </main>
     );
+  }
+
+  // 카페 모드 + 통계 view → 통계 패널 렌더
+  if (!isBlog && activeView === "stats") {
+    return <CafeStatsPanel clientId={client.id} clientName={client.name} />;
   }
 
   const sortedKeywords = (() => {
@@ -796,6 +806,19 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
 
         <div className="flex items-center gap-2 self-start shrink-0">
           {!isBlog && (
+            <button
+              onClick={() => setActiveView(activeView === "stats" ? "keywords" : "stats")}
+              className={`px-4 py-2.5 text-sm font-medium rounded-xl transition-colors ${
+                activeView === "stats"
+                  ? "bg-violet-500 text-white hover:bg-violet-600"
+                  : "bg-white border-2 border-violet-200 text-violet-600 hover:bg-violet-50"
+              }`}
+              title="월별 발행 통계"
+            >
+              📊 {activeView === "stats" ? "키워드로" : "통계"}
+            </button>
+          )}
+          {!isBlog && (
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -1076,6 +1099,13 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                 value={newAuthorName}
                 onChange={(e) => setNewAuthorName(e.target.value)}
                 placeholder="작성자 (선택)"
+                className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
+              />
+              <input
+                type="text"
+                value={newCafeName}
+                onChange={(e) => setNewCafeName(e.target.value)}
+                placeholder="카페 이름 (선택, 예: 부산맘카페 — 통계용)"
                 className={`w-full px-4 py-2 text-sm rounded-xl border border-slate-200 ${accentFocus} focus:ring-2 outline-none text-slate-800 placeholder:text-slate-400`}
               />
               {addError && <p className="text-red-500 text-xs">{addError}</p>}
