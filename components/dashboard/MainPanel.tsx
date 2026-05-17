@@ -65,6 +65,15 @@ function cooldownRemaining(updatedAt: string | null): string {
   return `${min}분 후 새로고침 가능`;
 }
 
+function getCafeDisplay(kw: CafeKeyword): { name: string; source: "user" | "auto" | "none" } {
+  if (kw.cafe_name?.trim()) return { name: kw.cafe_name.trim(), source: "user" };
+  if (kw.post_url) {
+    const m = kw.post_url.match(/cafe\.naver\.com\/([^/?#]+)/);
+    if (m) return { name: m[1], source: "auto" };
+  }
+  return { name: "미분류", source: "none" };
+}
+
 function formatCreatedDate(dateStr: string) {
   const created = new Date(dateStr);
   const days = Math.floor((Date.now() - created.getTime()) / 86400000);
@@ -591,8 +600,39 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           </div>
         </td>
       ) : (
-        <td className="px-5 py-4 text-sm text-slate-500 truncate max-w-[120px]">
-          {(kw as CafeKeyword).author_name ?? <span className="text-slate-300">-</span>}
+        <td className="px-5 py-4 text-sm max-w-[160px]">
+          <div className="text-slate-500 truncate">
+            {(kw as CafeKeyword).author_name ?? <span className="text-slate-300">-</span>}
+          </div>
+          {(() => {
+            const c = getCafeDisplay(kw as CafeKeyword);
+            if (c.source === "user") {
+              return <div className="text-xs text-violet-600 mt-0.5 truncate">{c.name}</div>;
+            }
+            if (c.source === "auto") {
+              return (
+                <div className="text-xs text-slate-400 mt-0.5 truncate">
+                  {c.name} <span className="text-slate-300">(자동)</span>
+                </div>
+              );
+            }
+            return (
+              <button
+                onClick={() => {
+                  setEditingId(kw.id);
+                  setEditingText(kw.keyword);
+                  setEditingPostUrl((kw as CafeKeyword).post_url ?? "");
+                  setEditingPostTitle((kw as CafeKeyword).post_title ?? "");
+                  setEditingAuthorName((kw as CafeKeyword).author_name ?? "");
+                  setEditingCafeName((kw as CafeKeyword).cafe_name ?? "");
+                }}
+                className="text-xs text-red-500 hover:underline mt-0.5"
+                title="카페를 분류하려면 클릭"
+              >
+                미분류 ✏️
+              </button>
+            );
+          })()}
         </td>
       )}
       <td className="px-5 py-4 text-center">
@@ -742,6 +782,30 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
             </p>
           )}
+          {!isBlog && editingId !== kw.id && (() => {
+            const c = getCafeDisplay(kw as CafeKeyword);
+            if (c.source === "user") {
+              return <p className="text-xs text-violet-600 mt-0.5 truncate max-w-[200px]">📍 {c.name}</p>;
+            }
+            if (c.source === "auto") {
+              return <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">📍 {c.name} (자동)</p>;
+            }
+            return (
+              <button
+                onClick={() => {
+                  setEditingId(kw.id);
+                  setEditingText(kw.keyword);
+                  setEditingPostUrl((kw as CafeKeyword).post_url ?? "");
+                  setEditingPostTitle((kw as CafeKeyword).post_title ?? "");
+                  setEditingAuthorName((kw as CafeKeyword).author_name ?? "");
+                  setEditingCafeName((kw as CafeKeyword).cafe_name ?? "");
+                }}
+                className="text-xs text-red-500 hover:underline mt-0.5"
+              >
+                📍 미분류 ✏️
+              </button>
+            );
+          })()}
         </div>
         <div className="flex items-center gap-2">
           <button onClick={() => handleRefreshKeyword(kw)} disabled={refreshingId === kw.id || isCooldown(kw.updated_at, kw.created_at)} title={isCooldown(kw.updated_at, kw.created_at) ? cooldownRemaining(kw.updated_at) : "순위 새로고침"} className={`text-slate-400 ${isCooldown(kw.updated_at, kw.created_at) ? "opacity-30 cursor-not-allowed" : accentRefresh} transition-colors p-1`}>
