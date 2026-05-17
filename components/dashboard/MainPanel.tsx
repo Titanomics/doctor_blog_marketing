@@ -95,6 +95,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [editingPostUrl, setEditingPostUrl] = useState("");
   const [editingPostTitle, setEditingPostTitle] = useState("");
   const [editingAuthorName, setEditingAuthorName] = useState("");
+  const [editingCafeName, setEditingCafeName] = useState("");
   const [rankSort, setRankSort] = useState<"none" | "asc" | "desc">("none");
   const [prioritySort, setPrioritySort] = useState<"none" | "asc" | "desc">("none");
   const [keywordSort, setKeywordSort] = useState<"none" | "asc" | "desc">("none");
@@ -253,6 +254,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       body.post_url = editingPostUrl.trim() || null;
       body.post_title = editingPostTitle.trim() || null;
       body.author_name = editingAuthorName.trim() || null;
+      body.cafe_name = editingCafeName.trim() || null;
     }
     await fetch(keywordsApi, {
       method: "PATCH",
@@ -546,6 +548,16 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   placeholder="작성자"
                   className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
                 />
+                <input
+                  value={editingCafeName}
+                  onChange={(e) => setEditingCafeName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit(kw.id);
+                    if (e.key === "Escape") setEditingId(null);
+                  }}
+                  placeholder="카페 이름"
+                  className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
+                />
               </>
             )}
           </div>
@@ -632,7 +644,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
             </button>
           )}
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
@@ -699,6 +711,16 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                     placeholder="작성자"
                     className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-36`}
                   />
+                  <input
+                    value={editingCafeName}
+                    onChange={(e) => setEditingCafeName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveEdit(kw.id);
+                      if (e.key === "Escape") setEditingId(null);
+                    }}
+                    placeholder="카페 이름"
+                    className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-36`}
+                  />
                 </>
               )}
             </div>
@@ -737,7 +759,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
             </button>
           )}
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} className="text-slate-400 hover:text-red-500 transition-colors p-1">
