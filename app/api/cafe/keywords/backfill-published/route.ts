@@ -34,16 +34,23 @@ export async function POST(request: NextRequest) {
 
   let updated = 0;
   let extracted = 0;
+  let errors = 0;
   for (const row of rows) {
     if (!row.post_url) continue;
-    const meta = await fetchCafeArticleMeta(row.post_url);
-    if (meta.publishedAt) {
-      extracted++;
-      const { error: upErr } = await supabase
-        .from("cafe_keywords")
-        .update({ published_at: meta.publishedAt })
-        .eq("id", row.id);
-      if (!upErr) updated++;
+    try {
+      const meta = await fetchCafeArticleMeta(row.post_url);
+      if (meta.publishedAt) {
+        extracted++;
+        const { error: upErr } = await supabase
+          .from("cafe_keywords")
+          .update({ published_at: meta.publishedAt })
+          .eq("id", row.id);
+        if (!upErr) updated++;
+        else errors++;
+      }
+    } catch (err) {
+      errors++;
+      console.error(`[backfill] row=${row.id} 처리 실패:`, err);
     }
     // 1초 간격 (네이버 차단 회피)
     await new Promise((r) => setTimeout(r, 1000));
@@ -53,6 +60,7 @@ export async function POST(request: NextRequest) {
     processed: rows.length,
     extracted,
     updated,
-    message: `${rows.length}건 시도 → ${extracted}건 추출 → ${updated}건 저장`,
+    errors,
+    message: `${rows.length}건 시도 → ${extracted}건 추출 → ${updated}건 저장 (에러 ${errors}건)`,
   });
 }
