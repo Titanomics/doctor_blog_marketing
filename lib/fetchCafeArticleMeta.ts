@@ -13,19 +13,17 @@ async function resolveCafeUrl(postUrl: string): Promise<string | null> {
   let m = postUrl.match(/cafe\.naver\.com\/([^/?#]+)\/(\d+)/);
   if (m) return postUrl;
 
-  // 2차: naver.me 단축 URL이면 redirect 1회 따라가서 location 추출
+  // 2차: naver.me 단축 URL이면 GET + redirect:follow → final URL 사용
+  // (Vercel Node fetch에서 HEAD/manual은 location 헤더 못 잡는 케이스 있어 GET/follow가 robust)
   if (postUrl.includes("naver.me/")) {
     try {
       const r = await fetch(postUrl, {
-        method: "HEAD",
-        redirect: "manual",
+        redirect: "follow",
         headers: { "User-Agent": UA },
       });
-      const loc = r.headers.get("location");
-      if (loc) {
-        m = loc.match(/cafe\.naver\.com\/([^/?#]+)\/(\d+)/);
-        if (m) return loc;
-      }
+      // 응답 본문은 사용 안 함. r.url에 최종 URL이 들어옴
+      m = r.url.match(/cafe\.naver\.com\/([^/?#]+)\/(\d+)/);
+      if (m) return r.url;
     } catch {
       // 다음 시도로
     }
