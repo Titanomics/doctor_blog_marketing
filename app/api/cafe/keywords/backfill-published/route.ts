@@ -35,10 +35,14 @@ export async function POST(request: NextRequest) {
   let updated = 0;
   let extracted = 0;
   let errors = 0;
+  const samples: Array<{ post_url: string; publishedAt: string | null; note?: string }> = [];
   for (const row of rows) {
     if (!row.post_url) continue;
     try {
       const meta = await fetchCafeArticleMeta(row.post_url);
+      if (samples.length < 3) {
+        samples.push({ post_url: row.post_url, publishedAt: meta.publishedAt });
+      }
       if (meta.publishedAt) {
         extracted++;
         const { error: upErr } = await supabase
@@ -50,6 +54,9 @@ export async function POST(request: NextRequest) {
       }
     } catch (err) {
       errors++;
+      if (samples.length < 3) {
+        samples.push({ post_url: row.post_url ?? "", publishedAt: null, note: String(err).slice(0, 100) });
+      }
       console.error(`[backfill] row=${row.id} 처리 실패:`, err);
     }
     // 1초 간격 (네이버 차단 회피)
@@ -61,6 +68,7 @@ export async function POST(request: NextRequest) {
     extracted,
     updated,
     errors,
+    samples,
     message: `${rows.length}건 시도 → ${extracted}건 추출 → ${updated}건 저장 (에러 ${errors}건)`,
   });
 }
