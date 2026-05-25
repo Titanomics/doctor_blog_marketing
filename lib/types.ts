@@ -74,6 +74,7 @@ export interface CafeKeyword {
   smart_block_rank: number | null;
   is_reply: boolean;
   reply_since: string | null;
+  published_at: string | null;
   updated_at: string;
   created_at: string;
 }

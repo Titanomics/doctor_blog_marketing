@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
+import { fetchCafeArticleMeta } from "@/lib/fetchCafeArticleMeta";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -48,6 +49,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // 카페 글 작성일 자동 추출 (cafe.naver.com/{shortcut}/{articleId} 형식만)
+  let publishedAt: string | null = null;
+  if (post_url) {
+    const meta = await fetchCafeArticleMeta(post_url);
+    publishedAt = meta.publishedAt;
+  }
+
   const { data, error } = await supabase
     .from("cafe_keywords")
     .insert({
@@ -57,6 +65,7 @@ export async function POST(request: NextRequest) {
       post_title: post_title ?? null,
       author_name: author_name ?? null,
       cafe_name: cafe_name?.trim() || null,
+      published_at: publishedAt,
     })
     .select()
     .single();
@@ -88,6 +97,7 @@ const ALLOWED_PATCH_FIELDS = new Set<string>([
   "reply_since",
   "updated_at",
   "created_at",
+  "published_at",
 ]);
 
 export async function PATCH(request: NextRequest) {
