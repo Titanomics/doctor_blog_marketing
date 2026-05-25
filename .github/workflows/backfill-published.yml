@@ -1,0 +1,51 @@
+name: Backfill published_at (one-shot)
+
+# 기존 cafe_keywords의 published_at 백필.
+# 사용자가 GitHub Actions UI에서 "Run workflow" 또는 gh workflow run으로 trigger.
+
+on:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: "백필 반복 횟수 (각 50건씩)"
+        required: false
+        default: "6"
+
+env:
+  BASE_URL: https://doctor-blog-marketing.vercel.app
+  BATCH_SIZE: 50
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Backfill published_at 반복 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          ITERATIONS: ${{ inputs.iterations }}
+        run: |
+          set -euo pipefail
+          AUTH="Authorization: Bearer $CRON_SECRET"
+          TOTAL_PROC=0
+          TOTAL_EXTR=0
+          TOTAL_UPD=0
+          for i in $(seq 1 "$ITERATIONS"); do
+            echo "::group::iteration $i / $ITERATIONS"
+            RESP=$(curl -fsSL -m 300 -X POST -H "$AUTH" \
+              "$BASE_URL/api/cafe/keywords/backfill-published?limit=$BATCH_SIZE")
+            echo "$RESP"
+            PROC=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('processed', 0))")
+            EXTR=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('extracted', 0))")
+            UPD=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('updated', 0))")
+            TOTAL_PROC=$((TOTAL_PROC + PROC))
+            TOTAL_EXTR=$((TOTAL_EXTR + EXTR))
+            TOTAL_UPD=$((TOTAL_UPD + UPD))
+            echo "::endgroup::"
+            if [ "$PROC" -eq 0 ]; then
+              echo "::notice::대상 0건 — 완료"
+              break
+            fi
+            sleep 5
+          done
+          echo "::notice::총 처리=$TOTAL_PROC 추출=$TOTAL_EXTR 저장=$TOTAL_UPD"
