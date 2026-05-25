@@ -7,7 +7,7 @@ export const revalidate = 0;
 type CafeBreakdown = {
   name: string;
   count: number;
-  source: "user" | "auto-shortcut" | "unclassified";
+  source: "user" | "unclassified";
 };
 
 type MonthStat = {
@@ -16,13 +16,6 @@ type MonthStat = {
   total: number;
   cafes: CafeBreakdown[];
 };
-
-// post_url에서 카페 shortcut 추출. 못 추출하면 null.
-function extractShortcut(postUrl: string | null): string | null {
-  if (!postUrl) return null;
-  const m = postUrl.match(/cafe\.naver\.com\/([^/?#]+)/);
-  return m ? m[1] : null;
-}
 
 // KST 기준 YYYY-MM 추출
 function toKstMonth(iso: string): string {
@@ -57,7 +50,7 @@ export async function GET(request: NextRequest) {
 
   const { data, error } = await supabase
     .from("cafe_keywords")
-    .select("post_url, cafe_name, created_at")
+    .select("cafe_name, created_at")
     .eq("client_id", clientId)
     .gte("created_at", new Date(fromDate).toISOString());
 
@@ -74,29 +67,13 @@ export async function GET(request: NextRequest) {
     const month = toKstMonth(row.created_at);
     if (!buckets.has(month)) continue; // 3개월 범위 밖
 
-    let name: string;
-    let source: CafeBreakdown["source"];
     const userName = (row.cafe_name as string | null)?.trim();
-    if (userName) {
-      name = userName;
-      source = "user";
-    } else {
-      const shortcut = extractShortcut(row.post_url as string | null);
-      if (shortcut) {
-        name = shortcut;
-        source = "auto-shortcut";
-      } else {
-        name = "미분류";
-        source = "unclassified";
-      }
-    }
+    const name = userName || "미분류";
+    const source: CafeBreakdown["source"] = userName ? "user" : "unclassified";
 
     const m = buckets.get(month)!;
     const entry = m.get(name) ?? { count: 0, source };
     entry.count += 1;
-    // source 우선순위: user > auto-shortcut > unclassified (같은 이름에 섞이면 user 우선)
-    if (source === "user") entry.source = "user";
-    else if (source === "auto-shortcut" && entry.source !== "user") entry.source = "auto-shortcut";
     m.set(name, entry);
   }
 

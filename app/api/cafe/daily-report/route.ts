@@ -21,12 +21,13 @@ async function fetchAllKeywordsFromDB() {
     post_url: string | null;
     post_title: string | null;
     matched_url: string | null;
+    cafe_name: string | null;
   }> = [];
 
   for (const client of clients) {
     const { data: keywords } = await supabase
       .from("cafe_keywords")
-      .select("keyword, current_rank, previous_rank, post_url, post_title, matched_url")
+      .select("keyword, current_rank, previous_rank, post_url, post_title, matched_url, cafe_name")
       .eq("client_id", client.id);
 
     if (!keywords) continue;
@@ -40,6 +41,7 @@ async function fetchAllKeywordsFromDB() {
         post_url: kw.post_url,
         post_title: kw.post_title,
         matched_url: kw.matched_url,
+        cafe_name: kw.cafe_name,
       });
     }
   }

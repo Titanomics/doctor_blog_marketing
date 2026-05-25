@@ -87,6 +87,7 @@ const ALLOWED_PATCH_FIELDS = new Set<string>([
   "is_reply",
   "reply_since",
   "updated_at",
+  "created_at",
 ]);
 
 export async function PATCH(request: NextRequest) {

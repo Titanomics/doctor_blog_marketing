@@ -65,12 +65,8 @@ function cooldownRemaining(updatedAt: string | null): string {
   return `${min}분 후 새로고침 가능`;
 }
 
-function getCafeDisplay(kw: CafeKeyword): { name: string; source: "user" | "auto" | "none" } {
+function getCafeDisplay(kw: CafeKeyword): { name: string; source: "user" | "none" } {
   if (kw.cafe_name?.trim()) return { name: kw.cafe_name.trim(), source: "user" };
-  if (kw.post_url) {
-    const m = kw.post_url.match(/cafe\.naver\.com\/([^/?#]+)/);
-    if (m) return { name: m[1], source: "auto" };
-  }
   return { name: "미분류", source: "none" };
 }
 
@@ -105,6 +101,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [editingPostTitle, setEditingPostTitle] = useState("");
   const [editingAuthorName, setEditingAuthorName] = useState("");
   const [editingCafeName, setEditingCafeName] = useState("");
+  const [editingCreatedAt, setEditingCreatedAt] = useState("");
   const [rankSort, setRankSort] = useState<"none" | "asc" | "desc">("none");
   const [prioritySort, setPrioritySort] = useState<"none" | "asc" | "desc">("none");
   const [keywordSort, setKeywordSort] = useState<"none" | "asc" | "desc">("none");
@@ -264,6 +261,10 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       body.post_title = editingPostTitle.trim() || null;
       body.author_name = editingAuthorName.trim() || null;
       body.cafe_name = editingCafeName.trim() || null;
+      if (editingCreatedAt) {
+        // YYYY-MM-DD → KST 자정 ISO (UTC)
+        body.created_at = new Date(`${editingCreatedAt}T00:00:00+09:00`).toISOString();
+      }
     }
     await fetch(keywordsApi, {
       method: "PATCH",
@@ -567,6 +568,17 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   placeholder="카페 이름"
                   className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
                 />
+                <input
+                  type="date"
+                  value={editingCreatedAt}
+                  onChange={(e) => setEditingCreatedAt(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSaveEdit(kw.id);
+                    if (e.key === "Escape") setEditingId(null);
+                  }}
+                  title="등록일 (발행일)"
+                  className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-40`}
+                />
               </>
             )}
           </div>
@@ -609,13 +621,6 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             if (c.source === "user") {
               return <div className="text-xs text-violet-600 mt-0.5 truncate">{c.name}</div>;
             }
-            if (c.source === "auto") {
-              return (
-                <div className="text-xs text-slate-400 mt-0.5 truncate">
-                  {c.name} <span className="text-slate-300">(자동)</span>
-                </div>
-              );
-            }
             return (
               <button
                 onClick={() => {
@@ -625,6 +630,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   setEditingPostTitle((kw as CafeKeyword).post_title ?? "");
                   setEditingAuthorName((kw as CafeKeyword).author_name ?? "");
                   setEditingCafeName((kw as CafeKeyword).cafe_name ?? "");
+                  setEditingCreatedAt((kw.created_at ?? "").slice(0, 10));
                 }}
                 className="text-xs text-red-500 hover:underline mt-0.5"
                 title="카페를 분류하려면 클릭"
@@ -684,7 +690,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
             </button>
           )}
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); setEditingCreatedAt((kw.created_at ?? "").slice(0, 10)); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
@@ -761,6 +767,17 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                     placeholder="카페 이름"
                     className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-36`}
                   />
+                  <input
+                    type="date"
+                    value={editingCreatedAt}
+                    onChange={(e) => setEditingCreatedAt(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSaveEdit(kw.id);
+                      if (e.key === "Escape") setEditingId(null);
+                    }}
+                    title="등록일 (발행일)"
+                    className={`px-2 py-1 text-xs border rounded-lg outline-none focus:ring-2 ${accentFocus} text-slate-800 w-36`}
+                  />
                 </>
               )}
             </div>
@@ -787,9 +804,6 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             if (c.source === "user") {
               return <p className="text-xs text-violet-600 mt-0.5 truncate max-w-[200px]">📍 {c.name}</p>;
             }
-            if (c.source === "auto") {
-              return <p className="text-xs text-slate-400 mt-0.5 truncate max-w-[200px]">📍 {c.name} (자동)</p>;
-            }
             return (
               <button
                 onClick={() => {
@@ -799,6 +813,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   setEditingPostTitle((kw as CafeKeyword).post_title ?? "");
                   setEditingAuthorName((kw as CafeKeyword).author_name ?? "");
                   setEditingCafeName((kw as CafeKeyword).cafe_name ?? "");
+                  setEditingCreatedAt((kw.created_at ?? "").slice(0, 10));
                 }}
                 className="text-xs text-red-500 hover:underline mt-0.5"
               >
@@ -823,7 +838,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
             </button>
           )}
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); setEditingCreatedAt((kw.created_at ?? "").slice(0, 10)); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} className="text-slate-400 hover:text-red-500 transition-colors p-1">

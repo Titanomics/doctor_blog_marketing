@@ -8,6 +8,7 @@ interface ReportKeyword {
   post_url: string | null;
   post_title: string | null;
   matched_url: string | null;
+  cafe_name?: string | null;
 }
 
 function rankChange(current: number | null, previous: number | null): string {
@@ -31,6 +32,7 @@ export function generateCafeReport(keywords: ReportKeyword[], date: string): Buf
     노출URL: k.matched_url ?? "",
     포스팅URL: k.post_url ?? "",
     포스팅제목: k.post_title ?? "",
+    카페이름: k.cafe_name ?? "",
   }));
 
   const unexposedRows = unexposed.map((k) => ({
@@ -40,6 +42,7 @@ export function generateCafeReport(keywords: ReportKeyword[], date: string): Buf
     변동: k.previous_rank !== null ? "순위권 밖" : "",
     포스팅URL: k.post_url ?? "",
     포스팅제목: k.post_title ?? "",
+    카페이름: k.cafe_name ?? "",
   }));
 
   const wb = XLSX.utils.book_new();

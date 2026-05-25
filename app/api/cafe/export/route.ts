@@ -21,12 +21,13 @@ export async function GET() {
       post_url: string | null;
       post_title: string | null;
       matched_url: string | null;
+      cafe_name: string | null;
     }> = [];
 
     for (const client of clients) {
       const { data: kws } = await supabase
         .from("cafe_keywords")
-        .select("keyword, current_rank, previous_rank, post_url, post_title, matched_url")
+        .select("keyword, current_rank, previous_rank, post_url, post_title, matched_url, cafe_name")
         .eq("client_id", client.id);
 
       if (!kws) continue;

@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 type CafeBreakdown = {
   name: string;
   count: number;
-  source: "user" | "auto-shortcut" | "unclassified";
+  source: "user" | "unclassified";
 };
 
 type MonthStat = {
@@ -111,11 +111,8 @@ export default function CafeStatsPanel({ clientId, clientName }: CafeStatsPanelP
                     >
                       <div className="w-40 md:w-56 shrink-0">
                         <span className="text-sm font-medium text-slate-800">{c.name}</span>
-                        {c.source === "auto-shortcut" && (
-                          <span className="ml-1.5 text-xs text-slate-400">(자동)</span>
-                        )}
                         {c.source === "unclassified" && (
-                          <span className="ml-1.5 text-xs text-slate-400">(미분류)</span>
+                          <span className="ml-1.5 text-xs text-red-400">(미분류)</span>
                         )}
                       </div>
                       <div className="flex-1 bg-slate-100 rounded-full h-2 overflow-hidden">
