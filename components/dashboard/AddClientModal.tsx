@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
 
 interface AddClientModalProps {
@@ -41,9 +42,10 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
     }
   };
 
-  return (
+  // 사이드바 래퍼의 transform이 fixed 기준점을 바꾸므로 body에 portal로 렌더링
+  return createPortal(
     <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 px-4"
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-[60] px-4"
       onClick={onClose}
     >
       <motion.div
@@ -119,6 +121,7 @@ export default function AddClientModal({ mode, onClose, onAdded }: AddClientModa
           </div>
         </form>
       </motion.div>
-    </div>
+    </div>,
+    document.body
   );
 }
