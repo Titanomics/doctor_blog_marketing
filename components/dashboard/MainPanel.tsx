@@ -70,10 +70,18 @@ function getCafeDisplay(kw: CafeKeyword): { name: string; source: "user" | "none
   return { name: "미분류", source: "none" };
 }
 
+// KST 기준 YYYY-MM-DD (toISOString은 UTC라 오전 9시 이전 등록 건이 전날로 표시됨)
+function toKstDateStr(dateStr: string | null | undefined): string {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+}
+
 function formatCreatedDate(dateStr: string) {
   const created = new Date(dateStr);
   const days = Math.floor((Date.now() - created.getTime()) / 86400000);
-  const dateLabel = created.toISOString().split("T")[0];
+  const dateLabel = toKstDateStr(dateStr);
   return { dateLabel, days };
 }
 
@@ -421,7 +429,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      const date = new Date().toISOString().split("T")[0];
+      const date = toKstDateStr(new Date().toISOString());
       a.download = `카페_상위노출_리포트_${date}.xlsx`;
       a.click();
       URL.revokeObjectURL(url);
@@ -645,7 +653,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   setEditingPostTitle((kw as CafeKeyword).post_title ?? "");
                   setEditingAuthorName((kw as CafeKeyword).author_name ?? "");
                   setEditingCafeName((kw as CafeKeyword).cafe_name ?? "");
-                  setEditingCreatedAt((kw.created_at ?? "").slice(0, 10)); setEditingPublishedAt((((kw as CafeKeyword).published_at) ?? "").slice(0, 10));
+                  setEditingCreatedAt(toKstDateStr(kw.created_at)); setEditingPublishedAt(toKstDateStr((kw as CafeKeyword).published_at));
                 }}
                 className="text-xs text-red-500 hover:underline mt-0.5"
                 title="카페를 분류하려면 클릭"
@@ -681,7 +689,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         const isUnexposed = kw.current_rank === null && kw.smart_block_rank === null || (kw as CafeKeyword).is_reply;
         const isOld = days >= 30 && isUnexposed;
         const pub = (kw as CafeKeyword).published_at;
-        const pubLabel = pub ? pub.slice(0, 10) : null;
+        const pubLabel = pub ? toKstDateStr(pub) : null;
         const mismatch = pubLabel && pubLabel !== dateLabel;
         return (
           <td className={`px-5 py-4 text-xs ${isOld ? "text-red-500 font-semibold" : "text-slate-400"}`}>
@@ -713,7 +721,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
             </button>
           )}
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); setEditingCreatedAt((kw.created_at ?? "").slice(0, 10)); setEditingPublishedAt((((kw as CafeKeyword).published_at) ?? "").slice(0, 10)); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); setEditingCreatedAt(toKstDateStr(kw.created_at)); setEditingPublishedAt(toKstDateStr((kw as CafeKeyword).published_at)); }} title="키워드 수정" className="text-slate-400 hover:text-blue-500 transition-colors">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} title="키워드 삭제" className="text-slate-400 hover:text-red-500 transition-colors">
@@ -847,7 +855,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   setEditingPostTitle((kw as CafeKeyword).post_title ?? "");
                   setEditingAuthorName((kw as CafeKeyword).author_name ?? "");
                   setEditingCafeName((kw as CafeKeyword).cafe_name ?? "");
-                  setEditingCreatedAt((kw.created_at ?? "").slice(0, 10)); setEditingPublishedAt((((kw as CafeKeyword).published_at) ?? "").slice(0, 10));
+                  setEditingCreatedAt(toKstDateStr(kw.created_at)); setEditingPublishedAt(toKstDateStr((kw as CafeKeyword).published_at));
                 }}
                 className="text-xs text-red-500 hover:underline mt-0.5"
               >
@@ -872,7 +880,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               {kw.matched_title === "[삭제된 게시글]" ? "삭제됨 ✓" : "삭제표시"}
             </button>
           )}
-          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); setEditingCreatedAt((kw.created_at ?? "").slice(0, 10)); setEditingPublishedAt((((kw as CafeKeyword).published_at) ?? "").slice(0, 10)); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
+          <button onClick={() => { setEditingId(kw.id); setEditingText(kw.keyword); setEditingPostUrl((kw as CafeKeyword).post_url ?? ""); setEditingPostTitle((kw as CafeKeyword).post_title ?? ""); setEditingAuthorName((kw as CafeKeyword).author_name ?? ""); setEditingCafeName((kw as CafeKeyword).cafe_name ?? ""); setEditingCreatedAt(toKstDateStr(kw.created_at)); setEditingPublishedAt(toKstDateStr((kw as CafeKeyword).published_at)); }} className="text-slate-400 hover:text-blue-500 transition-colors p-1">
             <PencilIcon />
           </button>
           <button onClick={() => handleDeleteKeyword(kw.id)} className="text-slate-400 hover:text-red-500 transition-colors p-1">
@@ -912,7 +920,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         const isUnexposed = kw.current_rank === null && kw.smart_block_rank === null || (kw as CafeKeyword).is_reply;
         const isOld = days >= 30 && isUnexposed;
         const pub = (kw as CafeKeyword).published_at;
-        const pubLabel = pub ? pub.slice(0, 10) : null;
+        const pubLabel = pub ? toKstDateStr(pub) : null;
         const mismatch = pubLabel && pubLabel !== dateLabel;
         return (
           <>

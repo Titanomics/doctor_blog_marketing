@@ -22,6 +22,21 @@ env:
   CHUNK_SIZE: 20
 
 jobs:
+  # GitHub은 60일간 커밋이 없으면 스케줄 워크플로우를 자동 비활성화함.
+  # 매 실행마다 enable API를 호출해 비활성화 타이머를 리셋 (커밋 없이 유지).
+  keepalive:
+    name: 워크플로우 자동 비활성화 방지
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: enable API 호출로 타이머 리셋
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api -X PUT "repos/${{ github.repository }}/actions/workflows/daily-batch.yml/enable"
+          gh api -X PUT "repos/${{ github.repository }}/actions/workflows/daily-report.yml/enable"
+
   blog-batch:
     name: 블로그 batch (clients × chunks 직렬)
     if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'blog' }}
