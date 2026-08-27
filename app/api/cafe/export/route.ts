@@ -1,13 +1,18 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { generateCafeReport } from "@/lib/generateCafeReport";
 import { getKSTDateString } from "@/lib/dateUtils";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const { data: clients } = await supabase
-      .from("cafe_clients")
-      .select("id, name");
+    // clientId가 있으면 해당 브랜드만, 없으면 전체 브랜드 내보내기
+    const clientId = request.nextUrl.searchParams.get("clientId");
+
+    let clientQuery = supabase.from("cafe_clients").select("id, name");
+    if (clientId) {
+      clientQuery = clientQuery.eq("id", clientId);
+    }
+    const { data: clients } = await clientQuery;
 
     if (!clients || clients.length === 0) {
       return NextResponse.json({ error: "등록된 브랜드가 없습니다." }, { status: 400 });
@@ -45,11 +50,12 @@ export async function GET() {
     const date = getKSTDateString();
     const excelBuffer = generateCafeReport(keywords, date);
 
+    const brandSuffix = clientId ? `_${clients[0].name}` : "";
     return new NextResponse(new Uint8Array(excelBuffer), {
       status: 200,
       headers: {
         "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(`카페_상위노출_리포트_${date}.xlsx`)}`,
+        "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(`카페_상위노출_리포트${brandSuffix}_${date}.xlsx`)}`,
       },
     });
   } catch (error) {

@@ -421,16 +421,18 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   };
 
   const handleExportExcel = async () => {
+    if (!client) return;
     setExportLoading(true);
     try {
-      const res = await fetch("/api/cafe/export");
+      // 선택된 브랜드만 내보내기 (clientId 없으면 서버가 전체 브랜드를 내보냄)
+      const res = await fetch(`/api/cafe/export?clientId=${client.id}`);
       if (!res.ok) return;
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       const date = toKstDateStr(new Date().toISOString());
-      a.download = `카페_상위노출_리포트_${date}.xlsx`;
+      a.download = `카페_상위노출_리포트_${client.name}_${date}.xlsx`;
       a.click();
       URL.revokeObjectURL(url);
     } finally {
