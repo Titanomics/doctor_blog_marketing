@@ -1,0 +1,73 @@
+import { NextRequest, NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
+import { fetchBlogPostMeta } from "@/lib/fetchBlogPostMeta";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const maxDuration = 300;
+
+// 기존 블로그기자단 entries의 published_at 백필. 한 번 호출로 limit개 처리.
+// 호출 예: POST /api/reporter/entries/backfill-published?limit=50
+// 인증: CRON_SECRET Bearer
+export async function POST(request: NextRequest) {
+  const auth = request.headers.get("authorization");
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret || auth !== `Bearer ${cronSecret}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const limitParam = request.nextUrl.searchParams.get("limit");
+  const limit = Math.max(1, Math.min(200, parseInt(limitParam ?? "50", 10) || 50));
+
+  const { data: rows, error } = await supabase
+    .from("reporter_blog_entries")
+    .select("id, blog_url")
+    .is("published_at", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!rows || rows.length === 0) {
+    return NextResponse.json({ processed: 0, updated: 0, message: "백필 대상 없음" });
+  }
+
+  let updated = 0;
+  let extracted = 0;
+  let errors = 0;
+  const samples: Array<{ blog_url: string; publishedAt: string | null; note?: string }> = [];
+  for (const row of rows) {
+    if (!row.blog_url) continue;
+    try {
+      const meta = await fetchBlogPostMeta(row.blog_url);
+      if (samples.length < 3) {
+        samples.push({ blog_url: row.blog_url, publishedAt: meta.publishedAt });
+      }
+      if (meta.publishedAt) {
+        extracted++;
+        const { error: upErr } = await supabase
+          .from("reporter_blog_entries")
+          .update({ published_at: meta.publishedAt })
+          .eq("id", row.id);
+        if (!upErr) updated++;
+        else errors++;
+      }
+    } catch (err) {
+      errors++;
+      if (samples.length < 3) {
+        samples.push({ blog_url: row.blog_url ?? "", publishedAt: null, note: String(err).slice(0, 100) });
+      }
+      console.error(`[reporter-backfill] row=${row.id} 처리 실패:`, err);
+    }
+    // 1초 간격 (네이버 차단 회피)
+    await new Promise((r) => setTimeout(r, 1000));
+  }
+
+  return NextResponse.json({
+    processed: rows.length,
+    extracted,
+    updated,
+    errors,
+    samples,
+    message: `${rows.length}건 시도 → ${extracted}건 추출 → ${updated}건 저장 (에러 ${errors}건)`,
+  });
+}

@@ -99,6 +99,7 @@ export interface ReporterBlogEntry {
   id: string;
   keyword_id: string;
   blog_url: string;
+  published_at?: string | null;
   current_rank: number | null;
   previous_rank: number | null;
   smart_block_name: string | null;

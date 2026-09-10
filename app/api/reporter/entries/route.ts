@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { saveReporterHistory } from "@/lib/saveReporterHistory";
+import { fetchBlogPostMeta } from "@/lib/fetchBlogPostMeta";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -55,11 +56,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data, error } = await supabase
+  // 블로그 발행일 자동 추출 (실패해도 등록은 진행)
+  const meta = await fetchBlogPostMeta(blog_url);
+
+  let { data, error } = await supabase
     .from("reporter_blog_entries")
-    .insert({ keyword_id, blog_url })
+    .insert({ keyword_id, blog_url, published_at: meta.publishedAt })
     .select()
     .single();
+
+  // published_at 컬럼이 아직 없는 DB에서도 등록이 깨지지 않도록 fallback
+  if (error && error.message.includes("published_at")) {
+    ({ data, error } = await supabase
+      .from("reporter_blog_entries")
+      .insert({ keyword_id, blog_url })
+      .select()
+      .single());
+  }
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -79,6 +92,7 @@ const ALLOWED_PATCH_FIELDS = new Set<string>([
   "smart_block_name",
   "smart_block_rank",
   "updated_at",
+  "published_at",
 ]);
 
 export async function PATCH(request: NextRequest) {

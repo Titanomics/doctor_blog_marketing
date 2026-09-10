@@ -67,6 +67,14 @@ function shortUrl(url: string) {
   return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
+// KST 기준 YYYY-MM-DD (toISOString은 UTC라 오전 9시 이전 건이 전날로 표시됨)
+function toKstDateStr(dateStr: string | null | undefined): string {
+  if (!dateStr) return "";
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-CA", { timeZone: "Asia/Seoul" });
+}
+
 export default function ReporterPanel({ client, onClientUpdated }: ReporterPanelProps) {
   const [keywords, setKeywords] = useState<ReporterKeyword[]>([]);
   const [loading, setLoading] = useState(false);
@@ -429,6 +437,10 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                                     {entry.matched_title}
                                   </a>
                                 )}
+                                <p className="text-[11px] text-slate-400 mt-0.5">
+                                  등록 {toKstDateStr(entry.created_at)}
+                                  {entry.published_at && <span> · 발행 {toKstDateStr(entry.published_at)}</span>}
+                                </p>
                               </div>
                               <div className="flex items-center gap-2 shrink-0">
                                 <RankBadge
