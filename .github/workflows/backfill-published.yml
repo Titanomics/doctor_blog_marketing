@@ -1,6 +1,6 @@
 name: Backfill published_at (one-shot)
 
-# 기존 cafe_keywords의 published_at 백필.
+# 기존 cafe_keywords / reporter_blog_entries의 published_at 백필.
 # 사용자가 GitHub Actions UI에서 "Run workflow" 또는 gh workflow run으로 trigger.
 
 on:
@@ -10,6 +10,10 @@ on:
         description: "백필 반복 횟수 (각 50건씩)"
         required: false
         default: "6"
+      target:
+        description: "백필 대상 (cafe/reporter)"
+        required: false
+        default: "cafe"
 
 env:
   BASE_URL: https://doctor-blog-marketing.vercel.app
@@ -24,16 +28,23 @@ jobs:
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           ITERATIONS: ${{ inputs.iterations }}
+          TARGET: ${{ inputs.target }}
         run: |
           set -euo pipefail
           AUTH="Authorization: Bearer $CRON_SECRET"
+          if [ "$TARGET" = "reporter" ]; then
+            ENDPOINT="$BASE_URL/api/reporter/entries/backfill-published"
+          else
+            ENDPOINT="$BASE_URL/api/cafe/keywords/backfill-published"
+          fi
+          echo "endpoint: $ENDPOINT"
           TOTAL_PROC=0
           TOTAL_EXTR=0
           TOTAL_UPD=0
           for i in $(seq 1 "$ITERATIONS"); do
             echo "::group::iteration $i / $ITERATIONS"
             RESP=$(curl -fsSL -m 300 -X POST -H "$AUTH" \
-              "$BASE_URL/api/cafe/keywords/backfill-published?limit=$BATCH_SIZE")
+              "$ENDPOINT?limit=$BATCH_SIZE")
             echo "$RESP"
             PROC=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('processed', 0))")
             EXTR=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('extracted', 0))")
