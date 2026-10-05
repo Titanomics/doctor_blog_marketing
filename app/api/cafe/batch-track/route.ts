@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { parseViewSection, parseSmartBlocks, parseReplies } from "@/lib/parseNaver";
+import { parseReplies } from "@/lib/parseNaver";
+import { fetchNaverSerp } from "@/lib/naverSerp";
+import { cafeRefToUrl, parseCafeRef, resolveCafeTarget, sameCafeArticle } from "@/lib/naverUrl";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
 import { internalAuthHeaders } from "@/lib/auth";
 import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
@@ -15,7 +17,6 @@ const CHUNK_SIZE = 20;
 // 동기 처리 임계 (이 이하면 chunk 분할 없이 직접 처리, 부모 maxDuration 보호)
 const SYNC_THRESHOLD = 10;
 // 단일 키워드 fetch timeout (네이버 응답 지연 누적 방지)
-const FETCH_TIMEOUT_MS = 8000;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -38,69 +39,37 @@ async function processKeyword(
   kw: CafeKeywordRow
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const encodedKeyword = encodeURIComponent(kw.keyword);
-    const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-    let response: Response;
-    try {
-      response = await fetch(url, {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-          "Accept-Language": "ko-KR,ko;q=0.9",
-        },
-        cache: "no-store",
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeoutId);
+    // 수집 실패 시에는 DB를 건드리지 않는다 (기존 순위 유지, "미노출"로 덮어쓰지 않음)
+    const serp = await fetchNaverSerp(kw.keyword);
+    if (!serp.ok) {
+      return { ok: false, error: `[${client.name}] "${kw.keyword}" ${serp.reason} — 기존 순위 유지` };
     }
+    const { results, smartBlockResults } = serp;
+    const replyResults = parseReplies(serp.html);
 
-    if (!response.ok) {
-      return { ok: false, error: `[${client.name}] "${kw.keyword}" 네이버 검색 실패 (${response.status})` };
+    // 등록 URL이 글 URL(직접 또는 naver.me)이면 카페·글 번호 완전일치로만 매칭한다.
+    // 글 URL이 아닐 때만 제목 포함 여부로 매칭.
+    const targetRef = await resolveCafeTarget(kw.post_url);
+    if (targetRef === "unresolved") {
+      // 단축 URL을 일시적으로 해석하지 못함 — 어느 글인지 모르는 채로 "미노출"을 저장하지 않는다
+      return { ok: false, error: `[${client.name}] "${kw.keyword}" 단축 URL 해석 실패 — 기존 순위 유지` };
     }
+    const hasSpecificPostId = !!targetRef;
+    const postTitle = kw.post_title?.toLowerCase() || null;
 
-    const html = await response.text();
-    const results = parseViewSection(html);
-    const smartBlockResults = parseSmartBlocks(html);
-    const replyResults = parseReplies(html);
-
-    const normalize = (link: string) =>
-      link.replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com");
-    const normalizedPostUrl = kw.post_url
-      ? kw.post_url.trim().replace(/^https?:\/\/m\.cafe\.naver\.com/, "https://cafe.naver.com")
-      : null;
-    // 카페 매칭은 cafe.naver.com URL만 (블로그/외부 사이트 잘못 매칭 차단)
-    const isCafeUrl = (link: string) =>
-      /^https?:\/\/(m\.)?cafe\.naver\.com\//.test(link);
-
-    const hasSpecificPostId = normalizedPostUrl && /\/\d+/.test(normalizedPostUrl);
-
-    const match = (r: { link: string; title?: string }) => {
-      if (!isCafeUrl(r.link)) return false;
-      const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
-      if (hasSpecificPostId) return !!urlMatch;
-      if (urlMatch) return true;
-      if (kw.post_title && "title" in r && r.title && r.title.toLowerCase().includes(kw.post_title.toLowerCase())) return true;
-      return false;
+    const matchLink = (link: string, text: string | undefined) => {
+      const ref = parseCafeRef(link); // 카페 글 링크가 아니면 null (블로그/외부 사이트 제외)
+      if (!ref) return false;
+      if (targetRef) return sameCafeArticle(ref, targetRef);
+      return !!(postTitle && text && text.toLowerCase().includes(postTitle));
     };
 
-    const found = results.find(match) ?? null;
-    const foundInSmartBlock = smartBlockResults.find(match) ?? null;
+    const found = results.find((r) => matchLink(r.link, r.title)) ?? null;
+    const foundInSmartBlock = smartBlockResults.find((r) => matchLink(r.link, r.title)) ?? null;
 
     let foundInReply = null;
     if (!found && !foundInSmartBlock) {
-      const matchReply = (r: { link: string; text: string }) => {
-        if (!isCafeUrl(r.link)) return false;
-        const urlMatch = normalizedPostUrl && normalize(r.link).includes(normalizedPostUrl);
-        if (hasSpecificPostId) return !!urlMatch;
-        if (urlMatch) return true;
-        if (kw.post_title && r.text.toLowerCase().includes(kw.post_title.toLowerCase())) return true;
-        return false;
-      };
-      foundInReply = replyResults.find(matchReply) ?? null;
+      foundInReply = replyResults.find((r) => matchLink(r.link, r.text)) ?? null;
     }
 
     const newRank = found ? found.rank : null;
@@ -114,8 +83,9 @@ async function processKeyword(
     }
 
     let postStatus: CafePostStatus | null = null;
-    if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply && normalizedPostUrl) {
-      postStatus = await getCafePostStatus(normalizedPostUrl);
+    const canonicalUrl = targetRef ? cafeRefToUrl(targetRef) : null;
+    if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply && canonicalUrl) {
+      postStatus = await getCafePostStatus(canonicalUrl);
     }
 
     const wasMarkedDeleted = kw.matched_title === "[삭제된 게시글]";

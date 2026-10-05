@@ -20,6 +20,7 @@ export async function getCafePostStatus(postUrl: string): Promise<CafePostStatus
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131.0.0.0",
       },
       cache: "no-store",
+      signal: AbortSignal.timeout(8000),
     });
 
     if (res.status === 200) return "alive";

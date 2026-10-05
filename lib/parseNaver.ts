@@ -16,30 +16,35 @@ export interface ReplyResult {
   text: string;
 }
 
+function stripTags(raw: string): string {
+  return raw.replace(/<[^>]*>/g, "").trim();
+}
+
+// 태그와, 제목 끝에 붙는 접근성용 숨김 문구("새 창 열림")를 제거
+function cleanTitle(raw: string): string {
+  return stripTags(raw).replace(/새 창 열림\s*$/, "").trim();
+}
+
+export type SerpState = "ok" | "empty" | "invalid";
+
 /**
- * 블로그 URL 매칭 - 여러 URL 형식을 유연하게 지원
- * - 직접: blog.naver.com/oenough/224181717584
- * - logNo 파라미터: blog.naver.com/oenough?logNo=224181717584
- * - 모바일: m.blog.naver.com/oenough/224181717584
+ * 받아온 HTML이 정상 검색 결과인지 판정한다.
+ * - ok:      결과를 1건 이상 파싱함
+ * - empty:   정상 검색 페이지인데 웹문서·리뷰 영역이 아예 없음 (실제로 노출 대상 없음)
+ * - invalid: 검색 페이지가 아니거나(차단·오류 페이지), 결과 영역 수에 비해 읽은 결과가 너무 적음(마크업 변경)
+ * invalid일 때는 "미노출"로 저장하면 안 된다.
+ *
+ * 화면의 결과 항목마다 data-block-id="web/…" 또는 "review/…" 표식이 하나씩 붙는다.
+ * 실측(2026-10, 27개 검색어)에서 읽은 결과 수는 표식 수의 0.94배 이상이었다.
+ * 일부만 읽히면 순위가 당겨지거나 대상 글을 놓치므로, 크게 모자라면 invalid로 본다.
  */
-export function matchesBlogUrl(resultLink: string, blogUrl: string): boolean {
-  const normalized = blogUrl.replace(/^https?:\/\//, "").trim();
+const MIN_PARSED_RATIO = 0.7;
 
-  // 1차: 직접 포함
-  if (resultLink.includes(normalized)) return true;
-
-  // 2차: blogId/postId 파싱 후 대안 형식 매칭
-  const path = normalized.replace(/^(?:www\.|m\.)?blog\.naver\.com\//, "").split("/");
-  const blogId = path[0];
-  const postId = path[1];
-
-  if (blogId && postId && /^\d+$/.test(postId)) {
-    if (resultLink.includes(`/${blogId}/`) && resultLink.includes(postId)) return true;
-    if (resultLink.includes(`blogId=${blogId}`) && resultLink.includes(`logNo=${postId}`)) return true;
-    if (resultLink.includes(`/${blogId}?`) && resultLink.includes(postId)) return true;
-  }
-
-  return false;
+export function classifySerp(html: string, parsedCount: number): SerpState {
+  if (!/id="main_pack"/.test(html)) return "invalid";
+  const expected = (html.match(/data-block-id="(?:web|review)\//g) ?? []).length;
+  if (expected === 0) return parsedCount > 0 ? "ok" : "empty";
+  return parsedCount >= expected * MIN_PARSED_RATIO ? "ok" : "invalid";
 }
 
 // HTML 엔티티 디코딩
@@ -68,9 +73,9 @@ export function parseViewSection(html: string): ViewResult[] {
 
   while ((match = headlinePattern.exec(viewHtml)) !== null) {
     const link = match[1];
-    const rawText = match[2].replace(/<[^>]*>/g, "").trim();
-
-    if (!rawText || rawText.length < 3) continue;
+    // 포함 여부는 기존과 같은 기준(숨김 문구 포함 원문 길이)으로 판단하고, 저장할 제목만 정리한다
+    if (stripTags(match[2]).length < 3) continue;
+    const rawText = cleanTitle(match[2]);
     if (seen.has(link)) continue;
     seen.add(link);
 
@@ -118,8 +123,8 @@ export function parseSmartBlocks(html: string): SmartBlockResult[] {
   let am;
   while ((am = articlePattern.exec(html)) !== null) {
     const link = am[1];
-    const title = am[2].replace(/<[^>]*>/g, "").trim();
-    if (!title || title.length < 3) continue;
+    if (stripTags(am[2]).length < 3) continue;
+    const title = cleanTitle(am[2]);
 
     const articlePos = am.index;
 

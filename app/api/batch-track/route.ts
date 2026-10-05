@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { parseViewSection, parseSmartBlocks, matchesBlogUrl } from "@/lib/parseNaver";
+import { fetchNaverSerp } from "@/lib/naverSerp";
+import { matchesBlogUrl } from "@/lib/naverUrl";
 import { saveKeywordHistory } from "@/lib/saveHistory";
 import { internalAuthHeaders } from "@/lib/auth";
 
@@ -11,7 +12,6 @@ export const maxDuration = 300;
 const KEYWORD_DELAY_MS = 10000;
 const CHUNK_SIZE = 20;
 const SYNC_THRESHOLD = 10;
-const FETCH_TIMEOUT_MS = 8000;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -24,33 +24,12 @@ async function processKeyword(
   kw: BlogKeywordRow
 ): Promise<{ ok: boolean; error?: string }> {
   try {
-    const encodedKeyword = encodeURIComponent(kw.keyword);
-    const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
-    let response: Response;
-    try {
-      response = await fetch(url, {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-          "Accept-Language": "ko-KR,ko;q=0.9",
-        },
-        cache: "no-store",
-        signal: controller.signal,
-      });
-    } finally {
-      clearTimeout(timeoutId);
+    // 수집 실패 시에는 DB를 건드리지 않는다 (기존 순위 유지, "미노출"로 덮어쓰지 않음)
+    const serp = await fetchNaverSerp(kw.keyword);
+    if (!serp.ok) {
+      return { ok: false, error: `[${client.name}] "${kw.keyword}" ${serp.reason} — 기존 순위 유지` };
     }
-
-    if (!response.ok) {
-      return { ok: false, error: `[${client.name}] "${kw.keyword}" 네이버 검색 실패 (${response.status})` };
-    }
-
-    const html = await response.text();
-    const results = parseViewSection(html);
-    const smartBlockResults = parseSmartBlocks(html);
+    const { results, smartBlockResults } = serp;
 
     const matched = results.find((r) => matchesBlogUrl(r.link, client.blog_url));
     const matchedInSmartBlock = smartBlockResults.find((r) => matchesBlogUrl(r.link, client.blog_url));
@@ -58,11 +37,7 @@ async function processKeyword(
     const newRank = matched ? matched.rank : null;
 
     if (!matched && !matchedInSmartBlock) {
-      if (results.length === 0 && smartBlockResults.length === 0) {
-        console.warn(`[PARSE-MISS] "${kw.keyword}" | 파싱 결과 0개 (HTML길이=${html.length}) | blog_url="${client.blog_url}"`);
-      } else {
-        console.warn(`[MATCH-MISS] "${kw.keyword}" | VIEW=${results.length}개, 스마트블록=${smartBlockResults.length}개 | blog_url="${client.blog_url}" | 상위3링크: ${results.slice(0, 3).map((r) => r.link).join(" | ")}`);
-      }
+      console.warn(`[MATCH-MISS] "${kw.keyword}" | VIEW=${results.length}개, 스마트블록=${smartBlockResults.length}개 | blog_url="${client.blog_url}" | 상위3링크: ${results.slice(0, 3).map((r) => r.link).join(" | ")}`);
     }
 
     const { error: updateError } = await supabase

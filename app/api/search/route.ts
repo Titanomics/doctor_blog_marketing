@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { parseViewSection, parseSmartBlocks, matchesBlogUrl } from "@/lib/parseNaver";
+import { fetchNaverSerp } from "@/lib/naverSerp";
+import { matchesBlogUrl } from "@/lib/naverUrl";
 import type { ViewResult, SmartBlockResult } from "@/lib/parseNaver";
 
 interface SearchApiResponse {
@@ -23,29 +24,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const encodedKeyword = encodeURIComponent(keyword);
-    const url = `https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=0&ie=utf8&query=${encodedKeyword}`;
-
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-        Accept: "text/html,application/xhtml+xml",
-      },
-      cache: "no-store",
-    });
-
-    if (!response.ok) {
-      return NextResponse.json(
-        { error: `네이버 검색 오류: ${response.status}` },
-        { status: response.status }
-      );
+    // 수집 실패는 오류로 응답한다 (화면이 "미노출"로 저장하지 않도록)
+    const serp = await fetchNaverSerp(keyword);
+    if (!serp.ok) {
+      return NextResponse.json({ error: serp.reason }, { status: serp.status });
     }
-
-    const html = await response.text();
-    const results = parseViewSection(html);
-    const smartBlockResults = parseSmartBlocks(html);
+    const { results, smartBlockResults } = serp;
 
     let found: ViewResult | null = null;
     let foundInSmartBlock: SmartBlockResult | null = null;
