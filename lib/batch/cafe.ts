@@ -5,6 +5,7 @@ import { fetchNaverSerp } from "@/lib/naverSerp";
 import { cafeRefToUrl, parseCafeRef, resolveCafeTarget, sameCafeArticle } from "@/lib/naverUrl";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
 import { nextPreviousRank } from "@/lib/rankUpdate";
+import { recordFailure } from "@/lib/collectFailures";
 import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
 import { getTodayPostStatus, isWeeklyRecheckDay, postKey } from "@/lib/cafePostStats";
 
@@ -34,6 +35,7 @@ export async function processCafeKeyword(
     // 수집 실패 시에는 DB를 건드리지 않는다 (기존 순위 유지, "미노출"로 덮어쓰지 않음)
     const serp = await fetchNaverSerp(kw.keyword);
     if (!serp.ok) {
+      await recordFailure("cafe", kw.id, "serp", serp.reason);
       return { ok: false, serpFailed: true, error: `[${client.name}] "${kw.keyword}" ${serp.reason} — 기존 순위 유지` };
     }
     const { results, smartBlockResults } = serp;
@@ -44,6 +46,7 @@ export async function processCafeKeyword(
     const targetRef = await resolveCafeTarget(kw.post_url);
     if (targetRef === "unresolved") {
       // 단축 URL을 일시적으로 해석하지 못함 — 어느 글인지 모르는 채로 "미노출"을 저장하지 않는다
+      await recordFailure("cafe", kw.id, "resolve", "단축 URL 또는 카페 이름을 해석하지 못함");
       return { ok: false, error: `[${client.name}] "${kw.keyword}" 단축 URL 해석 실패 — 기존 순위 유지` };
     }
     const hasSpecificPostId = !!targetRef;
@@ -114,16 +117,19 @@ export async function processCafeKeyword(
       .eq("id", kw.id);
 
     if (updateError) {
+      await recordFailure("cafe", kw.id, "db", updateError.message);
       return { ok: false, error: `[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}` };
     }
 
     const historyError = await saveCafeHistory(kw.id, newRank);
     if (historyError) {
+      await recordFailure("cafe", kw.id, "history", historyError);
       return { ok: false, error: `[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}` };
     }
     return { ok: true };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    await recordFailure("cafe", kw.id, "other", msg);
     return { ok: false, error: `[${client.name}] "${kw.keyword}" 처리 중 오류: ${msg}` };
   }
 }

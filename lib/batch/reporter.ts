@@ -4,6 +4,7 @@ import { fetchNaverSerp } from "@/lib/naverSerp";
 import { matchesBlogUrl } from "@/lib/naverUrl";
 import { saveReporterHistory } from "@/lib/saveReporterHistory";
 import { nextPreviousRank } from "@/lib/rankUpdate";
+import { recordFailure } from "@/lib/collectFailures";
 
 export async function processReporterKeyword(
   client: { id: string; name: string },
@@ -23,6 +24,7 @@ export async function processReporterKeyword(
     // 수집 실패 시에는 DB를 건드리지 않는다 (기존 순위 유지, "미노출"로 덮어쓰지 않음)
     const serp = await fetchNaverSerp(kw.keyword);
     if (!serp.ok) {
+      await recordFailure("reporter", kw.id, "serp", serp.reason);
       errors.push(`[${client.name}] "${kw.keyword}" ${serp.reason} — 기존 순위 유지`);
       return { updated, errors, serpFailed: true };
     }
@@ -50,10 +52,12 @@ export async function processReporterKeyword(
         .eq("id", entry.id);
 
       if (updateError) {
+        await recordFailure("reporter", kw.id, "db", updateError.message);
         errors.push(`[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}`);
       } else {
         const historyError = await saveReporterHistory(entry.id, newRank);
         if (historyError) {
+          await recordFailure("reporter", kw.id, "history", historyError);
           errors.push(`[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}`);
         } else {
           updated++;
@@ -62,6 +66,7 @@ export async function processReporterKeyword(
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    await recordFailure("reporter", kw.id, "other", msg);
     errors.push(`[${client.name}] "${kw.keyword}" 처리 중 오류: ${msg}`);
   }
 

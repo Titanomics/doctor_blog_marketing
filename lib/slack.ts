@@ -1,0 +1,46 @@
+// 슬랙 메시지 전송. 둘 중 설정된 방식을 쓴다.
+//   1) SLACK_WEBHOOK_URL                      — 인커밍 웹훅 (채널이 웹훅에 고정)
+//   2) SLACK_BOT_TOKEN + SLACK_CHANNEL_ID     — 봇 토큰으로 chat.postMessage (chat:write 권한 필요)
+// 아무것도 없으면 보내지 않고 { sent: false, reason: "not_configured" } 를 돌려준다.
+
+export type SlackResult = { sent: true } | { sent: false; reason: string };
+
+export function slackConfigured(): boolean {
+  return !!process.env.SLACK_WEBHOOK_URL || !!(process.env.SLACK_BOT_TOKEN && process.env.SLACK_CHANNEL_ID);
+}
+
+export async function sendSlack(text: string): Promise<SlackResult> {
+  try {
+    const webhook = process.env.SLACK_WEBHOOK_URL;
+    if (webhook) {
+      const res = await fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+        signal: AbortSignal.timeout(10000),
+      });
+      // 성공하면 200 + 본문 "ok"
+      if (res.ok) return { sent: true };
+      return { sent: false, reason: `webhook ${res.status}: ${(await res.text()).slice(0, 100)}` };
+    }
+
+    const token = process.env.SLACK_BOT_TOKEN;
+    const channel = process.env.SLACK_CHANNEL_ID;
+    if (token && channel) {
+      const res = await fetch("https://slack.com/api/chat.postMessage", {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=utf-8", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ channel, text }),
+        signal: AbortSignal.timeout(10000),
+      });
+      // 이 API는 실패해도 HTTP 200을 주고 본문의 ok 로 성공 여부를 알린다
+      const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+      if (data?.ok) return { sent: true };
+      return { sent: false, reason: `chat.postMessage: ${data?.error ?? `HTTP ${res.status}`}` };
+    }
+
+    return { sent: false, reason: "not_configured" };
+  } catch (err) {
+    return { sent: false, reason: err instanceof Error ? err.message : String(err) };
+  }
+}

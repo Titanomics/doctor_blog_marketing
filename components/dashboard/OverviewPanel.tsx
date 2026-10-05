@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Client, CafeClient } from "@/lib/types";
+import HealthSection from "./HealthSection";
 
 // 병원/브랜드를 고르기 전에 보이는 전체 홈 화면.
 // 블로그: 조치 목록(상위권 이탈·새 진입·최근 수집에서 빠진 키워드) + 병원별 요약
@@ -153,6 +154,8 @@ export default function OverviewPanel({
               />
             </div>
 
+            <HealthSection mode="blog" />
+
             <div className="grid md:grid-cols-2 gap-5">
               <Section title="상위권 이탈" note="직전 수집에서 7위 이내였다가 밀려난 키워드">
                 {blog.dropped.length === 0 ? (
@@ -246,6 +249,8 @@ export default function OverviewPanel({
               />
               <Tile label="삭제된 글" value={fmt(cafe.clients.reduce((n, c) => n + c.deleted, 0))} tone="bad" sub="키워드 기준" />
             </div>
+
+            <HealthSection mode="cafe" />
 
             <Section
               title="위닝 글"

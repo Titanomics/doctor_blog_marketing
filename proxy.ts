@@ -25,6 +25,7 @@ const JOB_ONLY_PATHS = new Set([
   "/api/cafe/keywords/backfill-published",
   "/api/cafe/post-stats",
   "/api/keyword-volumes/collect",
+  "/api/alerts/daily",
   "/api/reporter/entries/backfill-published",
 ]);
 

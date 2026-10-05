@@ -4,6 +4,7 @@ import { fetchNaverSerp } from "@/lib/naverSerp";
 import { matchesBlogUrl } from "@/lib/naverUrl";
 import { saveKeywordHistory } from "@/lib/saveHistory";
 import { nextPreviousRank } from "@/lib/rankUpdate";
+import { recordFailure } from "@/lib/collectFailures";
 
 // 처리에 필요한 컬럼 (라우트와 러너가 같은 목록을 쓴다)
 export const BLOG_KEYWORD_COLUMNS = "id, keyword, current_rank, previous_rank, updated_at";
@@ -24,6 +25,7 @@ export async function processBlogKeyword(
     // 수집 실패 시에는 DB를 건드리지 않는다 (기존 순위 유지, "미노출"로 덮어쓰지 않음)
     const serp = await fetchNaverSerp(kw.keyword);
     if (!serp.ok) {
+      await recordFailure("blog", kw.id, "serp", serp.reason);
       return { ok: false, serpFailed: true, error: `[${client.name}] "${kw.keyword}" ${serp.reason} — 기존 순위 유지` };
     }
     const { results, smartBlockResults } = serp;
@@ -51,16 +53,19 @@ export async function processBlogKeyword(
       .eq("id", kw.id);
 
     if (updateError) {
+      await recordFailure("blog", kw.id, "db", updateError.message);
       return { ok: false, error: `[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}` };
     }
 
     const historyError = await saveKeywordHistory(kw.id, newRank);
     if (historyError) {
+      await recordFailure("blog", kw.id, "history", historyError);
       return { ok: false, error: `[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}` };
     }
     return { ok: true };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
+    await recordFailure("blog", kw.id, "other", msg);
     return { ok: false, error: `[${client.name}] "${kw.keyword}" 처리 중 오류: ${msg}` };
   }
 }

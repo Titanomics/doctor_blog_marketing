@@ -222,3 +222,18 @@ jobs:
     if: ${{ always() && github.event_name == 'schedule' }}
     uses: ./.github/workflows/daily-report.yml
     secrets: inherit
+
+  # 수집 결과 요약을 슬랙으로 보낸다. 서버에 슬랙 설정이 없으면 아무 일도 하지 않는다.
+  alert:
+    name: 슬랙 알림 (배치 완료 후)
+    needs: [blog-batch, cafe-batch, reporter-batch]
+    if: ${{ always() && github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 알림 요청
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          curl -fsS -m 120 -X POST -H "Authorization: Bearer $CRON_SECRET" "$BASE_URL/api/alerts/daily" \
+            || echo "::warning::슬랙 알림 요청 실패"
