@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Client, CafeClient } from "@/lib/types";
 import HealthSection from "./HealthSection";
 import MentionScanSection from "./MentionScanSection";
+import CohortSection from "./CohortSection";
 
 // 병원/브랜드를 고르기 전에 보이는 전체 홈 화면.
 // 블로그: 조치 목록(상위권 이탈·새 진입·최근 수집에서 빠진 키워드) + 병원별 요약
@@ -252,6 +253,8 @@ export default function OverviewPanel({
             </div>
 
             <MentionScanSection />
+
+            <CohortSection />
 
             <HealthSection mode="cafe" />
 

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CafeClient, ReporterKeyword, ReporterBlogEntry } from "@/lib/types";
 import RankBadge from "@/components/dashboard/RankBadge";
 import RankChange from "@/components/dashboard/RankChange";
+import AgeBand, { type AgeInfo } from "@/components/dashboard/AgeBand";
 
 interface ReporterPanelProps {
   client: CafeClient | null;
@@ -80,6 +81,8 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
   const [loading, setLoading] = useState(false);
   const [batchLoading, setBatchLoading] = useState(false);
   const [batchMessage, setBatchMessage] = useState("");
+  // 글별 발행 주차 정보 (주차 띠)
+  const [ages, setAges] = useState<Record<string, AgeInfo>>({});
   const [deletingClient, setDeletingClient] = useState(false);
 
   // 키워드 추가
@@ -148,6 +151,22 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
     initializedRef.current = false;
     fetchKeywords();
   }, [fetchKeywords]);
+
+  const ageClientId = client?.id ?? null;
+  useEffect(() => {
+    setAges({});
+    if (!ageClientId) return;
+    let cancelled = false;
+    fetch(`/api/age?mode=reporter&clientId=${ageClientId}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data) setAges(data.items ?? {});
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [ageClientId]);
 
   const handleAddKeyword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -457,6 +476,7 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
                                   등록 {toKstDateStr(entry.created_at)}
                                   {entry.published_at && <span> · 발행 {toKstDateStr(entry.published_at)}</span>}
                                 </p>
+                                <AgeBand age={ages[entry.id]} />
                               </div>
                               <div className="flex items-center gap-2 shrink-0">
                                 <RankBadge

@@ -10,6 +10,10 @@ import { postKey } from "@/lib/cafePostStats";
 const DELETED_TITLE = "[삭제된 게시글]";
 
 export interface RankRow {
+  id: string; // 카페: 키워드 id / 기자단: 글(entry) id — 발행 주차 정보의 키
+  postKey: string; // 고유 글 식별자 (같은 글이 여러 키워드에 등록된 경우 묶는 용도)
+  published_at: string | null;
+  created_at: string | null;
   keyword: string;
   brand: string;
   current: number | null;
@@ -78,10 +82,13 @@ export async function loadProductOverview(brandPrefixes: string[]): Promise<{
     is_reply: boolean | null;
     post_cafe: string | null;
     post_article_id: string | null;
+    id: string;
+    published_at: string | null;
+    created_at: string | null;
   }>((from, to) =>
     supabase
       .from("cafe_keywords")
-      .select("client_id, keyword, current_rank, previous_rank, updated_at, matched_title, is_reply, post_cafe, post_article_id")
+      .select("id, client_id, keyword, current_rank, previous_rank, updated_at, matched_title, is_reply, post_cafe, post_article_id, published_at, created_at")
       .order("id", { ascending: true })
       .range(from, to)
   );
@@ -94,14 +101,17 @@ export async function loadProductOverview(brandPrefixes: string[]): Promise<{
   );
   const keywordById = new Map(reporterKeywords.data.filter((k) => brandName.has(k.client_id)).map((k) => [k.id, k]));
   const entries = await fetchAll<{
+    id: string;
     keyword_id: string;
     current_rank: number | null;
     previous_rank: number | null;
     updated_at: string | null;
+    published_at: string | null;
+    created_at: string | null;
   }>((from, to) =>
     supabase
       .from("reporter_blog_entries")
-      .select("keyword_id, current_rank, previous_rank, updated_at")
+      .select("id, keyword_id, current_rank, previous_rank, updated_at, published_at, created_at")
       .order("id", { ascending: true })
       .range(from, to)
   );
@@ -110,6 +120,10 @@ export async function loadProductOverview(brandPrefixes: string[]): Promise<{
     brands: brands.map((b) => b.name as string),
     cafe: summarize(
       cafeRows.map((k) => ({
+        id: k.id,
+        postKey: k.post_cafe && k.post_article_id ? postKey(k.post_cafe, k.post_article_id) : `kw:${k.id}`,
+        published_at: k.published_at,
+        created_at: k.created_at,
         keyword: k.keyword,
         brand: brandName.get(k.client_id) ?? "",
         current: k.current_rank,
@@ -125,6 +139,10 @@ export async function loadProductOverview(brandPrefixes: string[]): Promise<{
         .map((e) => {
           const kw = keywordById.get(e.keyword_id)!;
           return {
+            id: e.id,
+            postKey: `entry:${e.id}`,
+            published_at: e.published_at,
+            created_at: e.created_at,
             keyword: kw.keyword,
             brand: brandName.get(kw.client_id) ?? "",
             current: e.current_rank,

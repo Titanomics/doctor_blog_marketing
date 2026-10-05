@@ -20,13 +20,21 @@ export async function POST(request: NextRequest) {
   const limitParam = request.nextUrl.searchParams.get("limit");
   const limit = Math.max(1, Math.min(200, parseInt(limitParam ?? "50", 10) || 50));
 
+  // offset: 발행일을 얻을 수 없는 글(삭제·회원 전용)이 앞자리를 계속 차지해
+  // 뒤의 글이 처리되지 않는 것을 막기 위해, 호출하는 쪽이 건너뛸 수를 넘긴다.
+  const offsetParam = parseInt(request.nextUrl.searchParams.get("offset") ?? "0", 10);
+  const offset = Number.isFinite(offsetParam) && offsetParam > 0 ? offsetParam : 0;
+
   const { data: rows, error } = await supabase
     .from("cafe_keywords")
     .select("id, post_url")
     .is("published_at", null)
     .not("post_url", "is", null)
+    // 삭제 확인된 글은 발행일을 가져올 수 없으므로 대상에서 뺀다
+    .or("matched_title.is.null,matched_title.neq.[삭제된 게시글]")
     .order("created_at", { ascending: false })
-    .limit(limit);
+    .order("id", { ascending: true })
+    .range(offset, offset + limit - 1);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (!rows || rows.length === 0) {

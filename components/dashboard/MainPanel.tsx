@@ -11,6 +11,7 @@ import OverviewPanel from "@/components/dashboard/OverviewPanel";
 import { TrendCell, ViewCell, VolumeLine, volumeTotal, type TrendInfo, type VolumeInfo } from "@/components/dashboard/TrendCells";
 import type { TrendStatus } from "@/lib/trend";
 import type { KeywordPostStat } from "@/lib/cafePostStats";
+import AgeBand, { type AgeInfo } from "@/components/dashboard/AgeBand";
 
 type AnyClient = Client | CafeClient;
 type AnyKeyword = Keyword | CafeKeyword;
@@ -22,7 +23,7 @@ interface MainPanelProps {
   onSelectClient?: (client: AnyClient) => void;
 }
 
-type KeywordFilter = "all" | TrendStatus | "winning";
+type KeywordFilter = "all" | TrendStatus | "winning" | "late_first" | "needs_check";
 
 const RefreshIcon = ({ spinning }: { spinning?: boolean }) => (
   <svg className={`w-4 h-4 ${spinning ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,6 +132,8 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
   // 키워드별 최근 30일 검색량 (네이버 검색광고 API, 주 1회 갱신)
   const [volumes, setVolumes] = useState<Record<string, VolumeInfo>>({});
   const [volumeSort, setVolumeSort] = useState(false);
+  // 카페: 키워드별 발행 주차 정보 (주차 띠)
+  const [ages, setAges] = useState<Record<string, AgeInfo>>({});
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -187,8 +190,17 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
     setKeywordFilter("all");
     setVolumes({});
     setVolumeSort(false);
+    setAges({});
     if (!clientId) return;
     let cancelled = false;
+    if (!isBlog) {
+      fetch(`/api/age?mode=cafe&clientId=${clientId}`, { cache: "no-store" })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (!cancelled && data) setAges(data.items ?? {});
+        })
+        .catch(() => {});
+    }
     fetch(`/api/keyword-volumes?mode=${isBlog ? "blog" : "cafe"}&clientId=${clientId}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
@@ -543,12 +555,20 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
     return <CafeStatsPanel clientId={client.id} clientName={client.name} />;
   }
 
-  // 상태 필터 (블로그: 추이 상태 / 카페: 위닝)
+  const isDeletedKeyword = (kw: AnyKeyword) => kw.matched_title === "[삭제된 게시글]";
+
+  // 상태 필터 (블로그: 추이 상태 / 카페: 위닝·발행 주차)
   const filteredKeywords =
     keywordFilter === "all"
       ? keywords
       : keywords.filter((kw) =>
-          keywordFilter === "winning" ? postStats[kw.id]?.winning : trends[kw.id]?.status === keywordFilter
+          keywordFilter === "winning"
+            ? postStats[kw.id]?.winning
+            : keywordFilter === "late_first"
+              ? ages[kw.id]?.lateFirst
+              : keywordFilter === "needs_check"
+                ? ages[kw.id]?.needsCheck && !isDeletedKeyword(kw)
+                : trends[kw.id]?.status === keywordFilter
         );
   const countStatus = (status: TrendStatus) => keywords.filter((kw) => trends[kw.id]?.status === status).length;
   const filterChips: { key: KeywordFilter; label: string; count: number }[] = isBlog
@@ -565,6 +585,16 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
           key: "winning",
           label: "★ 위닝 (조회수 100 이상)",
           count: keywords.filter((kw) => postStats[kw.id]?.winning).length,
+        },
+        {
+          key: "late_first",
+          label: "2주차 이후 처음 노출",
+          count: keywords.filter((kw) => ages[kw.id]?.lateFirst).length,
+        },
+        {
+          key: "needs_check",
+          label: "점검 대상 (7일 지나도 노출 없음)",
+          count: keywords.filter((kw) => ages[kw.id]?.needsCheck && !isDeletedKeyword(kw)).length,
         },
       ];
 
@@ -736,6 +766,7 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
             <ViewCell stat={postStats[kw.id]} />
           </div>
         )}
+        {!isBlog && editingId !== kw.id && !isDeletedKeyword(kw) && <AgeBand age={ages[kw.id]} />}
       </td>
       {isBlog ? (
         <td className="px-5 py-4 text-center">
@@ -1178,9 +1209,9 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
           <span className="ml-auto text-[11px] text-slate-400">
             {isBlog
               ? "추이: 위쪽 색 띠 = 7위 이내 · 아래 점 = 미노출 · 빈 구간 = 수집 기록 없음"
-              : statsDate
-                ? `글 조회수: ${statsDate} 수집 · 🔒 = 카페 회원만 볼 수 있는 글`
-                : "글 조회수: 아직 수집 전"}
+              : `주차 띠: ● 그 주 절반 이상 노출 · ◐ 일부 · ○ 노출 없음 · 점 = 수집 기록 없음 · * = 등록일 기준${
+                  statsDate ? ` · 조회수 ${statsDate} 수집` : ""
+                }`}
           </span>
         </div>
       )}
