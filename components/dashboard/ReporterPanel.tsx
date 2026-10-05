@@ -112,13 +112,23 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
   const [editingKeywordId, setEditingKeywordId] = useState<string | null>(null);
   const [editingKeywordText, setEditingKeywordText] = useState("");
 
+  // 브랜드를 바꾼 뒤 늦게 도착한 이전 브랜드의 응답이 화면을 덮어쓰지 않게 한다
+  const activeClientRef = useRef<string | null>(null);
+  useEffect(() => {
+    activeClientRef.current = client?.id ?? null;
+  }, [client]);
+  const fetchSeq = useRef(0);
+
   const fetchKeywords = useCallback(async () => {
     if (!client) return;
+    const owner = client.id;
+    const seq = ++fetchSeq.current;
     setLoading(true);
     try {
       const res = await fetch(`/api/reporter/keywords?clientId=${client.id}`, { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
+        if (seq !== fetchSeq.current || activeClientRef.current !== owner) return;
         setKeywords(data);
         // 첫 로드 시 첫 번째 키워드 자동 열기
         if (!initializedRef.current && data.length > 0) {
@@ -208,15 +218,17 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
     try {
       const params = new URLSearchParams({ keyword, blogUrl: entry.blog_url });
       const res = await fetch(`/api/search?${params.toString()}`);
-      if (!res.ok) return;
+      if (!res.ok) {
+        setBatchMessage(`"${keyword}" 순위 조회 실패 (HTTP ${res.status}) — 기존 순위를 유지합니다.`);
+        return;
+      }
       const data = await res.json();
 
-      await fetch("/api/reporter/entries", {
+      const saved = await fetch("/api/reporter/entries", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           id: entry.id,
-          previous_rank: entry.current_rank,
           current_rank: data.foundRank ?? null,
           matched_title: data.found?.title ?? data.foundInSmartBlock?.title ?? null,
           matched_url: data.found?.link ?? data.foundInSmartBlock?.link ?? null,
@@ -225,6 +237,10 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
           updated_at: new Date().toISOString(),
         }),
       });
+      if (!saved.ok) {
+        setBatchMessage(`"${keyword}" 순위 저장 실패 (HTTP ${saved.status}) — 기존 순위를 유지합니다.`);
+        return;
+      }
 
       fetchKeywords();
     } finally {
@@ -255,8 +271,8 @@ export default function ReporterPanel({ client, onClientUpdated }: ReporterPanel
     setBatchMessage("");
     try {
       const res = await fetch(`/api/reporter/batch-track?clientId=${client!.id}`, { method: "POST" });
-      const data = await res.json();
-      setBatchMessage(data.message ?? "완료");
+      const data = await res.json().catch(() => ({}));
+      setBatchMessage(res.ok ? (data.message ?? "완료") : `갱신 실패: ${data.error ?? `HTTP ${res.status}`}`);
       fetchKeywords();
     } finally {
       setBatchLoading(false);

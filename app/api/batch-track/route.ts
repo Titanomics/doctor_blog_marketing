@@ -5,6 +5,7 @@ import { fetchNaverSerp } from "@/lib/naverSerp";
 import { matchesBlogUrl } from "@/lib/naverUrl";
 import { saveKeywordHistory } from "@/lib/saveHistory";
 import { internalAuthHeaders } from "@/lib/auth";
+import { nextPreviousRank } from "@/lib/rankUpdate";
 
 export const maxDuration = 300;
 
@@ -17,7 +18,13 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-type BlogKeywordRow = { id: string; keyword: string; current_rank: number | null };
+type BlogKeywordRow = {
+  id: string;
+  keyword: string;
+  current_rank: number | null;
+  previous_rank: number | null;
+  updated_at: string | null;
+};
 
 async function processKeyword(
   client: { id: string; name: string; blog_url: string },
@@ -43,7 +50,7 @@ async function processKeyword(
     const { error: updateError } = await supabase
       .from("keywords")
       .update({
-        previous_rank: kw.current_rank,
+        previous_rank: nextPreviousRank(kw),
         current_rank: newRank,
         matched_title: matched?.title ?? matchedInSmartBlock?.title ?? null,
         matched_url: matched?.link ?? matchedInSmartBlock?.link ?? null,
@@ -80,7 +87,7 @@ async function processClient(
 
   let query = supabase
     .from("keywords")
-    .select("id, keyword, current_rank")
+    .select("id, keyword, current_rank, previous_rank, updated_at")
     .eq("client_id", client.id)
     .order("id", { ascending: true });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Client, CafeClient, Keyword, CafeKeyword } from "@/lib/types";
 import RankBadge from "@/components/dashboard/RankBadge";
@@ -148,16 +148,29 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
     : "focus:border-violet-500 focus:ring-violet-500/20";
   const accentRefresh = isBlog ? "hover:text-emerald-500" : "hover:text-violet-500";
 
+  // 지금 화면에 떠 있는 고객. 고객을 바꾼 뒤 늦게 도착한 이전 고객의 응답이
+  // 새 고객 화면을 덮어쓰지 않도록 모든 비동기 처리가 이 값을 확인한다.
+  const activeClientRef = useRef<string | null>(null);
+  useEffect(() => {
+    activeClientRef.current = client ? `${mode}:${client.id}` : null;
+  }, [mode, client]);
+  const fetchSeq = useRef(0);
+
   const fetchKeywords = useCallback(async () => {
     if (!client) return;
+    const owner = `${mode}:${client.id}`;
+    const seq = ++fetchSeq.current;
+    const isCurrent = () => seq === fetchSeq.current && activeClientRef.current === owner;
     setLoading(true);
     try {
       const res = await fetch(`${keywordsApi}?clientId=${client.id}`, { cache: "no-store" });
-      if (res.ok) setKeywords(await res.json());
+      if (!res.ok) return;
+      const data = await res.json();
+      if (isCurrent()) setKeywords(data);
     } finally {
-      setLoading(false);
+      if (isCurrent()) setLoading(false);
     }
-  }, [client, keywordsApi]);
+  }, [client, keywordsApi, mode]);
 
   useEffect(() => {
     setKeywords([]);
@@ -243,8 +256,21 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
     }
   };
 
-  const handleRefreshKeyword = async (kw: AnyKeyword) => {
+  // 반환: 조회와 저장이 모두 성공했는지
+  const handleRefreshKeyword = async (kw: AnyKeyword, quiet = false): Promise<boolean> => {
     setRefreshingId(kw.id);
+    const fail = async (res: Response | null, what: string) => {
+      if (!quiet) {
+        let reason = "";
+        try {
+          reason = (await res?.json())?.error ?? "";
+        } catch {
+          // 본문이 JSON이 아니면 상태 코드만 표시
+        }
+        setBatchMessage(`"${kw.keyword}" ${what} 실패${reason ? `: ${reason}` : res ? ` (HTTP ${res.status})` : ""} — 기존 순위를 유지합니다.`);
+      }
+      return false;
+    };
     try {
       const params = new URLSearchParams({ keyword: kw.keyword });
 
@@ -257,7 +283,7 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
       }
 
       const res = await fetch(`${searchApi}?${params.toString()}`);
-      if (!res.ok) return;
+      if (!res.ok) return fail(res, "순위 조회");
       const data = await res.json();
 
       const isReply = !!data.foundInReply && !data.found && !data.foundInSmartBlock;
@@ -284,7 +310,6 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
 
       const patchBody: Record<string, unknown> = {
         id: kw.id,
-        previous_rank: kw.current_rank,
         current_rank: data.foundRank ?? null,
         matched_title: keepDeletedMark
           ? "[삭제된 게시글]"
@@ -299,13 +324,17 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
         patchBody.reply_since = replySince;
       }
 
-      await fetch(keywordsApi, {
+      const saved = await fetch(keywordsApi, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patchBody),
       });
+      if (!saved.ok) return fail(saved, "순위 저장");
 
       fetchKeywords();
+      return true;
+    } catch {
+      return fail(null, "순위 갱신");
     } finally {
       setRefreshingId(null);
     }
@@ -321,13 +350,18 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
       body.post_title = editingPostTitle.trim() || null;
       body.author_name = editingAuthorName.trim() || null;
       body.cafe_name = editingCafeName.trim() || null;
-      if (editingCreatedAt) {
+      // 날짜는 실제로 바꿨을 때만 보낸다. 바꾸지 않았는데 다시 저장하면
+      // 원래 시각(예: 15:30)이 자정으로 덮여 경과 시간 계산이 달라진다.
+      const original = keywords.find((k) => k.id === id) as CafeKeyword | undefined;
+      if (editingCreatedAt && editingCreatedAt !== toKstDateStr(original?.created_at)) {
         // YYYY-MM-DD → KST 자정 ISO (UTC)
         body.created_at = new Date(`${editingCreatedAt}T00:00:00+09:00`).toISOString();
       }
-      body.published_at = editingPublishedAt
-        ? new Date(`${editingPublishedAt}T00:00:00+09:00`).toISOString()
-        : null;
+      if (editingPublishedAt !== toKstDateStr(original?.published_at)) {
+        body.published_at = editingPublishedAt
+          ? new Date(`${editingPublishedAt}T00:00:00+09:00`).toISOString()
+          : null;
+      }
     }
     await fetch(keywordsApi, {
       method: "PATCH",
@@ -380,6 +414,8 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
 
   const handleBatchRefresh = async () => {
     if (!client || batchCooldown) return;
+    const owner = `${mode}:${client.id}`;
+    const stillHere = () => activeClientRef.current === owner;
     setLastBatchTime(Date.now());
     setBatchLoading(true);
     setBatchMessage("");
@@ -407,6 +443,7 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
         const pollStart = startedAt;
 
         const poll = async () => {
+          if (!stillHere()) return; // 다른 고객 화면으로 이동함 — 폴링 중단
           if (Date.now() - pollStart > maxPollMs) {
             setBatchMessage(`갱신 시간 초과 (${Math.ceil(maxPollMs / 60_000)}분). 화면 새로고침 후 직접 확인하세요.`);
             setBatchLoading(false);
@@ -416,6 +453,7 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
             const r = await fetch(`${keywordsApi}?clientId=${client.id}`, { cache: "no-store" });
             if (r.ok) {
               const fresh = (await r.json()) as AnyKeyword[];
+              if (!stillHere()) return;
               setKeywords(fresh);
               const updatedCount = fresh.filter((k) => k.updated_at && new Date(k.updated_at).getTime() >= startedAt).length;
               const pct = Math.floor((updatedCount / fresh.length) * 100);
@@ -444,15 +482,15 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
     let failed = 0;
     try {
       for (const kw of keywords) {
+        if (!stillHere()) return; // 다른 고객 화면으로 이동함 — 남은 갱신 중단
         setBatchMessage(`${completed + failed + 1}/${keywords.length} 갱신 중...`);
-        try {
-          await handleRefreshKeyword(kw);
-          completed++;
-        } catch {
-          failed++;
-        }
+        if (await handleRefreshKeyword(kw, true)) completed++;
+        else failed++;
       }
-      setBatchMessage(`${completed}개 완료${failed > 0 ? `, ${failed}개 실패` : ""}`);
+      if (!stillHere()) return;
+      setBatchMessage(
+        `${completed}개 완료${failed > 0 ? `, ${failed}개 실패 (실패한 키워드는 기존 순위 유지)` : ""}`
+      );
       fetchKeywords();
     } finally {
       setBatchLoading(false);

@@ -5,6 +5,7 @@ import { fetchNaverSerp } from "@/lib/naverSerp";
 import { matchesBlogUrl } from "@/lib/naverUrl";
 import { saveReporterHistory } from "@/lib/saveReporterHistory";
 import { internalAuthHeaders } from "@/lib/auth";
+import { nextPreviousRank } from "@/lib/rankUpdate";
 
 export const maxDuration = 300;
 
@@ -28,7 +29,7 @@ async function processKeyword(
 
   const { data: entries, error: entryError } = await supabase
     .from("reporter_blog_entries")
-    .select("id, blog_url, current_rank")
+    .select("id, blog_url, current_rank, previous_rank, updated_at")
     .eq("keyword_id", kw.id);
 
   if (entryError || !entries || entries.length === 0) return { updated, errors };
@@ -53,7 +54,7 @@ async function processKeyword(
       const { error: updateError } = await supabase
         .from("reporter_blog_entries")
         .update({
-          previous_rank: entry.current_rank,
+          previous_rank: nextPreviousRank(entry),
           current_rank: newRank,
           matched_title: matched?.title ?? matchedInSmartBlock?.title ?? null,
           matched_url: matched?.link ?? matchedInSmartBlock?.link ?? null,

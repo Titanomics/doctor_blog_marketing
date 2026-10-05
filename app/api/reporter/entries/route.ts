@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { nextPreviousRank } from "@/lib/rankUpdate";
 import { supabase } from "@/lib/supabase";
 import { saveReporterHistory } from "@/lib/saveReporterHistory";
 import { fetchBlogPostMeta } from "@/lib/fetchBlogPostMeta";
@@ -113,6 +114,22 @@ export async function PATCH(request: NextRequest) {
 
   if (Object.keys(updates).length === 0) {
     return NextResponse.json({ error: "수정할 필드가 없습니다." }, { status: 400 });
+  }
+
+  // 순위를 새로 저장할 때 직전 순위는 클라이언트 값을 쓰지 않고 서버가 정한다
+  // (같은 날 다시 수집해도 "지난 수집일 대비 변화"가 지워지지 않게 — lib/rankUpdate.ts)
+  if (updates.current_rank !== undefined) {
+    const { data: existing, error: existingError } = await supabase
+      .from("reporter_blog_entries")
+      .select("current_rank, previous_rank, updated_at")
+      .eq("id", id)
+      .single();
+    if (existingError || !existing) {
+      return NextResponse.json({ error: "대상을 찾을 수 없습니다." }, { status: 404 });
+    }
+    updates.previous_rank = nextPreviousRank(existing);
+  } else {
+    delete updates.previous_rank;
   }
 
   const { data, error } = await supabase

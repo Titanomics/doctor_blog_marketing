@@ -6,6 +6,7 @@ import { fetchNaverSerp } from "@/lib/naverSerp";
 import { cafeRefToUrl, parseCafeRef, resolveCafeTarget, sameCafeArticle } from "@/lib/naverUrl";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
 import { internalAuthHeaders } from "@/lib/auth";
+import { nextPreviousRank } from "@/lib/rankUpdate";
 import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
 import { getTodayPostStatus, isWeeklyRecheckDay, postKey } from "@/lib/cafePostStats";
 
@@ -27,6 +28,8 @@ type CafeKeywordRow = {
   id: string;
   keyword: string;
   current_rank: number | null;
+  previous_rank: number | null;
+  updated_at: string | null;
   post_url: string | null;
   post_title: string | null;
   is_reply: boolean;
@@ -107,7 +110,7 @@ async function processKeyword(
     const { error: updateError } = await supabase
       .from("cafe_keywords")
       .update({
-        previous_rank: kw.current_rank,
+        previous_rank: nextPreviousRank(kw),
         current_rank: newRank,
         matched_title: keepDeletedMark
           ? "[삭제된 게시글]"
@@ -149,7 +152,7 @@ async function processClient(
 
   let query = supabase
     .from("cafe_keywords")
-    .select("id, keyword, current_rank, post_url, post_title, is_reply, reply_since, matched_title")
+    .select("id, keyword, current_rank, previous_rank, updated_at, post_url, post_title, is_reply, reply_since, matched_title")
     .eq("client_id", client.id)
     .order("id", { ascending: true });
 
