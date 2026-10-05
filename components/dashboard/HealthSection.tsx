@@ -127,7 +127,7 @@ export default function HealthSection({ mode }: { mode: "blog" | "cafe" }) {
         return (
           <div key={m.mode} className="border-b border-slate-50 last:border-b-0">
             <div className="px-5 py-3.5 flex flex-wrap items-center gap-x-6 gap-y-2">
-              <div className="w-16 text-sm font-semibold text-slate-700">{m.label}</div>
+              <div className="w-24 text-sm font-semibold text-slate-700">{m.label}</div>
 
               <div className="min-w-[150px]">
                 <div className="text-xs text-slate-500">
@@ -198,7 +198,7 @@ export default function HealthSection({ mode }: { mode: "blog" | "cafe" }) {
 
       {data?.postStats && (
         <div className="px-5 py-3 border-t border-slate-50 text-xs text-slate-500 tabular-nums flex flex-wrap gap-x-4 gap-y-1">
-          <span className="w-16 text-sm font-semibold text-slate-700">글 조회수</span>
+          <span className="w-24 text-sm font-semibold text-slate-700">글 조회수</span>
           <span>
             최근 수집{" "}
             <span className={`font-semibold ${data.postStats.isToday ? "text-slate-800" : "text-amber-600"}`}>

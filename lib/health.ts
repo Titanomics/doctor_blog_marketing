@@ -18,7 +18,7 @@ const SOURCES: Record<
   blog: { label: "블로그", table: "keywords", history: "keyword_history", keywordTable: "keywords", clientTable: "clients" },
   cafe: { label: "카페", table: "cafe_keywords", history: "cafe_keyword_history", keywordTable: "cafe_keywords", clientTable: "cafe_clients" },
   // 기자단은 키워드 아래 등록된 글 단위로 순위를 저장한다
-  reporter: { label: "기자단", table: "reporter_blog_entries", history: "reporter_blog_history", keywordTable: "reporter_keywords", clientTable: "cafe_clients" },
+  reporter: { label: "블로그기자단", table: "reporter_blog_entries", history: "reporter_blog_history", keywordTable: "reporter_keywords", clientTable: "cafe_clients" },
 };
 
 export interface FailureItem {
