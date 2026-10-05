@@ -8,7 +8,7 @@ import RankChange from "@/components/dashboard/RankChange";
 import RankHistory from "@/components/dashboard/RankHistory";
 import CafeStatsPanel from "@/components/dashboard/CafeStatsPanel";
 import OverviewPanel from "@/components/dashboard/OverviewPanel";
-import { TrendCell, ViewCell, type TrendInfo } from "@/components/dashboard/TrendCells";
+import { TrendCell, ViewCell, VolumeLine, volumeTotal, type TrendInfo, type VolumeInfo } from "@/components/dashboard/TrendCells";
 import type { TrendStatus } from "@/lib/trend";
 import type { KeywordPostStat } from "@/lib/cafePostStats";
 
@@ -128,6 +128,9 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
   const [postStats, setPostStats] = useState<Record<string, KeywordPostStat>>({});
   const [statsDate, setStatsDate] = useState<string | null>(null);
   const [keywordFilter, setKeywordFilter] = useState<KeywordFilter>("all");
+  // 키워드별 최근 30일 검색량 (네이버 검색광고 API, 주 1회 갱신)
+  const [volumes, setVolumes] = useState<Record<string, VolumeInfo>>({});
+  const [volumeSort, setVolumeSort] = useState(false);
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -169,8 +172,16 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
     setPostStats({});
     setStatsDate(null);
     setKeywordFilter("all");
+    setVolumes({});
+    setVolumeSort(false);
     if (!clientId) return;
     let cancelled = false;
+    fetch(`/api/keyword-volumes?mode=${isBlog ? "blog" : "cafe"}&clientId=${clientId}`, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data) setVolumes(data.volumes ?? {});
+      })
+      .catch(() => {});
     const url = isBlog
       ? `/api/keywords/trends?clientId=${clientId}`
       : `/api/cafe/post-stats/summary?clientId=${clientId}`;
@@ -520,6 +531,11 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
       ];
 
   const sortedKeywords = (() => {
+    if (volumeSort) {
+      return [...filteredKeywords].sort(
+        (a, b) => (volumeTotal(volumes[b.id]) ?? -1) - (volumeTotal(volumes[a.id]) ?? -1)
+      );
+    }
     // null/undefined를 항상 끝으로 보내는 timestamp 비교
     const compareTimestamp = (aStr: string | null, bStr: string | null, dir: "asc" | "desc") => {
       const aNull = !aStr;
@@ -671,6 +687,7 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
             {kw.keyword}
           </button>
         )}
+        {editingId !== kw.id && <VolumeLine volume={volumes[kw.id]} />}
         {!isBlog && editingId !== kw.id && (
           <p className="text-xs text-slate-400 mt-0.5 truncate max-w-xs">
             {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
@@ -1107,6 +1124,19 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
               {chip.label} <span className="tabular-nums opacity-70">{chip.count}</span>
             </button>
           ))}
+          {Object.keys(volumes).length > 0 && (
+            <button
+              onClick={() => setVolumeSort((v) => !v)}
+              className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors ${
+                volumeSort
+                  ? "bg-slate-800 text-white border-slate-800"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
+              }`}
+              title="최근 30일 검색량(PC+모바일)이 많은 순으로 정렬"
+            >
+              검색량 많은 순
+            </button>
+          )}
           <span className="ml-auto text-[11px] text-slate-400">
             {isBlog
               ? "추이: 위쪽 색 띠 = 7위 이내 · 아래 점 = 미노출 · 빈 구간 = 수집 기록 없음"

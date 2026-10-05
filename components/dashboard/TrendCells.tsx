@@ -53,6 +53,47 @@ export function TrendCell({ trend }: { trend: TrendInfo | undefined }) {
 
 const fmt = (n: number) => n.toLocaleString("ko-KR");
 
+// 키워드의 최근 30일 검색량 (네이버 검색광고 API). pc/mobile: null = 값 없음, 0 = 10 미만
+export interface VolumeInfo {
+  pc: number | null;
+  mobile: number | null;
+  date: string;
+  previous: { pc: number | null; mobile: number | null; date: string } | null;
+}
+
+export function volumeTotal(v: { pc: number | null; mobile: number | null } | null | undefined): number | null {
+  if (!v || (v.pc === null && v.mobile === null)) return null;
+  return (v.pc ?? 0) + (v.mobile ?? 0);
+}
+
+const fmtVolume = (n: number | null) => (n === null ? "-" : n === 0 ? "10 미만" : fmt(n));
+
+// 키워드 이름 아래 한 줄: "검색 1,790/월 · 지난 조회 대비 +120"
+export function VolumeLine({ volume }: { volume: VolumeInfo | undefined }) {
+  if (!volume) return null;
+  const total = volumeTotal(volume);
+  if (total === null) {
+    return <p className="text-[11px] font-normal text-slate-300 mt-0.5">검색량 정보 없음</p>;
+  }
+  const prev = volumeTotal(volume.previous);
+  const diff = prev !== null ? total - prev : null;
+  return (
+    <p
+      className="text-[11px] font-normal text-slate-400 mt-0.5 tabular-nums whitespace-nowrap"
+      title={`최근 30일 검색량 (${volume.date} 조회) — PC ${fmtVolume(volume.pc)} · 모바일 ${fmtVolume(volume.mobile)}`}
+    >
+      검색 <span className="font-semibold text-slate-600">{total === 0 ? "20 미만" : fmt(total)}</span>/월
+      {diff !== null && diff !== 0 && (
+        <span className={diff > 0 ? "text-emerald-600" : "text-red-400"}>
+          {" "}
+          ({diff > 0 ? "+" : ""}
+          {fmt(diff)})
+        </span>
+      )}
+    </p>
+  );
+}
+
 // 카페 키워드 행: 글 조회수(누적) + 전날 대비 증가 + 위닝 표시
 export function ViewCell({ stat }: { stat: KeywordPostStat | undefined }) {
   if (!stat) return <span className="text-xs text-slate-300">-</span>;
