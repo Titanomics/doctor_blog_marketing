@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isJobAuthorization } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { generateCafeReport } from "@/lib/generateCafeReport";
 import { sendReportEmail, ReporterStatusChange, CafeKeywordSummary } from "@/lib/sendReportEmail";
@@ -150,7 +151,7 @@ async function handler(request: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const isDev = process.env.NODE_ENV === "development";
 
-  const hasValidSecret = !!cronSecret && auth === `Bearer ${cronSecret}`;
+  const hasValidSecret = isJobAuthorization(auth);
   const devFallback = isDev && !cronSecret;
 
   const authorized = hasValidSecret || devFallback;

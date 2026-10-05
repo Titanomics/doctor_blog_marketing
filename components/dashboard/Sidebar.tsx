@@ -77,9 +77,12 @@ export default function Sidebar({
     return matchesSearch && matchesAssignee;
   });
 
-  const handleLogout = () => {
-    sessionStorage.removeItem("authenticated");
-    window.location.href = "/";
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth", { method: "DELETE" });
+    } finally {
+      window.location.href = "/";
+    }
   };
 
   return (

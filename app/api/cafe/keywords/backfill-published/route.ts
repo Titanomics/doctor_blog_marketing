@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isJobAuthorization } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
 import { fetchCafeArticleMeta } from "@/lib/fetchCafeArticleMeta";
 
@@ -12,7 +13,7 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
   const auth = request.headers.get("authorization");
   const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret || auth !== `Bearer ${cronSecret}`) {
+  if (!cronSecret || !isJobAuthorization(auth)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

@@ -11,9 +11,12 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (sessionStorage.getItem("authenticated") === "true") {
-      router.replace("/dashboard");
-    }
+    fetch("/api/auth", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated) router.replace("/dashboard");
+      })
+      .catch(() => {});
   }, [router]);
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -29,7 +32,6 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        sessionStorage.setItem("authenticated", "true");
         router.push("/dashboard");
       } else {
         const data = await response.json();

@@ -8,11 +8,20 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (sessionStorage.getItem("authenticated") !== "true") {
-      router.replace("/");
-    } else {
-      setIsChecking(false);
-    }
+    let cancelled = false;
+    fetch("/api/auth", { cache: "no-store" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (data.authenticated) setIsChecking(false);
+        else router.replace("/");
+      })
+      .catch(() => {
+        if (!cancelled) router.replace("/");
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [router]);
 
   if (isChecking) {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { internalAuthHeaders, isJobAuthorization } from "@/lib/auth";
 
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
   const cronSecret = process.env.CRON_SECRET;
   const isDev = process.env.NODE_ENV === "development";
 
-  const hasValidSecret = !!cronSecret && auth === `Bearer ${cronSecret}`;
+  const hasValidSecret = isJobAuthorization(auth);
   const devFallback = isDev && !cronSecret;
 
   const authorized = hasValidSecret || devFallback;
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest) {
   // TCP 중단 방지 + 모든 부모가 자식들을 확실히 트리거했는지 확인
   const results = await Promise.allSettled(
     batchUrls.map((url) =>
-      fetch(url, { method: "POST" }).then(async (res) => {
+      fetch(url, { method: "POST", headers: internalAuthHeaders() }).then(async (res) => {
         if (!res.ok) throw new Error(`${url} returned ${res.status}`);
         return res.json();
       })

@@ -53,10 +53,18 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const body = await request.json();
-  const { id, ...updates } = body;
+  const { id } = body;
 
   if (!id) {
     return NextResponse.json({ error: "id가 필요합니다." }, { status: 400 });
+  }
+
+  const updates: Record<string, unknown> = {};
+  for (const field of ["name", "assignee"]) {
+    if (body[field] !== undefined) updates[field] = body[field];
+  }
+  if (Object.keys(updates).length === 0) {
+    return NextResponse.json({ error: "수정할 항목이 없습니다." }, { status: 400 });
   }
 
   const { data, error } = await supabase

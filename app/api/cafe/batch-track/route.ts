@@ -3,6 +3,7 @@ import { after } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { parseViewSection, parseSmartBlocks, parseReplies } from "@/lib/parseNaver";
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
+import { internalAuthHeaders } from "@/lib/auth";
 import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
 
 export const maxDuration = 300;
@@ -236,7 +237,7 @@ async function handler(request: NextRequest) {
           try {
             await fetch(
               `${baseUrl}/api/cafe/batch-track?clientId=${clientId}&offset=${nextOffset}&limit=${limit}&total=${totalForChain}`,
-              { method: "POST" }
+              { method: "POST", headers: internalAuthHeaders() }
             );
           } catch (err) {
             console.error(
@@ -291,7 +292,7 @@ async function handler(request: NextRequest) {
         try {
           await fetch(
             `${baseUrl}/api/cafe/batch-track?clientId=${clientId}&offset=0&limit=${CHUNK_SIZE}&total=${total}`,
-            { method: "POST" }
+            { method: "POST", headers: internalAuthHeaders() }
           );
         } catch (err) {
           console.error(`[cafe/batch-track] 체인 시작 실패 client=${clientId}:`, err);
@@ -320,7 +321,7 @@ async function handler(request: NextRequest) {
     after(async () => {
       for (const client of clients) {
         try {
-          await fetch(`${baseUrl}/api/cafe/batch-track?clientId=${client.id}`, { method: "POST" });
+          await fetch(`${baseUrl}/api/cafe/batch-track?clientId=${client.id}`, { method: "POST", headers: internalAuthHeaders() });
         } catch (err) {
           console.error(`[cafe/batch-track] fan-out 실패 client=${client.name}:`, err);
         }
