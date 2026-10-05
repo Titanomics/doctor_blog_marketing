@@ -119,8 +119,8 @@ export function summarizeAge(publishedDate: string, records: DayRecord[], today:
   };
 }
 
-// 발행 후 점검일(7·14·21·28일째)에 해당하는지
-export const CHECKPOINT_DAYS = [7, 14, 21, 28];
+// 발행 후 점검일(7·14·…·42일째 = 6주차 끝)에 해당하는지
+export const CHECKPOINT_DAYS = [7, 14, 21, 28, 35, 42];
 export function checkpointOf(ageDays: number): number | null {
   return CHECKPOINT_DAYS.includes(ageDays) ? ageDays : null;
 }

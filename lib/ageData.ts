@@ -35,7 +35,7 @@ export interface AgeInfo {
   todayEvent: AgeSummary["todayEvent"];
   latestDate: string | null;
   latestRank: number | null;
-  checkpoint: number | null; // 오늘이 발행 7·14·21·28일째면 그 숫자
+  checkpoint: number | null; // 오늘이 점검일(발행 7·14·…·42일째)이면 그 숫자
   needsCheck: boolean; // 발행 7일 경과 · 초기부터 수집 · 노출 확인 없음
 }
 

@@ -88,6 +88,8 @@ test("발행일 이전의 기록은 이 글의 기록으로 치지 않는다", (
 test("점검일과 발행 주", () => {
   assert.equal(checkpointOf(14), 14);
   assert.equal(checkpointOf(15), null);
+  assert.equal(checkpointOf(42), 42); // 6주차까지 추적
+  assert.equal(checkpointOf(49), null);
   assert.equal(publishWeekStart("2026-09-09"), "2026-09-07"); // 수요일 → 그 주 월요일
   assert.equal(publishWeekStart("2026-09-07"), "2026-09-07");
   assert.equal(publishWeekStart("2026-09-13"), "2026-09-07"); // 일요일

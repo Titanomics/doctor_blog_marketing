@@ -22,7 +22,7 @@ export const maxDuration = 60;
 //
 // 구성: 수집 상태 → 카페 → 블로그기자단 → 카페 글 조회수 → (월요일만) 발행 묶음별 현황
 // 카페·기자단 각각: 오늘의 사건(처음 노출·다시 노출·이탈·3계단 이상 변동)
-//                  → 점검일 도달(발행 7·14·21·28일째가 된 글의 상태) → 전체 순위(각 줄에 발행 주차)
+//                  → 점검일 도달(발행 7·14·…·42일째가 된 글의 상태) → 전체 순위(각 줄에 발행 주차)
 
 const HIGHLIGHT_MAX = 10;
 // 슬랙 메시지 하나가 너무 길어지지 않게 이 길이를 넘으면 여러 개로 나눠 보낸다
@@ -109,7 +109,7 @@ function firstLines(rows: RankRow[], ages: Ages): string[] {
   return lines;
 }
 
-// 오늘 발행 7·14·21·28일째가 된 글을 시점별로 묶어 상태를 알린다
+// 오늘 발행 7·14·…·42일째(6주차까지)가 된 글을 시점별로 묶어 상태를 알린다
 function checkpointLines(side: ProductSide, ages: Ages): string[] {
   const lines: string[] = [];
   for (const day of CHECKPOINT_DAYS) {
