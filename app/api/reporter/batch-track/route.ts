@@ -66,8 +66,12 @@ async function processKeyword(
       if (updateError) {
         errors.push(`[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}`);
       } else {
-        await saveReporterHistory(entry.id, newRank);
-        updated++;
+        const historyError = await saveReporterHistory(entry.id, newRank);
+        if (historyError) {
+          errors.push(`[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}`);
+        } else {
+          updated++;
+        }
       }
     }
   } catch (err) {

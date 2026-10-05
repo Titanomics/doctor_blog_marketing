@@ -57,7 +57,10 @@ async function processKeyword(
       return { ok: false, error: `[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}` };
     }
 
-    await saveKeywordHistory(kw.id, newRank);
+    const historyError = await saveKeywordHistory(kw.id, newRank);
+    if (historyError) {
+      return { ok: false, error: `[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}` };
+    }
     return { ok: true };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

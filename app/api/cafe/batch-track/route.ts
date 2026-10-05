@@ -33,6 +33,14 @@ type CafeKeywordRow = {
   matched_title: string | null;
 };
 
+// 삭제 확인된 글의 재확인 요일: id에서 0~6을 뽑아 KST 날짜와 맞는 날만 true (글들이 7일에 고르게 분산)
+function isWeeklyRecheckDay(id: string, nowMs: number = Date.now()): boolean {
+  let sum = 0;
+  for (let i = 0; i < id.length; i++) sum += id.charCodeAt(i);
+  const kstDay = Math.floor((nowMs + 9 * 60 * 60 * 1000) / 86_400_000);
+  return (sum + kstDay) % 7 === 0;
+}
+
 // 단일 키워드 처리 (병렬 호출 가능 단위)
 async function processKeyword(
   client: { id: string; name: string },
@@ -82,14 +90,21 @@ async function processKeyword(
       replySince = null;
     }
 
-    let postStatus: CafePostStatus | null = null;
-    const canonicalUrl = targetRef ? cafeRefToUrl(targetRef) : null;
-    if (hasSpecificPostId && !found && !foundInSmartBlock && !foundInReply && canonicalUrl) {
-      postStatus = await getCafePostStatus(canonicalUrl);
-    }
-
     const wasMarkedDeleted = kw.matched_title === "[삭제된 게시글]";
     const noMatchFound = !found && !foundInSmartBlock && !foundInReply;
+
+    // 검색에 없는 글만 상태를 조회한다. 이미 삭제로 확인된 글은 매일 다시 묻지 않고
+    // 글마다 정해진 요일에 주 1회만 재확인한다 (네이버 조회량 절감).
+    let postStatus: CafePostStatus | null = null;
+    const canonicalUrl = targetRef ? cafeRefToUrl(targetRef) : null;
+    if (
+      hasSpecificPostId &&
+      noMatchFound &&
+      canonicalUrl &&
+      (!wasMarkedDeleted || isWeeklyRecheckDay(kw.id))
+    ) {
+      postStatus = await getCafePostStatus(canonicalUrl);
+    }
     const keepDeletedMark =
       postStatus === "deleted" ||
       (postStatus !== "alive" && noMatchFound && wasMarkedDeleted);
@@ -116,7 +131,10 @@ async function processKeyword(
       return { ok: false, error: `[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}` };
     }
 
-    await saveCafeHistory(kw.id, newRank);
+    const historyError = await saveCafeHistory(kw.id, newRank);
+    if (historyError) {
+      return { ok: false, error: `[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}` };
+    }
     return { ok: true };
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
