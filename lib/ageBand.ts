@@ -37,6 +37,9 @@ export interface AgeSummary {
   observedFromStart: boolean; // 발행 후 7일 안에 수집이 시작됐는지
   firstExposureDate: string | null;
   firstExposureWeek: number | null;
+  // "N주차에 처음 노출"이라고 말할 수 있는지: 발행 초기부터 수집했고,
+  // 처음 노출된 주 이전의 모든 주에 수집 기록이 있음(그 사이에 떴다가 내려갔을 공백이 없음)
+  firstExposureConfirmed: boolean;
   everExposed: boolean;
   todayEvent: ExposureEvent | null; // 가장 최근 수집일에 일어난 사건
   latestDate: string | null; // 가장 최근 유효 수집일
@@ -90,6 +93,11 @@ export function summarizeAge(publishedDate: string, records: DayRecord[], today:
   const firstExposure = valid.find((r) => r.rank !== null) ?? null;
   const firstExposureWeek = firstExposure ? Math.floor((toDay(firstExposure.date) - pub) / 7) + 1 : null;
 
+  const firstExposureConfirmed =
+    observedFromStart &&
+    firstExposureWeek !== null &&
+    cells.slice(0, firstExposureWeek - 1).every((c) => c.observedDays > 0);
+
   const latest = valid[valid.length - 1] ?? null;
   const before = valid[valid.length - 2] ?? null;
   let todayEvent: ExposureEvent | null = null;
@@ -112,6 +120,7 @@ export function summarizeAge(publishedDate: string, records: DayRecord[], today:
     observedFromStart,
     firstExposureDate: firstExposure?.date ?? null,
     firstExposureWeek,
+    firstExposureConfirmed,
     everExposed: !!firstExposure,
     todayEvent,
     latestDate: latest?.date ?? null,

@@ -31,7 +31,8 @@ export interface AgeInfo {
   firstExposureDate: string | null;
   firstExposureWeek: number | null;
   everExposed: boolean;
-  lateFirst: boolean; // 발행 초기부터 수집했고, 2주차 이후에 처음 노출됨
+  lateFirst: boolean; // 수집 공백 없이 확인된 "2주차 이후 처음 노출"
+  firstExposureConfirmed: boolean; // "N주차에 처음 노출"이라고 단정할 수 있는지
   todayEvent: AgeSummary["todayEvent"];
   latestDate: string | null;
   latestRank: number | null;
@@ -56,7 +57,8 @@ export function toAgeInfo(publishedDate: string, estimated: boolean, records: Da
     firstExposureDate: s.firstExposureDate,
     firstExposureWeek: s.firstExposureWeek,
     everExposed: s.everExposed,
-    lateFirst: s.observedFromStart && s.firstExposureWeek !== null && s.firstExposureWeek >= 2,
+    lateFirst: s.firstExposureConfirmed && s.firstExposureWeek !== null && s.firstExposureWeek >= 2,
+    firstExposureConfirmed: s.firstExposureConfirmed,
     todayEvent: s.todayEvent,
     latestDate: s.latestDate,
     latestRank: s.latestRank,

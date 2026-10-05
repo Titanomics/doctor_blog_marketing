@@ -41,6 +41,17 @@ test("2주차 이후에 처음 뜬 글: 발행 직후부터 수집했으면 firs
   assert.equal(s.observedFromStart, true);
 });
 
+test("처음 노출 주차는 그 전 주들에 수집 기록이 있을 때만 단정한다", () => {
+  // 1·2주차 수집(미노출) → 3주차에 노출: 단정 가능
+  const ok = summarizeAge(PUB, [rec(1, null), rec(8, null), rec(15, 6)], d(15));
+  assert.equal(ok.firstExposureWeek, 3);
+  assert.equal(ok.firstExposureConfirmed, true);
+  // 1주차만 수집하고 2주차 기록이 비어 있음 → 2주차에 떴다가 내려갔을 수 있어 단정 불가
+  const gap = summarizeAge(PUB, [rec(1, null), rec(15, 6)], d(15));
+  assert.equal(gap.firstExposureWeek, 3);
+  assert.equal(gap.firstExposureConfirmed, false);
+});
+
 test("수집이 늦게 시작된 글의 첫 노출은 first_seen (그 전에 떴었는지는 모름)", () => {
   const s = summarizeAge(PUB, [rec(30, null), rec(31, 7)], d(31));
   assert.equal(s.todayEvent, "first_seen");

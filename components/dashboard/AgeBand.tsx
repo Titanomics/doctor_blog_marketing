@@ -25,6 +25,7 @@ export interface AgeInfo {
   firstExposureWeek: number | null;
   everExposed: boolean;
   lateFirst: boolean;
+  firstExposureConfirmed: boolean;
   todayEvent: "first" | "first_seen" | "reentry" | "drop" | null;
   latestDate: string | null;
   latestRank: number | null;
@@ -77,13 +78,13 @@ export default function AgeBand({ age, accent = "#8b5cf6" }: { age: AgeInfo | un
           <Cell key={c.week} cell={c} accent={accent} />
         ))}
       </span>
-      {age.firstExposureWeek !== null && age.observedFromStart ? (
+      {age.firstExposureWeek !== null && age.firstExposureConfirmed ? (
         <span className={`whitespace-nowrap ${age.lateFirst ? "font-semibold text-violet-700" : ""}`}>
           {age.firstExposureWeek}주차에 처음 노출
         </span>
       ) : age.firstExposureWeek !== null ? (
-        <span className="whitespace-nowrap text-slate-400" title="수집을 시작하기 전에 떠 있었는지는 알 수 없습니다">
-          수집 시작({age.observedSince?.slice(5).replace("-", "/")}) 후 노출 확인
+        <span className="whitespace-nowrap text-slate-400" title="그 전에 수집 기록이 없는 기간이 있어, 더 일찍 떴었는지는 알 수 없습니다">
+          {age.firstExposureWeek}주차에 노출 확인 (그 전 기록 공백)
         </span>
       ) : age.needsCheck ? (
         <span className="whitespace-nowrap font-medium text-amber-600">노출 확인 없음 · 점검 대상</span>
