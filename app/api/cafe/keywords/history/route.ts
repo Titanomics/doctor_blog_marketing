@@ -15,7 +15,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const thirtyDaysAgo = new Date(Date.now() - 30 * 86400000);
+  // days: 조회 기간(기본 30일, 최대 180일)
+  const daysParam = parseInt(request.nextUrl.searchParams.get("days") ?? "30", 10);
+  const days = Math.max(1, Math.min(180, Number.isFinite(daysParam) ? daysParam : 30));
+  const thirtyDaysAgo = new Date(Date.now() - days * 86400000);
   const fromDate = getKSTDateString(thirtyDaysAgo);
 
   const { data, error } = await supabase

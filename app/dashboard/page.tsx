@@ -93,6 +93,7 @@ export default function DashboardPage() {
               mode={mode}
               client={selectedClient}
               onClientUpdated={handleClientUpdated}
+              onSelectClient={handleClientSelect}
             />
           )}
         </div>

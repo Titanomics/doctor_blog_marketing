@@ -7,6 +7,10 @@ import RankBadge from "@/components/dashboard/RankBadge";
 import RankChange from "@/components/dashboard/RankChange";
 import RankHistory from "@/components/dashboard/RankHistory";
 import CafeStatsPanel from "@/components/dashboard/CafeStatsPanel";
+import OverviewPanel from "@/components/dashboard/OverviewPanel";
+import { TrendCell, ViewCell, type TrendInfo } from "@/components/dashboard/TrendCells";
+import type { TrendStatus } from "@/lib/trend";
+import type { KeywordPostStat } from "@/lib/cafePostStats";
 
 type AnyClient = Client | CafeClient;
 type AnyKeyword = Keyword | CafeKeyword;
@@ -15,7 +19,10 @@ interface MainPanelProps {
   mode: "blog" | "cafe";
   client: AnyClient | null;
   onClientUpdated: () => void;
+  onSelectClient?: (client: AnyClient) => void;
 }
+
+type KeywordFilter = "all" | TrendStatus | "winning";
 
 const RefreshIcon = ({ spinning }: { spinning?: boolean }) => (
   <svg className={`w-4 h-4 ${spinning ? "animate-spin" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,7 +92,7 @@ function formatCreatedDate(dateStr: string) {
   return { dateLabel, days };
 }
 
-export default function MainPanel({ mode, client, onClientUpdated }: MainPanelProps) {
+export default function MainPanel({ mode, client, onClientUpdated, onSelectClient }: MainPanelProps) {
   const [keywords, setKeywords] = useState<AnyKeyword[]>([]);
   const [loading, setLoading] = useState(false);
   const [newKeyword, setNewKeyword] = useState("");
@@ -116,6 +123,11 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
   const [keywordSort, setKeywordSort] = useState<"none" | "asc" | "desc">("none");
   const [updatedSort, setUpdatedSort] = useState<"none" | "asc" | "desc">("none");
   const [createdSort, setCreatedSort] = useState<"none" | "asc" | "desc">("none");
+  // 블로그: 키워드별 30일 순위 추이·상태 / 카페: 키워드별 글 조회수
+  const [trends, setTrends] = useState<Record<string, TrendInfo>>({});
+  const [postStats, setPostStats] = useState<Record<string, KeywordPostStat>>({});
+  const [statsDate, setStatsDate] = useState<string | null>(null);
+  const [keywordFilter, setKeywordFilter] = useState<KeywordFilter>("all");
 
   const isBlog = mode === "blog";
   const apiBase = isBlog ? "" : "/cafe";
@@ -149,6 +161,34 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     setBatchMessage("");
     fetchKeywords();
   }, [fetchKeywords]);
+
+  // 추이·조회수는 화면 보조 정보라 키워드 목록과 따로 불러온다 (실패해도 표는 그대로 보임)
+  const clientId = client?.id ?? null;
+  useEffect(() => {
+    setTrends({});
+    setPostStats({});
+    setStatsDate(null);
+    setKeywordFilter("all");
+    if (!clientId) return;
+    let cancelled = false;
+    const url = isBlog
+      ? `/api/keywords/trends?clientId=${clientId}`
+      : `/api/cafe/post-stats/summary?clientId=${clientId}`;
+    fetch(url, { cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (cancelled || !data) return;
+        if (isBlog) setTrends(data.trends ?? {});
+        else {
+          setPostStats(data.stats ?? {});
+          setStatsDate(data.latestDate ?? null);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [clientId, isBlog]);
 
   const handleAddKeyword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -446,23 +486,38 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     (kw.current_rank === null || kw.current_rank > 7);
 
   if (!client) {
-    return (
-      <main className="flex-1 flex items-center justify-center p-4">
-        <div className="text-center">
-          <p className="text-slate-400 text-base md:text-lg">
-            <span className="hidden md:inline">좌측에서 {entityLabel}을 선택하세요</span>
-            <span className="md:hidden">메뉴에서 {entityLabel}을 선택하세요</span>
-          </p>
-          <p className="text-slate-300 text-sm mt-2">선택한 {entityLabel}의 키워드 순위가 표시됩니다</p>
-        </div>
-      </main>
-    );
+    return <OverviewPanel mode={mode} onSelectClient={onSelectClient} />;
   }
 
   // 카페 모드 + 통계 view → 통계 패널 렌더
   if (!isBlog && activeView === "stats") {
     return <CafeStatsPanel clientId={client.id} clientName={client.name} />;
   }
+
+  // 상태 필터 (블로그: 추이 상태 / 카페: 위닝)
+  const filteredKeywords =
+    keywordFilter === "all"
+      ? keywords
+      : keywords.filter((kw) =>
+          keywordFilter === "winning" ? postStats[kw.id]?.winning : trends[kw.id]?.status === keywordFilter
+        );
+  const countStatus = (status: TrendStatus) => keywords.filter((kw) => trends[kw.id]?.status === status).length;
+  const filterChips: { key: KeywordFilter; label: string; count: number }[] = isBlog
+    ? [
+        { key: "all", label: "전체", count: keywords.length },
+        { key: "top_hold", label: "상위권 유지", count: countStatus("top_hold") },
+        { key: "top_drop", label: "상위권 이탈", count: countStatus("top_drop") },
+        { key: "long_unexposed", label: "장기 미노출", count: countStatus("long_unexposed") },
+        { key: "insufficient", label: "관측 부족", count: countStatus("insufficient") },
+      ]
+    : [
+        { key: "all", label: "전체", count: keywords.length },
+        {
+          key: "winning",
+          label: "★ 위닝 (조회수 100 이상)",
+          count: keywords.filter((kw) => postStats[kw.id]?.winning).length,
+        },
+      ];
 
   const sortedKeywords = (() => {
     // null/undefined를 항상 끝으로 보내는 timestamp 비교
@@ -478,26 +533,26 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
     };
 
     if (keywordSort !== "none") {
-      return [...keywords].sort((a, b) => {
+      return [...filteredKeywords].sort((a, b) => {
         const cmp = a.keyword.localeCompare(b.keyword, "ko");
         return keywordSort === "asc" ? cmp : -cmp;
       });
     }
     if (updatedSort !== "none") {
-      return [...keywords].sort((a, b) => compareTimestamp(a.updated_at, b.updated_at, updatedSort));
+      return [...filteredKeywords].sort((a, b) => compareTimestamp(a.updated_at, b.updated_at, updatedSort));
     }
     if (createdSort !== "none") {
-      return [...keywords].sort((a, b) => compareTimestamp(a.created_at, b.created_at, createdSort));
+      return [...filteredKeywords].sort((a, b) => compareTimestamp(a.created_at, b.created_at, createdSort));
     }
     if (prioritySort !== "none") {
-      return [...keywords].sort((a, b) => {
+      return [...filteredKeywords].sort((a, b) => {
         const aPri = (a as Keyword).priority ?? 3;
         const bPri = (b as Keyword).priority ?? 3;
         return prioritySort === "desc" ? bPri - aPri : aPri - bPri;
       });
     }
     if (rankSort !== "none") {
-      return [...keywords].sort((a, b) => {
+      return [...filteredKeywords].sort((a, b) => {
         const aRank = a.current_rank;
         const bRank = b.current_rank;
         if (aRank === null && bRank === null) return 0;
@@ -506,7 +561,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         return rankSort === "asc" ? aRank - bRank : bRank - aRank;
       });
     }
-    return keywords;
+    return filteredKeywords;
   })();
 
   const blogUrl = isBlog ? (client as Client).blog_url : null;
@@ -621,6 +676,11 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             {(kw as CafeKeyword).post_title ?? (kw as CafeKeyword).post_url ?? ""}
           </p>
         )}
+        {!isBlog && editingId !== kw.id && postStats[kw.id] && (
+          <div className="mt-1.5 font-normal">
+            <ViewCell stat={postStats[kw.id]} />
+          </div>
+        )}
       </td>
       {isBlog ? (
         <td className="px-5 py-4 text-center">
@@ -666,12 +726,17 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
           })()}
         </td>
       )}
-      <td className="px-5 py-4 text-center">
+      <td className="px-5 py-4 text-center whitespace-nowrap">
         <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} isReply={(kw as CafeKeyword).is_reply} replySince={(kw as CafeKeyword).reply_since} />
       </td>
       <td className="px-5 py-4 text-center">
         <RankChange current={kw.current_rank} previous={kw.previous_rank} />
       </td>
+      {isBlog && (
+        <td className="px-3 py-3">
+          <TrendCell trend={trends[kw.id]} />
+        </td>
+      )}
       <td className="px-5 py-4">
         {kw.matched_title === "[삭제된 게시글]" ? (
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-yellow-50 text-red-600 text-xs font-bold border-2 border-yellow-400">
@@ -907,6 +972,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         <RankBadge rank={kw.current_rank} smartBlockName={kw.smart_block_name} smartBlockRank={kw.smart_block_rank} isReply={(kw as CafeKeyword).is_reply} replySince={(kw as CafeKeyword).reply_since} />
         <RankChange current={kw.current_rank} previous={kw.previous_rank} />
       </div>
+      <div className="mb-2">
+        {isBlog ? <TrendCell trend={trends[kw.id]} /> : <ViewCell stat={postStats[kw.id]} />}
+      </div>
       {kw.matched_title === "[삭제된 게시글]" ? (
         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-yellow-50 text-red-600 text-xs font-bold border-2 border-yellow-400 mb-1">
           ❌ 삭제된 게시글
@@ -1022,6 +1090,33 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
         )}
       </AnimatePresence>
 
+      {/* 상태 필터 */}
+      {keywords.length > 0 && (
+        <div className="flex flex-wrap items-center gap-1.5 mb-3">
+          {filterChips.map((chip) => (
+            <button
+              key={chip.key}
+              onClick={() => setKeywordFilter(chip.key)}
+              disabled={chip.key !== "all" && chip.count === 0}
+              className={`px-3 py-1.5 text-xs font-medium rounded-full border transition-colors disabled:opacity-40 disabled:cursor-default ${
+                keywordFilter === chip.key
+                  ? "bg-slate-800 text-white border-slate-800"
+                  : "bg-white text-slate-600 border-slate-200 hover:border-slate-400"
+              }`}
+            >
+              {chip.label} <span className="tabular-nums opacity-70">{chip.count}</span>
+            </button>
+          ))}
+          <span className="ml-auto text-[11px] text-slate-400">
+            {isBlog
+              ? "추이: 위쪽 색 띠 = 7위 이내 · 아래 점 = 미노출 · 빈 구간 = 수집 기록 없음"
+              : statsDate
+                ? `글 조회수: ${statsDate} 수집 · 🔒 = 카페 회원만 볼 수 있는 글`
+                : "글 조회수: 아직 수집 전"}
+          </span>
+        </div>
+      )}
+
       {/* 블로그 모드: 기존 테이블/카드 */}
       {isBlog ? (
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
@@ -1047,6 +1142,7 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
                   현재 순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
                 </th>
                 <th className="px-5 py-3.5 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
+                <th className="px-3 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32">30일 추이</th>
                 <th className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">매칭 포스트</th>
                 <th
                   className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-emerald-600 transition-colors"
@@ -1059,9 +1155,9 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan={7} className="text-center py-12 text-slate-400">불러오는 중...</td></tr>
+                <tr><td colSpan={8} className="text-center py-12 text-slate-400">불러오는 중...</td></tr>
               ) : keywords.length === 0 ? (
-                <tr><td colSpan={7} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td></tr>
+                <tr><td colSpan={8} className="text-center py-12 text-slate-400">등록된 키워드가 없습니다</td></tr>
               ) : (
                 sortedKeywords.map((kw, i) => renderKeywordRow(kw, i))
               )}
@@ -1108,49 +1204,51 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               <span className="text-xs text-violet-500">{exposedKeywords.length}개</span>
             </div>
 
-            <table className="w-full hidden md:table">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-100">
-                  <th
-                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
-                  >
-                    키워드 / 포스팅 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
-                  </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
-                  <th
-                    className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setKeywordSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
-                  >
-                    순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
-                  </th>
-                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">노출 URL</th>
-                  <th
-                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
-                  >
-                    마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
-                  </th>
-                  <th
-                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setCreatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); }}
-                  >
-                    등록일 {createdSort === "desc" ? "▼" : createdSort === "asc" ? "▲" : ""}
-                  </th>
-                  <th className="px-5 py-3 w-20"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={8} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
-                ) : exposedKeywords.length === 0 ? (
-                  <tr><td colSpan={8} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
-                ) : (
-                  exposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
-                )}
-              </tbody>
-            </table>
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full min-w-[1080px]">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-100">
+                    <th
+                      className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
+                    >
+                      키워드 / 포스팅 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
+                    </th>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
+                    <th
+                      className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setRankSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setKeywordSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
+                    >
+                      순위 {rankSort === "asc" ? "▲" : rankSort === "desc" ? "▼" : ""}
+                    </th>
+                    <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">노출 URL</th>
+                    <th
+                      className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
+                    >
+                      마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
+                    </th>
+                    <th
+                      className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setCreatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); }}
+                    >
+                      등록일 {createdSort === "desc" ? "▼" : createdSort === "asc" ? "▲" : ""}
+                    </th>
+                    <th className="px-5 py-3 w-20"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr><td colSpan={8} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                  ) : exposedKeywords.length === 0 ? (
+                    <tr><td colSpan={8} className="text-center py-8 text-slate-400">노출 중인 키워드가 없습니다</td></tr>
+                  ) : (
+                    exposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
+                  )}
+                </tbody>
+              </table>
+            </div>
 
             <div className="md:hidden">
               {loading ? (
@@ -1172,44 +1270,46 @@ export default function MainPanel({ mode, client, onClientUpdated }: MainPanelPr
               <span className="text-xs text-slate-400">{unexposedKeywords.length}개</span>
             </div>
 
-            <table className="w-full hidden md:table">
-              <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th
-                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
-                  >
-                    키워드 / 포스팅 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
-                  </th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
-                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">상태</th>
-                  <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
-                  <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide"></th>
-                  <th
-                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
-                  >
-                    마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
-                  </th>
-                  <th
-                    className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32 cursor-pointer select-none hover:text-violet-600 transition-colors"
-                    onClick={() => { setCreatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); }}
-                  >
-                    등록일 {createdSort === "desc" ? "▼" : createdSort === "asc" ? "▲" : ""}
-                  </th>
-                  <th className="px-5 py-3 w-20"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr><td colSpan={8} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
-                ) : unexposedKeywords.length === 0 ? (
-                  <tr><td colSpan={8} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
-                ) : (
-                  unexposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
-                )}
-              </tbody>
-            </table>
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full min-w-[1080px]">
+                <thead>
+                  <tr className="bg-slate-50/50 border-b border-slate-100">
+                    <th
+                      className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
+                    >
+                      키워드 / 포스팅 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
+                    </th>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-28">작성자</th>
+                    <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">상태</th>
+                    <th className="px-5 py-3 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide w-24">변화</th>
+                    <th className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide"></th>
+                    <th
+                      className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-36 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setUpdatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setPrioritySort("none"); setCreatedSort("none"); }}
+                    >
+                      마지막 갱신 {updatedSort === "desc" ? "▼" : updatedSort === "asc" ? "▲" : ""}
+                    </th>
+                    <th
+                      className="px-5 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-32 cursor-pointer select-none hover:text-violet-600 transition-colors"
+                      onClick={() => { setCreatedSort(prev => prev === "none" ? "desc" : prev === "desc" ? "asc" : "none"); setKeywordSort("none"); setRankSort("none"); setUpdatedSort("none"); setPrioritySort("none"); }}
+                    >
+                      등록일 {createdSort === "desc" ? "▼" : createdSort === "asc" ? "▲" : ""}
+                    </th>
+                    <th className="px-5 py-3 w-20"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loading ? (
+                    <tr><td colSpan={8} className="text-center py-8 text-slate-400">불러오는 중...</td></tr>
+                  ) : unexposedKeywords.length === 0 ? (
+                    <tr><td colSpan={8} className="text-center py-8 text-slate-400 text-sm">미노출 키워드가 없습니다 🎉</td></tr>
+                  ) : (
+                    unexposedKeywords.map((kw, i) => renderKeywordRow(kw, i))
+                  )}
+                </tbody>
+              </table>
+            </div>
 
             <div className="md:hidden">
               {loading ? (

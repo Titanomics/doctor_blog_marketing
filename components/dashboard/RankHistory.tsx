@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { KeywordHistory } from "@/lib/types";
+import { recentKstDates } from "@/lib/trend";
+import RankChart from "./RankChart";
 
 interface RankHistoryProps {
   keywordId: string;
@@ -21,13 +23,14 @@ export default function RankHistory({
 }: RankHistoryProps) {
   const [history, setHistory] = useState<KeywordHistory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState<30 | 90>(90);
 
   useEffect(() => {
     const fetchHistory = async () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `${historyApiPath}?keywordId=${keywordId}`,
+          `${historyApiPath}?keywordId=${keywordId}&days=${period}`,
           { cache: "no-store" }
         );
         if (res.ok) {
@@ -39,23 +42,21 @@ export default function RankHistory({
       }
     };
     fetchHistory();
-  }, [keywordId]);
+  }, [keywordId, historyApiPath, period]);
 
-  // 최근 30일 날짜 배열 생성
-  const days: { date: string; label: string; dayName: string }[] = [];
-  for (let i = 0; i < 30; i++) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().split("T")[0];
-    const month = d.getMonth() + 1;
-    const day = d.getDate();
-    const dayName = DAY_NAMES[d.getDay()];
-    days.push({
-      date: dateStr,
-      label: `${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`,
-      dayName,
+  // 최근 30일 날짜 배열 (KST 기준 — DB의 tracked_date와 같은 기준)
+  const days = recentKstDates(30)
+    .reverse()
+    .map((dateStr) => {
+      const [, month, day] = dateStr.split("-");
+      return {
+        date: dateStr,
+        label: `${month}-${day}`,
+        dayName: DAY_NAMES[new Date(`${dateStr}T00:00:00Z`).getUTCDay()],
+      };
     });
-  }
+  const chartDates = recentKstDates(period);
+  const accent = historyApiPath.includes("/cafe") ? "#8b5cf6" : "#10b981";
 
   // 날짜별 순위 매핑
   const rankMap = new Map<string, number | null>();
@@ -90,7 +91,7 @@ export default function RankHistory({
               순위 변화 추이
             </h2>
             <p className="text-sm text-slate-500 mt-0.5">
-              키워드: <span className="font-medium text-slate-700">{keywordName}</span> · 최근 30일
+              키워드: <span className="font-medium text-slate-700">{keywordName}</span> · PC 통합검색 화면 순서 기준
             </p>
           </div>
           <button
@@ -102,6 +103,31 @@ export default function RankHistory({
             </svg>
           </button>
         </div>
+
+        <div className="flex items-center gap-1.5 mb-3">
+          {([30, 90] as const).map((p) => (
+            <button
+              key={p}
+              onClick={() => setPeriod(p)}
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+                period === p ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+              }`}
+            >
+              최근 {p}일
+            </button>
+          ))}
+          <span className="ml-auto text-[11px] text-slate-400">색 띠 = 7위 이내 · 빈 구간 = 수집 기록 없음</span>
+        </div>
+
+        {!loading && history.length > 0 && (
+          <div className="mb-5 rounded-xl border border-slate-100 p-2">
+            <RankChart
+              dates={chartDates}
+              points={history.map((h) => ({ date: h.tracked_date, rank: h.rank }))}
+              accent={accent}
+            />
+          </div>
+        )}
 
         {loading ? (
           <div className="text-center py-12 text-slate-400">불러오는 중...</div>
