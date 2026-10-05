@@ -7,6 +7,7 @@ import { cafeRefToUrl, parseCafeRef, resolveCafeTarget, sameCafeArticle } from "
 import { saveCafeHistory } from "@/lib/saveCafeHistory";
 import { internalAuthHeaders } from "@/lib/auth";
 import { getCafePostStatus, type CafePostStatus } from "@/lib/checkCafePostDeleted";
+import { getTodayPostStatus, isWeeklyRecheckDay, postKey } from "@/lib/cafePostStats";
 
 export const maxDuration = 300;
 
@@ -32,14 +33,6 @@ type CafeKeywordRow = {
   reply_since: string | null;
   matched_title: string | null;
 };
-
-// 삭제 확인된 글의 재확인 요일: id에서 0~6을 뽑아 KST 날짜와 맞는 날만 true (글들이 7일에 고르게 분산)
-function isWeeklyRecheckDay(id: string, nowMs: number = Date.now()): boolean {
-  let sum = 0;
-  for (let i = 0; i < id.length; i++) sum += id.charCodeAt(i);
-  const kstDay = Math.floor((nowMs + 9 * 60 * 60 * 1000) / 86_400_000);
-  return (sum + kstDay) % 7 === 0;
-}
 
 // 단일 키워드 처리 (병렬 호출 가능 단위)
 async function processKeyword(
@@ -93,17 +86,19 @@ async function processKeyword(
     const wasMarkedDeleted = kw.matched_title === "[삭제된 게시글]";
     const noMatchFound = !found && !foundInSmartBlock && !foundInReply;
 
-    // 검색에 없는 글만 상태를 조회한다. 이미 삭제로 확인된 글은 매일 다시 묻지 않고
-    // 글마다 정해진 요일에 주 1회만 재확인한다 (네이버 조회량 절감).
+    // 검색에 없는 글만 생존 여부를 확인한다.
+    // 글 API는 글당 하루 1회가 원칙 — /api/cafe/post-stats 가 오늘 이미 관측했으면 그 결과를 쓴다.
+    // 오늘 관측이 없을 때만 직접 조회하고, 이미 삭제로 확인된 글은 주 1회 요일에만 다시 묻는다.
     let postStatus: CafePostStatus | null = null;
     const canonicalUrl = targetRef ? cafeRefToUrl(targetRef) : null;
-    if (
-      hasSpecificPostId &&
-      noMatchFound &&
-      canonicalUrl &&
-      (!wasMarkedDeleted || isWeeklyRecheckDay(kw.id))
-    ) {
-      postStatus = await getCafePostStatus(canonicalUrl);
+    if (hasSpecificPostId && noMatchFound && targetRef?.cafe && canonicalUrl) {
+      postStatus = await getTodayPostStatus(targetRef.cafe, targetRef.articleId);
+      if (
+        !postStatus &&
+        (!wasMarkedDeleted || isWeeklyRecheckDay(postKey(targetRef.cafe, targetRef.articleId)))
+      ) {
+        postStatus = await getCafePostStatus(canonicalUrl);
+      }
     }
     const keepDeletedMark =
       postStatus === "deleted" ||

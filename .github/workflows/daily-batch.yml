@@ -90,9 +90,37 @@ jobs:
             echo "::endgroup::"
           done
 
+  # 카페 글 조회수·생존 여부 수집. 카페 배치보다 먼저 끝내 두면 배치가 같은 글을 다시 조회하지 않는다.
+  post-stats:
+    name: 카페 글 조회수 수집
+    if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: 오늘 관측이 없는 글이 0이 될 때까지 반복 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -uo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+          for i in $(seq 1 12); do
+            RESP=$(curl -fsS -m 290 -X POST -H "$AUTH_HEADER" "$BASE_URL/api/cafe/post-stats?limit=100") || { echo "::warning::post-stats 호출 실패 (iteration $i)"; break; }
+            # 글 식별자는 로그에 남기지 않고 집계 숫자만 출력
+            echo "$RESP" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:d.get(k) for k in ('date','posts','targets','alreadyDone','processed','saved','failed','remaining','unresolvedUrls','stopped')})"
+            SAVED=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('saved', 0))")
+            REMAINING=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('remaining', 0))")
+            STOPPED=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('stopped') or '')")
+            if [ "$REMAINING" -le 0 ]; then echo "::notice::조회수 수집 완료"; break; fi
+            if [ "$STOPPED" = "consecutive_failures" ]; then echo "::warning::연속 실패로 중단 (차단·장애 의심), 남은 글 $REMAINING"; break; fi
+            if [ "$SAVED" -le 0 ]; then echo "::warning::진전 없음, 남은 글 $REMAINING"; break; fi
+            sleep 5
+          done
+
   cafe-batch:
     name: 카페 batch (clients × chunks 직렬)
-    if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe' }}
+    # 조회수 수집이 실패해도 카페 배치는 진행한다
+    needs: [post-stats]
+    if: ${{ always() && (inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe') }}
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
