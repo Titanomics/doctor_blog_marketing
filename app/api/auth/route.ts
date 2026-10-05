@@ -6,6 +6,7 @@ import {
   createSessionToken,
   verifySessionToken,
 } from "@/lib/auth";
+import { usingServiceRole } from "@/lib/supabase";
 
 // 로그인 실패 제한 (인스턴스 메모리 기준 — 서버리스에서는 인스턴스별로 따로 센다)
 const MAX_FAILS = 10;
@@ -38,7 +39,11 @@ function recordFail(ip: string, now: number) {
 // 세션 확인
 export async function GET(request: NextRequest) {
   const authenticated = verifySessionToken(request.cookies.get(SESSION_COOKIE)?.value);
-  return NextResponse.json({ authenticated }, { headers: { "Cache-Control": "no-store" } });
+  return NextResponse.json(
+    // db: 서버가 어느 키로 Supabase에 접속 중인지 (RLS 적용 전 점검용, 로그인 시에만 노출)
+    authenticated ? { authenticated, db: usingServiceRole ? "service_role" : "anon" } : { authenticated },
+    { headers: { "Cache-Control": "no-store" } }
+  );
 }
 
 // 로그인
