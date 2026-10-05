@@ -84,6 +84,12 @@ test("카페: 이름과 숫자 ID가 섞여 대조할 수 없으면 일치로 �
   assert.equal(sameCafeArticle(byName, byId), false);
   assert.equal(sameCafeArticle(byId, sameId), true);
   assert.equal(sameCafeArticle(byId, otherId), false);
+  // 숫자 ID로 등록된 글의 카페 이름을 조회해 채운 뒤에는 이름 형식 링크와 대조된다
+  const resolved = { ...byId, cafe: "team" };
+  assert.equal(sameCafeArticle(resolved, byName), true);
+  assert.equal(sameCafeArticle(resolved, parseCafeRef("https://cafe.naver.com/other/456")), false);
+  // 양쪽에 숫자 ID가 있으면 이름보다 숫자 ID를 우선 비교
+  assert.equal(sameCafeArticle(resolved, { cafe: "team", clubId: "999", articleId: "456" }), false);
   assert.equal(cafeRefToUrl(byName), "https://cafe.naver.com/team/456");
   assert.equal(cafeRefToUrl(byId), null);
 });

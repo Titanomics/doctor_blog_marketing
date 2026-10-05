@@ -116,9 +116,36 @@ export function parseCafeRef(input: string): CafeRef | null {
 // (글 번호만 같은 다른 카페 글을 잡는 것보다 못 찾는 편이 안전).
 export function sameCafeArticle(a: CafeRef, b: CafeRef): boolean {
   if (a.articleId !== b.articleId) return false;
-  if (a.cafe && b.cafe) return a.cafe === b.cafe;
   if (a.clubId && b.clubId) return a.clubId === b.clubId;
+  if (a.cafe && b.cafe) return a.cafe === b.cafe;
   return false;
+}
+
+// 숫자 카페 ID → 카페 이름. 성공한 결과만 하루 동안 기억한다 (실패는 기억하지 않음).
+const CAFE_NAME_TTL_MS = 24 * 60 * 60 * 1000;
+const cafeNameCache = new Map<string, { name: string; at: number }>();
+
+// 반환: 카페 이름 / null(조회 실패 — 일시적일 수 있음)
+async function lookupCafeName(clubId: string): Promise<string | null> {
+  const hit = cafeNameCache.get(clubId);
+  if (hit && Date.now() - hit.at < CAFE_NAME_TTL_MS) return hit.name;
+  try {
+    const res = await fetch(
+      `https://apis.naver.com/cafe-web/cafe2/CafeGateInfo.json?cafeId=${clubId}`,
+      { headers: { "User-Agent": UA }, cache: "no-store", signal: AbortSignal.timeout(RESOLVE_TIMEOUT_MS) }
+    );
+    if (!res.ok) return null;
+    const info = (await res.json())?.message?.result?.cafeInfoView;
+    const name = info?.cafeUrl;
+    if (typeof name !== "string" || !/^[A-Za-z0-9_-]+$/.test(name)) return null;
+    // 응답이 요청한 카페의 것인지 확인
+    if (info.cafeId !== undefined && String(info.cafeId) !== clubId) return null;
+    const lower = name.toLowerCase();
+    cafeNameCache.set(clubId, { name: lower, at: Date.now() });
+    return lower;
+  } catch {
+    return null;
+  }
 }
 
 // 카페 이름을 아는 경우의 표준 URL (삭제 여부 확인 API용). 숫자 ID만 알면 null.
@@ -128,18 +155,27 @@ export function cafeRefToUrl(ref: CafeRef): string | null {
 
 // 등록된 카페 글 URL(직접 또는 naver.me) → CafeRef.
 // - null: URL이 없거나 카페 글 URL이 아님 (확정적 — 호출부는 제목 매칭으로 넘어가도 됨)
-// - "unresolved": naver.me 해석이 일시적 오류로 실패 (호출부는 저장을 보류해야 함)
+// - "unresolved": naver.me 해석이나 카페 이름 조회가 일시적 오류로 실패 (호출부는 저장을 보류해야 함)
+// 숫자 카페 ID로만 등록된 URL은 카페 이름을 조회해 채운다 — 검색 결과 링크가 이름 형식이기 때문.
 export async function resolveCafeTarget(
   postUrl: string | null | undefined
 ): Promise<CafeRef | null | "unresolved"> {
   if (!postUrl) return null;
-  const direct = parseCafeRef(postUrl);
-  if (direct) return direct;
-  const u = parseSafeUrl(postUrl);
-  if (!u || u.hostname !== SHORT_HOST) return null;
-  const resolved = await resolveShortUrl(u);
-  if (resolved === "error") return "unresolved";
-  return resolved ? parseCafeRef(resolved.href) : null;
+  let ref = parseCafeRef(postUrl);
+  if (!ref) {
+    const u = parseSafeUrl(postUrl);
+    if (!u || u.hostname !== SHORT_HOST) return null;
+    const resolved = await resolveShortUrl(u);
+    if (resolved === "error") return "unresolved";
+    ref = resolved ? parseCafeRef(resolved.href) : null;
+    if (!ref) return null;
+  }
+  if (!ref.cafe && ref.clubId) {
+    const name = await lookupCafeName(ref.clubId);
+    if (!name) return "unresolved";
+    ref = { ...ref, cafe: name };
+  }
+  return ref;
 }
 
 // naver.me 단축 URL을 따라가 최종 URL을 돌려준다.
