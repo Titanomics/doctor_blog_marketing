@@ -1,9 +1,11 @@
-name: Daily Report (KST 07:00)
+name: Daily Report
+
+# 리포트 메일 발송. 정기 발송은 daily-batch.yml의 report job이 배치 완료 직후 이 워크플로우를 호출한다.
+# (고정 시각 cron은 배치가 끝나기 전에 메일이 나가는 문제가 있어 제거)
+# 수동 재발송: Actions UI에서 Run workflow.
 
 on:
-  schedule:
-    # UTC 22:00 = KST 07:00 (daily-batch 완료 후 4시간 뒤 메일 발송)
-    - cron: "0 22 * * *"
+  workflow_call:
   workflow_dispatch:
 
 jobs:

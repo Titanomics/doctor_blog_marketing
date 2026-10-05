@@ -2,6 +2,9 @@ name: Daily Batch (KST 03:00) — chunks 직접 호출
 
 # 체인 의존 0: GitHub Actions이 모든 client × chunks를 직렬로 직접 호출
 # 체인 끊김 위험 없음. 각 chunk는 독립 호출이라 한 chunk가 실패해도 다음은 진행.
+# chunk 호출에는 total을 넘기지 않는다 — total이 있으면 서버가 다음 chunk를 또 체인 호출해
+# 같은 chunk가 여러 번 실행된다 (요청량 증가 + previous_rank가 당일 값으로 덮임).
+# 세 배치가 모두 끝나면 report job이 리포트 메일을 보낸다.
 
 on:
   schedule:
@@ -16,8 +19,9 @@ on:
 
 env:
   BASE_URL: https://doctor-blog-marketing.vercel.app
-  # chunk 사이 sleep (자식 처리 + 여유). 자식 200s + 30s 여유
-  CHUNK_INTERVAL_S: 230
+  # chunk 사이 sleep. chunk 호출은 처리가 끝날 때까지 기다리는 동기 호출이므로
+  # 서버의 키워드 간격(10s)보다 조금 길게만 둔다.
+  CHUNK_INTERVAL_S: 20
   # chunk 크기 (서버 코드 CHUNK_SIZE와 일치)
   CHUNK_SIZE: 20
 
@@ -51,7 +55,7 @@ jobs:
           AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
 
           echo "::group::블로그 client 목록"
-          CLIENTS_JSON=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/clients")
+          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/clients")
           CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
           echo "$CLIENT_IDS"
           echo "::endgroup::"
@@ -59,7 +63,8 @@ jobs:
           for CLIENT_ID in $CLIENT_IDS; do
             echo "::group::Client $CLIENT_ID"
             # 키워드 수
-            COUNT=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))")
+            COUNT=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))") \
+              || { echo "::warning::client $CLIENT_ID 키워드 수 조회 실패 — 건너뜀"; echo "::endgroup::"; continue; }
             echo "키워드: $COUNT개"
 
             if [ "$COUNT" -le 0 ]; then echo "skip (키워드 없음)"; echo "::endgroup::"; continue; fi
@@ -76,7 +81,7 @@ jobs:
             while [ "$OFFSET" -lt "$COUNT" ]; do
               echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
               curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
-                "$BASE_URL/api/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE&total=$COUNT" \
+                "$BASE_URL/api/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE" \
                 -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
                 || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
               OFFSET=$((OFFSET + CHUNK_SIZE))
@@ -99,14 +104,15 @@ jobs:
           AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
 
           echo "::group::카페 client 목록"
-          CLIENTS_JSON=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
+          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
           CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
           echo "$CLIENT_IDS"
           echo "::endgroup::"
 
           for CLIENT_ID in $CLIENT_IDS; do
             echo "::group::Client $CLIENT_ID"
-            COUNT=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/cafe/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))")
+            COUNT=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))") \
+              || { echo "::warning::client $CLIENT_ID 키워드 수 조회 실패 — 건너뜀"; echo "::endgroup::"; continue; }
             echo "키워드: $COUNT개"
 
             if [ "$COUNT" -le 0 ]; then echo "skip"; echo "::endgroup::"; continue; fi
@@ -120,7 +126,7 @@ jobs:
             while [ "$OFFSET" -lt "$COUNT" ]; do
               echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
               curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
-                "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE&total=$COUNT" \
+                "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE" \
                 -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
                 || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
               OFFSET=$((OFFSET + CHUNK_SIZE))
@@ -143,7 +149,7 @@ jobs:
           AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
 
           echo "::group::기자단 client 목록 (cafe_clients 공유)"
-          CLIENTS_JSON=$(curl -fsSL -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
+          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
           CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
           echo "$CLIENT_IDS"
           echo "::endgroup::"
@@ -157,3 +163,11 @@ jobs:
             echo "::endgroup::"
             sleep 60  # client 사이 1분 간격
           done
+
+  report:
+    name: 리포트 메일 발송 (배치 완료 후)
+    # 정기 실행에서만, 배치가 일부 실패·시간 초과여도 발송한다.
+    needs: [blog-batch, cafe-batch, reporter-batch]
+    if: ${{ always() && github.event_name == 'schedule' }}
+    uses: ./.github/workflows/daily-report.yml
+    secrets: inherit
