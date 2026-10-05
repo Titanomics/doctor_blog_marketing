@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { after } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { fetchNaverSerp } from "@/lib/naverSerp";
-import { matchesBlogUrl } from "@/lib/naverUrl";
-import { saveKeywordHistory } from "@/lib/saveHistory";
 import { internalAuthHeaders } from "@/lib/auth";
-import { nextPreviousRank } from "@/lib/rankUpdate";
+import { BLOG_KEYWORD_COLUMNS, processBlogKeyword } from "@/lib/batch/blog";
 
 export const maxDuration = 300;
 
@@ -16,63 +13,6 @@ const SYNC_THRESHOLD = 10;
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-type BlogKeywordRow = {
-  id: string;
-  keyword: string;
-  current_rank: number | null;
-  previous_rank: number | null;
-  updated_at: string | null;
-};
-
-async function processKeyword(
-  client: { id: string; name: string; blog_url: string },
-  kw: BlogKeywordRow
-): Promise<{ ok: boolean; error?: string }> {
-  try {
-    // 수집 실패 시에는 DB를 건드리지 않는다 (기존 순위 유지, "미노출"로 덮어쓰지 않음)
-    const serp = await fetchNaverSerp(kw.keyword);
-    if (!serp.ok) {
-      return { ok: false, error: `[${client.name}] "${kw.keyword}" ${serp.reason} — 기존 순위 유지` };
-    }
-    const { results, smartBlockResults } = serp;
-
-    const matched = results.find((r) => matchesBlogUrl(r.link, client.blog_url));
-    const matchedInSmartBlock = smartBlockResults.find((r) => matchesBlogUrl(r.link, client.blog_url));
-
-    const newRank = matched ? matched.rank : null;
-
-    if (!matched && !matchedInSmartBlock) {
-      console.warn(`[MATCH-MISS] "${kw.keyword}" | VIEW=${results.length}개, 스마트블록=${smartBlockResults.length}개 | blog_url="${client.blog_url}" | 상위3링크: ${results.slice(0, 3).map((r) => r.link).join(" | ")}`);
-    }
-
-    const { error: updateError } = await supabase
-      .from("keywords")
-      .update({
-        previous_rank: nextPreviousRank(kw),
-        current_rank: newRank,
-        matched_title: matched?.title ?? matchedInSmartBlock?.title ?? null,
-        matched_url: matched?.link ?? matchedInSmartBlock?.link ?? null,
-        smart_block_name: matchedInSmartBlock?.blockName ?? null,
-        smart_block_rank: matchedInSmartBlock?.rank ?? null,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", kw.id);
-
-    if (updateError) {
-      return { ok: false, error: `[${client.name}] "${kw.keyword}" DB 업데이트 실패: ${updateError.message}` };
-    }
-
-    const historyError = await saveKeywordHistory(kw.id, newRank);
-    if (historyError) {
-      return { ok: false, error: `[${client.name}] "${kw.keyword}" 이력 저장 실패: ${historyError}` };
-    }
-    return { ok: true };
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    return { ok: false, error: `[${client.name}] "${kw.keyword}" 처리 중 오류: ${msg}` };
-  }
 }
 
 // 단일 클라이언트 키워드 처리 — concurrency CONCURRENCY 그룹 병렬
@@ -87,7 +27,7 @@ async function processClient(
 
   let query = supabase
     .from("keywords")
-    .select("id, keyword, current_rank, previous_rank, updated_at")
+    .select(BLOG_KEYWORD_COLUMNS)
     .eq("client_id", client.id)
     .order("id", { ascending: true });
 
@@ -101,7 +41,7 @@ async function processClient(
 
   // 키워드당 10초 간격
   for (let i = 0; i < keywords.length; i++) {
-    const r = await processKeyword(client, keywords[i]);
+    const r = await processBlogKeyword(client, keywords[i]);
     if (r.ok) updated++;
     else if (r.error) errors.push(r.error);
     if (i < keywords.length - 1) await sleep(KEYWORD_DELAY_MS);
