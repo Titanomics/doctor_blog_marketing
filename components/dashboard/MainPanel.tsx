@@ -1154,7 +1154,7 @@ export default function MainPanel({ mode, client, onClientUpdated, onSelectClien
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
                 <th
-                  className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-48 cursor-pointer select-none hover:text-emerald-600 transition-colors"
+                  className="px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide w-60 cursor-pointer select-none hover:text-emerald-600 transition-colors"
                   onClick={() => { setKeywordSort(prev => prev === "none" ? "asc" : prev === "asc" ? "desc" : "none"); setPrioritySort("none"); setRankSort("none"); setUpdatedSort("none"); setCreatedSort("none"); }}
                 >
                   키워드 {keywordSort === "asc" ? "▲" : keywordSort === "desc" ? "▼" : ""}
