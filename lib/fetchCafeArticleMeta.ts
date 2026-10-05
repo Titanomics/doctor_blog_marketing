@@ -17,7 +17,8 @@ export async function fetchCafeArticleMeta(postUrl: string): Promise<CafeArticle
     if (!ref) return empty;
     const { cafe: shortcut, articleId } = ref;
 
-    const apiUrl = `https://apis.naver.com/cafe-web/cafe-articleapi/v3/cafes/${shortcut}/articles/${articleId}?query=&menuId=0&useCafeId=false&requestFrom=A`;
+    // v3 엔드포인트는 2026-10 현재 모든 요청에 500을 반환한다. v2.1은 정상 동작.
+    const apiUrl = `https://apis.naver.com/cafe-web/cafe-articleapi/v2.1/cafes/${shortcut}/articles/${articleId}?query=&useCafeId=false&requestFrom=A`;
     const res = await fetch(apiUrl, {
       headers: { "User-Agent": UA },
       cache: "no-store",
