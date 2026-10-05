@@ -84,19 +84,25 @@ export async function loadAgeInfo(mode: AgeMode, sources: AgeSource[]): Promise<
   const byId = new Map<string, DayRecord[]>();
   let error: string | null = null;
 
+  // 이력이 수만 행이라 id 묶음별로 동시에 읽는다
   const ids = dated.map((d) => d.id);
-  for (let i = 0; i < ids.length; i += 100) {
-    const part = ids.slice(i, i + 100);
-    const result = await fetchAll<Record<string, string | number | null>>((from, to) =>
-      supabase
-        .from(table)
-        .select("*") // 열 이름이 표마다 달라(keyword_id / entry_id) 문자열 조합 대신 전체를 읽는다
-        .in(idColumn, part)
-        .gte("tracked_date", earliest)
-        .order("tracked_date", { ascending: true })
-        .order(idColumn, { ascending: true })
-        .range(from, to)
-    );
+  const chunks: string[][] = [];
+  for (let i = 0; i < ids.length; i += 100) chunks.push(ids.slice(i, i + 100));
+  const results = await Promise.all(
+    chunks.map((part) =>
+      fetchAll<Record<string, string | number | null>>((from, to) =>
+        supabase
+          .from(table)
+          .select("*") // 열 이름이 표마다 달라(keyword_id / entry_id) 문자열 조합 대신 전체를 읽는다
+          .in(idColumn, part)
+          .gte("tracked_date", earliest)
+          .order("tracked_date", { ascending: true })
+          .order(idColumn, { ascending: true })
+          .range(from, to)
+      )
+    )
+  );
+  for (const result of results) {
     if (result.error) error = result.error;
     for (const row of result.data) {
       const id = row[idColumn] as string;
