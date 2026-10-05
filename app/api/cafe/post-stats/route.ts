@@ -137,7 +137,13 @@ export async function POST(request: NextRequest) {
     if (!data || data.length < 1000) break;
   }
 
+  // 매 호출마다 순서를 섞는다 — 계속 실패하는 글(폐쇄된 카페 등)이 앞자리를 차지해
+  // 뒤의 글이 영영 처리되지 않는 것을 막는다.
   const pending = targets.filter(([key]) => !done.has(key));
+  for (let i = pending.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pending[i], pending[j]] = [pending[j], pending[i]];
+  }
 
   let processed = 0;
   let saved = 0;

@@ -1,7 +1,10 @@
 // 네이버 카페 글 1건 조회 (비공식 카페 웹 API).
 // 응답 하나로 생존 여부·조회수·댓글 수를 함께 얻는다 — 글당 하루 1회만 부르는 것이 원칙.
 //
-// - alive:   정상 게시글 (200). 조회수 등 포함
+// - alive:   글이 존재함. 공개 글(200)이면 조회수 등 포함.
+//            로그인해야 볼 수 있는 글(401 + 0004)은 존재는 확인되지만 조회수를 얻을 수 없어
+//            readCount 등이 null 이다. (삭제된 글은 로그인 여부와 무관하게 404 + 4003 으로 응답함을
+//            2026-10 실측으로 확인 — 따라서 401 은 "존재하는 글"로 본다)
 // - deleted: 명시적 삭제 확인 (404 + errorCode 4003)
 // - unknown: 일시 장애·차단·예상 외 응답. 호출부는 기존 상태를 보존해야 한다
 
@@ -49,6 +52,25 @@ export async function fetchCafePost(cafe: string, articleId: string): Promise<Ca
         memberCount: toInt(result?.cafe?.memberCount),
         writeDate: writeMs ? new Date(writeMs).toISOString() : null,
       };
+    }
+
+    if (res.status === 401) {
+      try {
+        const data = await res.json();
+        if (data?.result?.errorCode === "0004") {
+          return {
+            status: "alive",
+            readCount: null,
+            commentCount: null,
+            clubId: null,
+            memberCount: null,
+            writeDate: null,
+          };
+        }
+      } catch {
+        // 아래에서 unknown 처리
+      }
+      return { status: "unknown" };
     }
 
     if (res.status === 404) {

@@ -5,11 +5,12 @@
 import { supabase } from "@/lib/supabase";
 import { getKSTDateString } from "@/lib/dateUtils";
 
-// "위닝" 판정 기준: 연속된 두 일별 관측 사이 조회수 증가가 이 값 이상
-export const WINNING_READ_DELTA = 100;
-// 두 관측을 "하루 간격"으로 인정하는 실제 시간 범위
-export const WINNING_MIN_GAP_HOURS = 12;
-export const WINNING_MAX_GAP_HOURS = 36;
+// "위닝" 판정 기준: 글의 누적 조회수가 이 값 이상 (발행 직후 글도 포함)
+export const WINNING_READ_COUNT = 100;
+
+export function isWinning(readCount: number | null | undefined): boolean {
+  return typeof readCount === "number" && readCount >= WINNING_READ_COUNT;
+}
 
 export function postKey(cafe: string, articleId: string): string {
   return `${cafe}/${articleId}`;
