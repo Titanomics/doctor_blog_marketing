@@ -235,5 +235,12 @@ jobs:
         env:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          curl -fsS -m 120 -X POST -H "Authorization: Bearer $CRON_SECRET" "$BASE_URL/api/alerts/daily" \
-            || echo "::warning::슬랙 알림 요청 실패"
+          # 리포트 메일 호출과 같은 순간에 돌아 502가 난 적이 있어, 실패하면 30초 뒤 두 번 더 시도한다
+          for attempt in 1 2 3; do
+            STATUS=$(curl -sS -o /dev/null -m 120 -X POST -H "Authorization: Bearer $CRON_SECRET" \
+              -w "%{http_code}" "$BASE_URL/api/alerts/daily" || echo "000")
+            echo "attempt $attempt: HTTP $STATUS"
+            [ "$STATUS" = "200" ] && exit 0
+            sleep 30
+          done
+          echo "::warning::슬랙 알림 요청 실패 (3회)"
