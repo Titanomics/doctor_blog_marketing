@@ -1,0 +1,41 @@
+name: Slack Alert (manual)
+
+# 슬랙 알림을 배치와 별개로 보내거나(재발송) 응답을 확인(dry)할 때 수동으로 실행한다.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: "1이면 슬랙에 보내지 않고 본문만 응답"
+        required: false
+        default: "0"
+      cohorts:
+        description: "1이면 요일과 무관하게 발행 묶음별 현황 포함"
+        required: false
+        default: "0"
+
+env:
+  BASE_URL: https://doctor-blog-marketing.vercel.app
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: 알림 요청
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          DRY: ${{ github.event.inputs.dry }}
+          COHORTS: ${{ github.event.inputs.cohorts }}
+        run: |
+          RESPONSE=$(curl -sS -m 120 -X POST -H "Authorization: Bearer $CRON_SECRET" \
+            -D /tmp/headers.txt \
+            "$BASE_URL/api/alerts/daily?dry=$DRY&cohorts=$COHORTS" -w "\n---HTTP=%{http_code} TIME=%{time_total}s")
+          echo "$RESPONSE" | tail -1
+          grep -iE "^(x-vercel-id|x-vercel-error|x-vercel-cache):" /tmp/headers.txt || true
+          # 본문에는 키워드가 들어가므로 길이와 상태만 남긴다 (공개 저장소 로그)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+          echo "body bytes: ${#BODY}"
+          echo "$BODY" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:(v if not isinstance(v,(list,str)) or k in ('date','sent','dry') else (len(v) if isinstance(v,list) else len(v))) for k,v in d.items()})" || echo "(JSON 아님) $(echo "$BODY" | head -c 300)"
+          STATUS=$(echo "$RESPONSE" | tail -1 | grep -oE 'HTTP=[0-9]+' | cut -d= -f2)
+          [ "$STATUS" = "200" ] || { echo "::error::alerts/daily returned HTTP $STATUS"; exit 1; }
