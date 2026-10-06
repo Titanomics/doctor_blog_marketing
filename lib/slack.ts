@@ -11,11 +11,19 @@ function env(name: string): string | undefined {
   return v ? v : undefined;
 }
 
+// 봇 토큰. 값이 여러 번 붙여 넣어져 공백으로 이어진 경우(실제로 있었음)에는 토큰 모양(xoxb-/xoxp-)인 첫 조각을 쓴다.
+function botToken(): string | undefined {
+  const raw = env("SLACK_BOT_TOKEN");
+  if (!raw) return undefined;
+  if (!/\s/.test(raw)) return raw;
+  return raw.split(/\s+/).find((piece) => /^xox[bp]-/.test(piece)) ?? raw;
+}
+
 // 설정 점검용. 값은 내보내지 않고 길이·형식만 알려준다.
 //   token: "ok" | "missing" | "non_ascii" | "has_whitespace" | "unexpected_prefix"
 export function slackConfigStatus(): { mode: "webhook" | "bot" | "none"; token: string; tokenLength: number; channel: string } {
   if (env("SLACK_WEBHOOK_URL")) return { mode: "webhook", token: "ok", tokenLength: 0, channel: "ok" };
-  const token = env("SLACK_BOT_TOKEN");
+  const token = botToken();
   const channel = env("SLACK_CHANNEL_ID");
   if (!token || !channel) return { mode: "none", token: token ? "ok" : "missing", tokenLength: token?.length ?? 0, channel: channel ? "ok" : "missing" };
   const tokenStatus = /[^!-~]/.test(token)
@@ -29,7 +37,7 @@ export function slackConfigStatus(): { mode: "webhook" | "bot" | "none"; token: 
 }
 
 export function slackConfigured(): boolean {
-  return !!env("SLACK_WEBHOOK_URL") || !!(env("SLACK_BOT_TOKEN") && env("SLACK_CHANNEL_ID"));
+  return !!env("SLACK_WEBHOOK_URL") || !!(botToken() && env("SLACK_CHANNEL_ID"));
 }
 
 export async function sendSlack(text: string): Promise<SlackResult> {
@@ -47,7 +55,7 @@ export async function sendSlack(text: string): Promise<SlackResult> {
       return { sent: false, reason: `webhook ${res.status}: ${(await res.text()).slice(0, 100)}` };
     }
 
-    const token = env("SLACK_BOT_TOKEN");
+    const token = botToken();
     const channel = env("SLACK_CHANNEL_ID");
     if (token && channel) {
       const res = await fetch("https://slack.com/api/chat.postMessage", {
