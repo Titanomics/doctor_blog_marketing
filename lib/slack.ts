@@ -11,6 +11,23 @@ function env(name: string): string | undefined {
   return v ? v : undefined;
 }
 
+// 설정 점검용. 값은 내보내지 않고 길이·형식만 알려준다.
+//   token: "ok" | "missing" | "non_ascii" | "has_whitespace" | "unexpected_prefix"
+export function slackConfigStatus(): { mode: "webhook" | "bot" | "none"; token: string; tokenLength: number; channel: string } {
+  if (env("SLACK_WEBHOOK_URL")) return { mode: "webhook", token: "ok", tokenLength: 0, channel: "ok" };
+  const token = env("SLACK_BOT_TOKEN");
+  const channel = env("SLACK_CHANNEL_ID");
+  if (!token || !channel) return { mode: "none", token: token ? "ok" : "missing", tokenLength: token?.length ?? 0, channel: channel ? "ok" : "missing" };
+  const tokenStatus = /[^!-~]/.test(token)
+    ? /\s/.test(token)
+      ? "has_whitespace"
+      : "non_ascii"
+    : /^xox[bp]-/.test(token)
+      ? "ok"
+      : "unexpected_prefix";
+  return { mode: "bot", token: tokenStatus, tokenLength: token.length, channel: /^[A-Z0-9]+$/.test(channel) ? "ok" : "unexpected_format" };
+}
+
 export function slackConfigured(): boolean {
   return !!env("SLACK_WEBHOOK_URL") || !!(env("SLACK_BOT_TOKEN") && env("SLACK_CHANNEL_ID"));
 }

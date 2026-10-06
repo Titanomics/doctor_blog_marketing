@@ -8,7 +8,7 @@ import {
 } from "@/lib/auth";
 import { usingServiceRole } from "@/lib/supabase";
 import { hasNaverAdKeys } from "@/lib/naverAd";
-import { slackConfigured } from "@/lib/slack";
+import { slackConfigStatus, slackConfigured } from "@/lib/slack";
 
 // 로그인 실패 제한 (인스턴스 메모리 기준 — 서버리스에서는 인스턴스별로 따로 센다)
 const MAX_FAILS = 10;
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(
     // 설정 점검용(로그인 시에만 노출): db = Supabase 접속 키 종류, naverAd = 검색광고 API 키 3개 설정 여부
     authenticated
-      ? { authenticated, db: usingServiceRole ? "service_role" : "anon", naverAd: hasNaverAdKeys(), slack: slackConfigured() }
+      ? { authenticated, db: usingServiceRole ? "service_role" : "anon", naverAd: hasNaverAdKeys(), slack: slackConfigured(), slackConfig: slackConfigStatus() }
       : { authenticated },
     { headers: { "Cache-Control": "no-store" } }
   );
