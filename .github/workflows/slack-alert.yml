@@ -36,6 +36,6 @@ jobs:
           # 본문에는 키워드가 들어가므로 길이와 상태만 남긴다 (공개 저장소 로그)
           BODY=$(echo "$RESPONSE" | sed '$d')
           echo "body bytes: ${#BODY}"
-          echo "$BODY" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:(v if not isinstance(v,(list,str)) or k in ('date','sent','dry') else (len(v) if isinstance(v,list) else len(v))) for k,v in d.items()})" || echo "(JSON 아님) $(echo "$BODY" | head -c 300)"
+          echo "$BODY" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:(v if not isinstance(v,(list,str)) or k in ('date','sent','dry','reason') else (len(v) if isinstance(v,list) else len(v))) for k,v in d.items()})" || echo "(JSON 아님) $(echo "$BODY" | head -c 300)"
           STATUS=$(echo "$RESPONSE" | tail -1 | grep -oE 'HTTP=[0-9]+' | cut -d= -f2)
           [ "$STATUS" = "200" ] || { echo "::error::alerts/daily returned HTTP $STATUS"; exit 1; }
