@@ -1,15 +1,15 @@
-name: Daily Batch (KST 03:00) — chunks 직접 호출
+name: Daily Batch (KST 새벽) — 러너 직접 수집
 
-# 체인 의존 0: GitHub Actions이 모든 client × chunks를 직렬로 직접 호출
-# 체인 끊김 위험 없음. 각 chunk는 독립 호출이라 한 chunk가 실패해도 다음은 진행.
-# chunk 호출에는 total을 넘기지 않는다 — total이 있으면 서버가 다음 chunk를 또 체인 호출해
-# 같은 chunk가 여러 번 실행된다 (요청량 증가 + previous_rank가 당일 값으로 덮임).
-# 세 배치가 모두 끝나면 report job이 리포트 메일을 보낸다.
+# 순위 수집(블로그 → 기자단 → 카페)은 GitHub 러너에서 직접 실행한다 (daily-batch-runner.yml 호출).
+#   - Vercel 함수의 실행 시간 제한·체인 끊김과 무관하고, 한 스트림씩 돌아 요청 간격이 일정하다.
+#   - 오늘 이미 수집된 키워드는 건너뛰므로 중간에 끊겨도 다시 실행하면 이어서 한다.
+# 조회수·검색량·리포트·슬랙 알림은 그대로 Vercel API를 호출한다.
+# 세 수집이 모두 끝나면 report job이 리포트 메일을, alert job이 슬랙 알림을 보낸다.
 
 on:
   schedule:
-    # UTC 18:00 = KST 03:00
-    - cron: "0 18 * * *"
+    # UTC 17:17 = KST 02:17. 정각(:00) cron은 GitHub 혼잡으로 2~5시간씩 밀려서 정각을 피했다.
+    - cron: "17 17 * * *"
   workflow_dispatch:
     inputs:
       domain:
@@ -19,11 +19,6 @@ on:
 
 env:
   BASE_URL: https://doctor-blog-marketing.vercel.app
-  # chunk 사이 sleep. chunk 호출은 처리가 끝날 때까지 기다리는 동기 호출이므로
-  # 서버의 키워드 간격(10s)보다 조금 길게만 둔다.
-  CHUNK_INTERVAL_S: 20
-  # chunk 크기 (서버 코드 CHUNK_SIZE와 일치)
-  CHUNK_SIZE: 20
 
 jobs:
   # GitHub은 60일간 커밋이 없으면 스케줄 워크플로우를 자동 비활성화함.
@@ -42,55 +37,12 @@ jobs:
           gh api -X PUT "repos/${{ github.repository }}/actions/workflows/daily-report.yml/enable"
 
   blog-batch:
-    name: 블로그 batch (clients × chunks 직렬)
+    name: 블로그 수집
     if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'blog' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 350  # 5시간 50분 (안전 마진)
-    steps:
-      - name: 블로그 clients × chunks 호출
-        env:
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          set -euo pipefail
-          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
-
-          echo "::group::블로그 client 목록"
-          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/clients")
-          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
-          echo "$CLIENT_IDS"
-          echo "::endgroup::"
-
-          for CLIENT_ID in $CLIENT_IDS; do
-            echo "::group::Client $CLIENT_ID"
-            # 키워드 수
-            COUNT=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))") \
-              || { echo "::warning::client $CLIENT_ID 키워드 수 조회 실패 — 건너뜀"; echo "::endgroup::"; continue; }
-            echo "키워드: $COUNT개"
-
-            if [ "$COUNT" -le 0 ]; then echo "skip (키워드 없음)"; echo "::endgroup::"; continue; fi
-            if [ "$COUNT" -le 10 ]; then
-              # 작은 client: 동기 처리 라우트
-              echo "동기 처리 호출"
-              curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::client $CLIENT_ID 동기 호출 실패"
-              echo "::endgroup::"
-              continue
-            fi
-
-            # 큰 client: chunks 직접 호출
-            OFFSET=0
-            while [ "$OFFSET" -lt "$COUNT" ]; do
-              echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
-              curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
-                "$BASE_URL/api/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE" \
-                -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
-                || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
-              OFFSET=$((OFFSET + CHUNK_SIZE))
-              if [ "$OFFSET" -lt "$COUNT" ]; then sleep $CHUNK_INTERVAL_S; fi
-            done
-            echo "::endgroup::"
-          done
-
-  # 카페 글 조회수·생존 여부 수집. 카페 배치보다 먼저 끝내 두면 배치가 같은 글을 다시 조회하지 않는다.
+    uses: ./.github/workflows/daily-batch-runner.yml
+    with:
+      mode: blog
+    secrets: inherit
   post-stats:
     name: 카페 글 조회수 수집
     if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe' }}
@@ -117,82 +69,22 @@ jobs:
           done
 
   cafe-batch:
-    name: 카페 batch (clients × chunks 직렬)
-    # 조회수 수집이 실패해도 카페 배치는 진행한다
-    needs: [post-stats]
+    name: 카페 수집
+    # 조회수 수집이 실패해도, 앞선 수집이 실패해도 카페 수집은 진행한다
+    needs: [post-stats, reporter-batch]
     if: ${{ always() && (inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe') }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 350
-    steps:
-      - name: 카페 clients × chunks 호출
-        env:
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          set -euo pipefail
-          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
-
-          echo "::group::카페 client 목록"
-          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
-          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
-          echo "$CLIENT_IDS"
-          echo "::endgroup::"
-
-          for CLIENT_ID in $CLIENT_IDS; do
-            echo "::group::Client $CLIENT_ID"
-            COUNT=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))") \
-              || { echo "::warning::client $CLIENT_ID 키워드 수 조회 실패 — 건너뜀"; echo "::endgroup::"; continue; }
-            echo "키워드: $COUNT개"
-
-            if [ "$COUNT" -le 0 ]; then echo "skip"; echo "::endgroup::"; continue; fi
-            if [ "$COUNT" -le 10 ]; then
-              curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::client $CLIENT_ID 동기 호출 실패"
-              echo "::endgroup::"
-              continue
-            fi
-
-            OFFSET=0
-            while [ "$OFFSET" -lt "$COUNT" ]; do
-              echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
-              curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
-                "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE" \
-                -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
-                || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
-              OFFSET=$((OFFSET + CHUNK_SIZE))
-              if [ "$OFFSET" -lt "$COUNT" ]; then sleep $CHUNK_INTERVAL_S; fi
-            done
-            echo "::endgroup::"
-          done
-
+    uses: ./.github/workflows/daily-batch-runner.yml
+    with:
+      mode: cafe
+    secrets: inherit
   reporter-batch:
-    name: 기자단 batch (clients × chunks 직렬)
-    if: ${{ inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'reporter' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 350
-    steps:
-      - name: 기자단 clients × chunks 호출
-        env:
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          set -euo pipefail
-          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
-
-          echo "::group::기자단 client 목록 (cafe_clients 공유)"
-          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
-          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
-          echo "$CLIENT_IDS"
-          echo "::endgroup::"
-
-          for CLIENT_ID in $CLIENT_IDS; do
-            echo "::group::Client $CLIENT_ID"
-            # 기자단은 keyword count API가 없어 batch-track의 응답으로 chunk 분기
-            curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/reporter/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::reporter client $CLIENT_ID 호출 실패"
-            # 작은 client는 동기 응답, 큰 client는 chunk 체인 시작 응답
-            # 큰 client의 chunks는 서버 체인이 처리하지만 끊길 수 있음 → 추후 별도 워크플로우 권장
-            echo "::endgroup::"
-            sleep 60  # client 사이 1분 간격
-          done
-
-  # 키워드 검색량(네이버 검색광고 공식 API). 키워드마다 주 1회만 갱신되고, 새 키워드는 바로 채워진다.
+    name: 기자단 수집
+    needs: [blog-batch]
+    if: ${{ always() && (inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'reporter') }}
+    uses: ./.github/workflows/daily-batch-runner.yml
+    with:
+      mode: reporter
+    secrets: inherit
   keyword-volumes:
     name: 키워드 검색량 수집
     if: ${{ inputs.domain == '' || inputs.domain == 'all' }}
