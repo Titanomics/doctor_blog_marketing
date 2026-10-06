@@ -5,13 +5,19 @@
 
 export type SlackResult = { sent: true } | { sent: false; reason: string };
 
+// 환경변수를 붙여 넣을 때 끝에 줄바꿈·공백이 딸려 오면 헤더 값으로 쓸 수 없어 전송이 실패한다. 항상 다듬어서 쓴다.
+function env(name: string): string | undefined {
+  const v = process.env[name]?.trim();
+  return v ? v : undefined;
+}
+
 export function slackConfigured(): boolean {
-  return !!process.env.SLACK_WEBHOOK_URL || !!(process.env.SLACK_BOT_TOKEN && process.env.SLACK_CHANNEL_ID);
+  return !!env("SLACK_WEBHOOK_URL") || !!(env("SLACK_BOT_TOKEN") && env("SLACK_CHANNEL_ID"));
 }
 
 export async function sendSlack(text: string): Promise<SlackResult> {
   try {
-    const webhook = process.env.SLACK_WEBHOOK_URL;
+    const webhook = env("SLACK_WEBHOOK_URL");
     if (webhook) {
       const res = await fetch(webhook, {
         method: "POST",
@@ -24,8 +30,8 @@ export async function sendSlack(text: string): Promise<SlackResult> {
       return { sent: false, reason: `webhook ${res.status}: ${(await res.text()).slice(0, 100)}` };
     }
 
-    const token = process.env.SLACK_BOT_TOKEN;
-    const channel = process.env.SLACK_CHANNEL_ID;
+    const token = env("SLACK_BOT_TOKEN");
+    const channel = env("SLACK_CHANNEL_ID");
     if (token && channel) {
       const res = await fetch("https://slack.com/api/chat.postMessage", {
         method: "POST",
