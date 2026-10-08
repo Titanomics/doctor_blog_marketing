@@ -10,6 +10,10 @@ name: Batch Runner (순위 수집, 러너 직접 실행)
 
 on:
   workflow_call:
+    outputs:
+      failed:
+        description: "수집이 비정상 종료됐으면 '1' (호출한 쪽에서 대체 경로를 돌린다)"
+        value: ${{ jobs.batch.outputs.failed }}
     inputs:
       mode:
         description: "처리할 종류 (all/blog/cafe/reporter)"
@@ -43,6 +47,8 @@ jobs:
     name: ${{ inputs.mode }} 수집
     runs-on: ubuntu-latest
     timeout-minutes: 350
+    outputs:
+      failed: ${{ steps.run.outputs.failed }}
     # 수집 스트림이 겹치지 않게 한 번에 하나만 실행 (수동 실행이 정기 실행과 겹치면 기다린다)
     concurrency:
       group: naver-crawl-runner
@@ -59,6 +65,7 @@ jobs:
       - name: 의존성 설치
         run: npm ci
       - name: 수집 실행
+        id: run
         env:
           MODE: ${{ inputs.mode }}
           LIMIT: ${{ inputs.limit }}
@@ -76,10 +83,12 @@ jobs:
             blog|cafe|reporter) MODES="$MODE" ;;
             *) echo "::error::mode 값이 잘못됨: $MODE"; exit 1 ;;
           esac
+          # 비정상 종료(러너 IP 차단 등)는 job 을 실패시키지 않고 출력값으로 알린다.
+          # 호출한 Daily Batch 가 이 값을 보고 Vercel 대체 경로를 돌리므로, 수집이 빠지는 게 아니라면 실패 메일이 갈 이유가 없다.
           FAILED=0
           for m in $MODES; do
             echo "::group::$m 수집"
-            npx tsx scripts/daily-batch.mts --mode "$m" $ARGS || { echo "::warning::$m 수집이 비정상 종료"; FAILED=1; }
+            npx tsx scripts/daily-batch.mts --mode "$m" $ARGS || { echo "::warning::$m 수집이 비정상 종료 — 대체 경로로 넘긴다"; FAILED=1; }
             echo "::endgroup::"
           done
-          exit $FAILED
+          echo "failed=$FAILED" >> "$GITHUB_OUTPUT"

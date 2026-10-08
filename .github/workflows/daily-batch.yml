@@ -93,7 +93,7 @@ jobs:
     # 러너 IP가 네이버에 막히는 등으로 러너 수집이 실패하면 예전 방식(Vercel 함수 chunk 호출)으로 대신 돌린다.
     # 오늘 이미 수집된 키워드도 다시 수집되지만, previous_rank 규칙(당일 갱신은 전날 값 유지)이 있어 해롭지 않다.
     needs: [blog-batch]
-    if: ${{ always() && needs.blog-batch.result == 'failure' }}
+    if: ${{ always() && (needs.blog-batch.result == 'failure' || needs.blog-batch.outputs.failed == '1') }}
     runs-on: ubuntu-latest
     timeout-minutes: 350  # 5시간 50분 (안전 마진)
     steps:
@@ -145,7 +145,7 @@ jobs:
     # 러너 IP가 네이버에 막히는 등으로 러너 수집이 실패하면 예전 방식(Vercel 함수 chunk 호출)으로 대신 돌린다.
     # 오늘 이미 수집된 키워드도 다시 수집되지만, previous_rank 규칙(당일 갱신은 전날 값 유지)이 있어 해롭지 않다.
     needs: [reporter-batch]
-    if: ${{ always() && needs.reporter-batch.result == 'failure' }}
+    if: ${{ always() && (needs.reporter-batch.result == 'failure' || needs.reporter-batch.outputs.failed == '1') }}
     runs-on: ubuntu-latest
     timeout-minutes: 350
     steps:
@@ -177,7 +177,7 @@ jobs:
     # 러너 IP가 네이버에 막히는 등으로 러너 수집이 실패하면 예전 방식(Vercel 함수 chunk 호출)으로 대신 돌린다.
     # 오늘 이미 수집된 키워드도 다시 수집되지만, previous_rank 규칙(당일 갱신은 전날 값 유지)이 있어 해롭지 않다.
     needs: [cafe-batch]
-    if: ${{ always() && needs.cafe-batch.result == 'failure' }}
+    if: ${{ always() && (needs.cafe-batch.result == 'failure' || needs.cafe-batch.outputs.failed == '1') }}
     # 조회수 수집이 실패해도 카페 배치는 진행한다
     runs-on: ubuntu-latest
     timeout-minutes: 350
