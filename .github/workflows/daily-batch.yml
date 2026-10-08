@@ -19,6 +19,9 @@ on:
 
 env:
   BASE_URL: https://doctor-blog-marketing.vercel.app
+  # (Vercel 대체 경로용) chunk 사이 sleep · chunk 크기 (서버 코드 CHUNK_SIZE와 일치)
+  CHUNK_INTERVAL_S: 20
+  CHUNK_SIZE: 20
 
 jobs:
   # GitHub은 60일간 커밋이 없으면 스케줄 워크플로우를 자동 비활성화함.
@@ -85,6 +88,140 @@ jobs:
     with:
       mode: reporter
     secrets: inherit
+  blog-fallback:
+    name: 블로그 수집 (Vercel 대체 — 러너 실패 시)
+    # 러너 IP가 네이버에 막히는 등으로 러너 수집이 실패하면 예전 방식(Vercel 함수 chunk 호출)으로 대신 돌린다.
+    # 오늘 이미 수집된 키워드도 다시 수집되지만, previous_rank 규칙(당일 갱신은 전날 값 유지)이 있어 해롭지 않다.
+    needs: [blog-batch]
+    if: ${{ always() && needs.blog-batch.result == 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350  # 5시간 50분 (안전 마진)
+    steps:
+      - name: 블로그 clients × chunks 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+
+          echo "::group::블로그 client 목록"
+          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/clients")
+          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
+          echo "$CLIENT_IDS"
+          echo "::endgroup::"
+
+          for CLIENT_ID in $CLIENT_IDS; do
+            echo "::group::Client $CLIENT_ID"
+            # 키워드 수
+            COUNT=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))") \
+              || { echo "::warning::client $CLIENT_ID 키워드 수 조회 실패 — 건너뜀"; echo "::endgroup::"; continue; }
+            echo "키워드: $COUNT개"
+
+            if [ "$COUNT" -le 0 ]; then echo "skip (키워드 없음)"; echo "::endgroup::"; continue; fi
+            if [ "$COUNT" -le 10 ]; then
+              # 작은 client: 동기 처리 라우트
+              echo "동기 처리 호출"
+              curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::client $CLIENT_ID 동기 호출 실패"
+              echo "::endgroup::"
+              continue
+            fi
+
+            # 큰 client: chunks 직접 호출
+            OFFSET=0
+            while [ "$OFFSET" -lt "$COUNT" ]; do
+              echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
+              curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
+                "$BASE_URL/api/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE" \
+                -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
+                || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
+              OFFSET=$((OFFSET + CHUNK_SIZE))
+              if [ "$OFFSET" -lt "$COUNT" ]; then sleep $CHUNK_INTERVAL_S; fi
+            done
+            echo "::endgroup::"
+          done
+
+  reporter-fallback:
+    name: 기자단 수집 (Vercel 대체 — 러너 실패 시)
+    # 러너 IP가 네이버에 막히는 등으로 러너 수집이 실패하면 예전 방식(Vercel 함수 chunk 호출)으로 대신 돌린다.
+    # 오늘 이미 수집된 키워드도 다시 수집되지만, previous_rank 규칙(당일 갱신은 전날 값 유지)이 있어 해롭지 않다.
+    needs: [reporter-batch]
+    if: ${{ always() && needs.reporter-batch.result == 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: 기자단 clients × chunks 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+
+          echo "::group::기자단 client 목록 (cafe_clients 공유)"
+          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
+          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
+          echo "$CLIENT_IDS"
+          echo "::endgroup::"
+
+          for CLIENT_ID in $CLIENT_IDS; do
+            echo "::group::Client $CLIENT_ID"
+            # 기자단은 keyword count API가 없어 batch-track의 응답으로 chunk 분기
+            curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/reporter/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::reporter client $CLIENT_ID 호출 실패"
+            # 작은 client는 동기 응답, 큰 client는 chunk 체인 시작 응답
+            # 큰 client의 chunks는 서버 체인이 처리하지만 끊길 수 있음 → 추후 별도 워크플로우 권장
+            echo "::endgroup::"
+            sleep 60  # client 사이 1분 간격
+          done
+
+  cafe-fallback:
+    name: 카페 수집 (Vercel 대체 — 러너 실패 시)
+    # 러너 IP가 네이버에 막히는 등으로 러너 수집이 실패하면 예전 방식(Vercel 함수 chunk 호출)으로 대신 돌린다.
+    # 오늘 이미 수집된 키워드도 다시 수집되지만, previous_rank 규칙(당일 갱신은 전날 값 유지)이 있어 해롭지 않다.
+    needs: [cafe-batch]
+    if: ${{ always() && needs.cafe-batch.result == 'failure' }}
+    # 조회수 수집이 실패해도 카페 배치는 진행한다
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: 카페 clients × chunks 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+
+          echo "::group::카페 client 목록"
+          CLIENTS_JSON=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/clients")
+          CLIENT_IDS=$(echo "$CLIENTS_JSON" | python3 -c "import json,sys; [print(c['id']) for c in json.load(sys.stdin)]")
+          echo "$CLIENT_IDS"
+          echo "::endgroup::"
+
+          for CLIENT_ID in $CLIENT_IDS; do
+            echo "::group::Client $CLIENT_ID"
+            COUNT=$(curl -fsSL --retry 3 --retry-all-errors -m 60 -H "$AUTH_HEADER" "$BASE_URL/api/cafe/keywords?clientId=$CLIENT_ID" | python3 -c "import json,sys; print(len(json.load(sys.stdin)))") \
+              || { echo "::warning::client $CLIENT_ID 키워드 수 조회 실패 — 건너뜀"; echo "::endgroup::"; continue; }
+            echo "키워드: $COUNT개"
+
+            if [ "$COUNT" -le 0 ]; then echo "skip"; echo "::endgroup::"; continue; fi
+            if [ "$COUNT" -le 10 ]; then
+              curl -fsSL -m 300 -H "$AUTH_HEADER" -X POST "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID" -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" || echo "::warning::client $CLIENT_ID 동기 호출 실패"
+              echo "::endgroup::"
+              continue
+            fi
+
+            OFFSET=0
+            while [ "$OFFSET" -lt "$COUNT" ]; do
+              echo "chunk offset=$OFFSET limit=$CHUNK_SIZE"
+              curl -fsSL -m 280 -H "$AUTH_HEADER" -X POST \
+                "$BASE_URL/api/cafe/batch-track?clientId=$CLIENT_ID&offset=$OFFSET&limit=$CHUNK_SIZE" \
+                -w "\nHTTP=%{http_code} TIME=%{time_total}s\n" \
+                || echo "::warning::client $CLIENT_ID offset=$OFFSET chunk 실패"
+              OFFSET=$((OFFSET + CHUNK_SIZE))
+              if [ "$OFFSET" -lt "$COUNT" ]; then sleep $CHUNK_INTERVAL_S; fi
+            done
+            echo "::endgroup::"
+          done
+
+  # 키워드 검색량(네이버 검색광고 공식 API). 키워드마다 주 1회만 갱신되고, 새 키워드는 바로 채워진다.
   keyword-volumes:
     name: 키워드 검색량 수집
     if: ${{ inputs.domain == '' || inputs.domain == 'all' }}
@@ -110,7 +247,7 @@ jobs:
   report:
     name: 리포트 메일 발송 (배치 완료 후)
     # 정기 실행에서만, 배치가 일부 실패·시간 초과여도 발송한다.
-    needs: [blog-batch, cafe-batch, reporter-batch]
+    needs: [blog-batch, cafe-batch, reporter-batch, blog-fallback, reporter-fallback, cafe-fallback]
     if: ${{ always() && github.event_name == 'schedule' }}
     uses: ./.github/workflows/daily-report.yml
     secrets: inherit
@@ -118,7 +255,7 @@ jobs:
   # 수집 결과 요약을 슬랙으로 보낸다. 서버에 슬랙 설정이 없으면 아무 일도 하지 않는다.
   alert:
     name: 슬랙 알림 (배치 완료 후)
-    needs: [blog-batch, cafe-batch, reporter-batch]
+    needs: [blog-batch, cafe-batch, reporter-batch, blog-fallback, reporter-fallback, cafe-fallback]
     if: ${{ always() && github.event_name == 'schedule' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
