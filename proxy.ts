@@ -27,6 +27,7 @@ const JOB_ONLY_PATHS = new Set([
   "/api/keyword-volumes/collect",
   "/api/alerts/daily",
   "/api/reporter/entries/backfill-published",
+  "/api/mention-scan/auto/run",
 ]);
 
 function deny(status: number, error: string) {

@@ -8,6 +8,8 @@ import { sendSlack, slackConfigured } from "@/lib/slack";
 import { loadAgeInfo, type AgeInfo } from "@/lib/ageData";
 import { buildCohorts } from "@/lib/cohorts";
 import { CHECKPOINT_DAYS } from "@/lib/ageBand";
+import { loadAutoScanOverview, type AutoScanVerdict } from "@/lib/autoScan";
+import { getKSTDateString, getKSTYesterdayString } from "@/lib/dateUtils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -20,7 +22,7 @@ export const maxDuration = 60;
 // (쉼표로 구분한 이름 앞부분. 기본값 "솔커트" → "솔커트", "솔커트-지역명키워드").
 // 병원 블로그는 알림 대상이 아니다.
 //
-// 구성: 수집 상태 → 카페 → 블로그기자단 → 카페 글 조회수 → (월요일만) 발행 묶음별 현황
+// 구성: 수집 상태 → 카페 → 블로그기자단 → 미노출 키워드 제품 글 확인 → 카페 글 조회수 → (월요일만) 발행 묶음별 현황
 // 카페·기자단 각각: 오늘의 사건(처음 노출·다시 노출·이탈·3계단 이상 변동)
 //                  → 점검일 도달(발행 7·14·…·42일째가 된 글의 상태) → 전체 순위(각 줄에 발행 주차)
 
@@ -161,6 +163,30 @@ function sideLines(label: string, side: ProductSide, withBrand: boolean, mainBra
 }
 
 // 줄 단위로 끊어 여러 메시지로 나눈다
+// 미노출 키워드 자동 확인 결과. "그 검색 결과에 우리 제품 글이 있긴 한가"만 알린다.
+const LEVEL_TEXT: Record<string, string> = { main: "제품 글", switch: "전환형 글", light: "짧은 추천", comment_only: "댓글 언급" };
+
+function verdictLine(v: AutoScanVerdict, isNew: boolean): string {
+  const side = v.sides.length === 2 ? "" : v.sides[0] === "cafe" ? " (카페)" : " (기자단)";
+  const what = v.registered ? `우리 등록 글${v.registeredBrand ? ` · ${v.registeredBrand}` : ""}` : `미등록 ${LEVEL_TEXT[v.mentionLevel ?? ""] ?? "언급 글"}`;
+  return `   ${v.keyword}${side} → ${v.bestRank}위 ${what}${isNew ? " 🆕" : ""}`;
+}
+
+async function autoScanLines(): Promise<string[]> {
+  const overview = await loadAutoScanOverview(getKSTDateString(), getKSTYesterdayString());
+  if (!overview.date || overview.verdicts.length === 0) return [];
+  const lines: string[] = [""];
+  lines.push(
+    `🔎 *미노출 키워드 제품 글 확인* ${overview.verdicts.length}개 키워드 — 있음 ${overview.found.length} · 없음 ${overview.none.length}` +
+      (overview.unreadable.length ? ` · 본문 확인 불가 ${overview.unreadable.length}` : "")
+  );
+  const newly = overview.found.filter((v) => overview.newlyFound.has(v.keyword));
+  const rest = overview.found.filter((v) => !overview.newlyFound.has(v.keyword));
+  for (const v of [...newly, ...rest].slice(0, 30)) lines.push(verdictLine(v, overview.newlyFound.has(v.keyword)));
+  if (overview.found.length > 30) lines.push(`   외 ${overview.found.length - 30}건`);
+  return lines;
+}
+
 function chunk(lines: string[]): string[] {
   const out: string[] = [];
   let buf = "";
@@ -220,6 +246,7 @@ export async function POST(request: NextRequest) {
   ]);
   lines.push(...sideLines("카페", product.cafe, withBrand, mainBrand, cafeAge.items));
   lines.push(...sideLines("블로그기자단", product.reporter, withBrand, mainBrand, reporterAge.items));
+  lines.push(...(await autoScanLines()));
 
   if (posts.latestDate) {
     // 이 브랜드의 글만

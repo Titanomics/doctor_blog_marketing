@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Client, CafeClient } from "@/lib/types";
 import HealthSection from "./HealthSection";
 import MentionScanSection from "./MentionScanSection";
+import AutoScanSection from "./AutoScanSection";
 import CohortSection from "./CohortSection";
 
 // 병원/브랜드를 고르기 전에 보이는 전체 홈 화면.
@@ -252,6 +253,7 @@ export default function OverviewPanel({
               <Tile label="삭제된 글" value={fmt(cafe.clients.reduce((n, c) => n + c.deleted, 0))} tone="bad" sub="키워드 기준" />
             </div>
 
+            <AutoScanSection />
             <MentionScanSection />
 
             <CohortSection />

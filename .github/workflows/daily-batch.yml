@@ -221,6 +221,33 @@ jobs:
             echo "::endgroup::"
           done
 
+  # 미노출 키워드 제품 글 확인. 카페 수집이 끝난 뒤(그날의 미노출이 확정된 뒤) 돌린다.
+  mention-scan:
+    name: 미노출 키워드 제품 글 확인
+    needs: [cafe-batch, cafe-fallback]
+    if: ${{ always() && (inputs.domain == '' || inputs.domain == 'all' || inputs.domain == 'cafe') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: 남은 키워드가 0이 될 때까지 반복 호출
+        env:
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -uo pipefail
+          AUTH_HEADER="Authorization: Bearer $CRON_SECRET"
+          for i in $(seq 1 15); do
+            RESP=$(curl -fsS -m 295 -X POST -H "$AUTH_HEADER" "$BASE_URL/api/mention-scan/auto/run?limit=15") || { echo "::warning::자동 확인 호출 실패 (iteration $i)"; break; }
+            # 키워드는 로그에 남기지 않고 집계 숫자만 출력
+            echo "$RESP" | python3 -c "import json,sys; d=json.load(sys.stdin); print({k:d.get(k) for k in ('date','targets','alreadyDone','processed','saved','failed','found','remaining','stopped','elapsedMs')})"
+            SAVED=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('saved', 0))")
+            REMAINING=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('remaining', 0))")
+            STOPPED=$(echo "$RESP" | python3 -c "import json,sys; print(json.load(sys.stdin).get('stopped') or '')")
+            if [ "$REMAINING" -le 0 ]; then echo "::notice::자동 확인 완료"; break; fi
+            if [ "$STOPPED" = "consecutive_failures" ]; then echo "::warning::연속 실패로 중단 (차단·장애 의심), 남은 키워드 $REMAINING"; break; fi
+            if [ "$SAVED" -le 0 ]; then echo "::warning::진전 없음, 남은 키워드 $REMAINING"; break; fi
+            sleep 5
+          done
+
   # 키워드 검색량(네이버 검색광고 공식 API). 키워드마다 주 1회만 갱신되고, 새 키워드는 바로 채워진다.
   keyword-volumes:
     name: 키워드 검색량 수집
@@ -247,7 +274,7 @@ jobs:
   report:
     name: 리포트 메일 발송 (배치 완료 후)
     # 정기 실행에서만, 배치가 일부 실패·시간 초과여도 발송한다.
-    needs: [blog-batch, cafe-batch, reporter-batch, blog-fallback, reporter-fallback, cafe-fallback]
+    needs: [blog-batch, cafe-batch, reporter-batch, blog-fallback, reporter-fallback, cafe-fallback, mention-scan]
     if: ${{ always() && github.event_name == 'schedule' }}
     uses: ./.github/workflows/daily-report.yml
     secrets: inherit
@@ -255,7 +282,7 @@ jobs:
   # 수집 결과 요약을 슬랙으로 보낸다. 서버에 슬랙 설정이 없으면 아무 일도 하지 않는다.
   alert:
     name: 슬랙 알림 (배치 완료 후)
-    needs: [blog-batch, cafe-batch, reporter-batch, blog-fallback, reporter-fallback, cafe-fallback]
+    needs: [blog-batch, cafe-batch, reporter-batch, blog-fallback, reporter-fallback, cafe-fallback, mention-scan]
     if: ${{ always() && github.event_name == 'schedule' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
